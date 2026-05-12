@@ -52,37 +52,34 @@ agent from logged trials requires \emph{offline} reinforcement
 learning; evaluating a candidate policy without re-running it on a
 human user requires \emph{off-policy evaluation} (OPE) --- both
 mature in clinical decision-making but, to our knowledge, unused
-in BCI.
-
-This paper supplies both. We train a Conservative Q-Learning agent
-on a deterministic per-trial MDP and validate the resulting
-policies with a calibrated fitted-Q evaluator against on-policy
-Monte-Carlo ground truth. On a 12-policy panel (\bcib{}~subject 4),
-the OPE estimate tracks ground truth at Pearson $r\!=\!0.860$ with
-rank ordering preserved --- the property required for offline
-policy selection, and the first such calibrated OPE estimate
-published for BCI motor imagery. Under the standard \bcia{} 4-class
-evaluation protocol, the trained agent reaches
-$86.2\!\pm\!5.8\%$ commit accuracy at $34.2$~bits/min~\itr{} with
-\textsc{Defer} as a \emph{learned} action; the \itr{} is roughly
-$2\times$ the typical value reported on this benchmark, gained by
-deferring uncertain trials instead of guessing wrong.
-
-A monotonic electrode-count to cross-subject-significance trend
-emerges across three datasets: leave-one-subject-out (LOSO)
-classification on 3-channel \bcib{} and 22-channel \bcia{} is
-not significant (paired Wilcoxon $p\!=\!0.10$, $p\!=\!0.15$),
-while on 62-channel Lee2019 all $10/10$ held-out subjects beat
-random ($p\!=\!0.001$) --- the first published Lee2019 LOSO
-classification benchmark for offline-RL BCI. Two supplementary
-contributions: an $N\!=\!9$ multi-method OPE benchmark in which
-weighted importance sampling yields $3\times$ lower bias than FQE
-($9/9$ subjects, $p\!=\!0.002$), exposing a calibration-rank
-decoupling that affects deployment; and the first end-to-end RL
-fine-tuning of the \labram{} EEG foundation model, which ties
-\eegnet{} on aggregate but lifts a previously weakly-decoded
-subject by $+16$~pp on both \bcib{} and \bcia{}. Code released
-under MIT.
+in BCI. This paper supplies both. We train a Conservative
+Q-Learning agent on a deterministic per-trial MDP and validate
+the resulting policies with a calibrated fitted-Q evaluator
+against on-policy Monte-Carlo ground truth. On a 12-policy panel
+(\bcib{}~subject 4), the OPE estimate tracks ground truth at
+Pearson $r\!=\!0.860$ with rank ordering preserved --- the
+property required for offline policy selection, and the first
+such calibrated OPE estimate published for BCI motor imagery.
+Under the standard \bcia{} 4-class evaluation protocol, the
+trained agent reaches $86.2\!\pm\!5.8\%$ commit accuracy at
+$34.2$~bits/min~\itr{} with \textsc{Defer} as a \emph{learned}
+action; the \itr{} is roughly $2\times$ the typical value reported
+on this benchmark, gained by deferring uncertain trials instead of
+guessing wrong. A monotonic electrode-count to
+cross-subject-significance trend emerges across three datasets:
+leave-one-subject-out (LOSO) classification on 3-channel \bcib{}
+and 22-channel \bcia{} is not significant (paired Wilcoxon
+$p\!=\!0.10$, $p\!=\!0.15$), while on 62-channel Lee2019 all
+$10/10$ held-out subjects beat random ($p\!=\!0.001$) --- the first
+published Lee2019 LOSO classification benchmark for offline-RL BCI.
+Two supplementary contributions: an $N\!=\!9$ multi-method OPE
+benchmark in which weighted importance sampling yields $3\times$
+lower bias than FQE ($9/9$ subjects, $p\!=\!0.002$), exposing a
+calibration-rank decoupling that affects deployment; and the first
+end-to-end RL fine-tuning of the \labram{} EEG foundation model,
+which ties \eegnet{} on aggregate but lifts a previously
+weakly-decoded subject by $+16$~pp on both \bcib{} and \bcia{}.
+Code released under MIT.
 \end{abstract}
 
 \begin{IEEEkeywords}
