@@ -340,31 +340,45 @@ FBCSP+LDA                                              & $0.593$ & $0.593$ & $1.
 EEGNet + window-avg                                    & $0.675$ & $0.675$ & $1.00$ & --- \\
 \textbf{EEG-Conformer + window-avg}                    & $\mathbf{0.745 \!\pm\! 0.13}$ & $\mathbf{0.745}$ & $1.00$ & --- \\
 \midrule
-\multicolumn{5}{l}{\textit{Selective decoders (ours, 3 subj $\times$ 5 seeds)}} \\
-\textsc{NeuroPolicy} scalar-\cql{}                    & $0.450 \!\pm\! 0.04$ & $0.856 \!\pm\! 0.05$ & $0.53$ & $31.7$ \\
-\textbf{\textsc{NeuroPolicy} CVaR+CMDP}                & $0.332 \!\pm\! 0.06$ & $\mathbf{0.862 \!\pm\! 0.06}$ & $0.39$ & $\mathbf{34.2}$ \\
+\multicolumn{5}{l}{\textit{Selective decoders (ours, 3 subj $\times$ 5 seeds, same protocol)}} \\
+EEGNet-fixed (mandatory end-of-trial commit)            & --- & $0.815 \!\pm\! 0.07$ & $1.00$ & $20.7$ \\
+EEGNet+threshold $\tau=0.55$                            & --- & $0.564 \!\pm\! 0.04$ & $1.00$ & $850.6$ \\
+EEGNet+threshold $\tau=0.65$                            & --- & $0.595 \!\pm\! 0.04$ & $1.00$ & $315.4$ \\
+EEGNet+threshold $\tau=0.75$                            & --- & $0.634 \!\pm\! 0.04$ & $1.00$ & $157.6$ \\
+EEGNet+threshold $\tau=0.85$                            & --- & $0.680 \!\pm\! 0.04$ & $1.00$ & $87.8$ \\
+EEGNet+threshold $\tau=0.90$                            & --- & $0.703 \!\pm\! 0.04$ & $1.00$ & $66.5$ \\
+\textsc{NeuroPolicy} scalar-\cql{}                      & $0.450 \!\pm\! 0.04$ & $0.856 \!\pm\! 0.05$ & $0.53$ & $31.7$ \\
+\textbf{\textsc{NeuroPolicy} CVaR+CMDP}                  & $0.332 \!\pm\! 0.06$ & $\mathbf{0.862 \!\pm\! 0.06}$ & $0.39$ & $34.2$ \\
 \bottomrule
 \end{tabular}
 \end{table*}
 
 \paragraph*{Empirical findings}
-Applying cropped multi-window inference
-averaging~\cite{Schirrmeister2017DeepLearning} on top of
-EEG-Conformer gives $+7.8$pp over single-shot
-($66.7\!\to\!74.5\%$ on 9 subjects) and $+7.0$pp over EEGNet with
-the same recipe --- a reproducibility/engineering measurement of
-established prior art~\cite{Schirrmeister2017DeepLearning}, not a
-novel recipe. The 9-subject mean $74.5\%$ sits below published
-Conformer ($78.7\%$), CTNet ($82.5\%$), Transformer-2025
-($86.5\%$) due to our truncated training budget ($80$ vs.~$2$k
-epochs); the easy subset $\{1, 3, 7\}$ reaches
-$87.9\!\pm\!1.1\%$. \nettype{} CVaR+CMDP: commit accuracy
-$86.2\!\pm\!5.8\%$, \itr{}~$\approx 34$~bits/min, wrong-commit
-$\le 5\%$ under $\epsilon\!=\!0.10$ --- the first offline-RL BCI
-decoder with \textsc{Defer} as a learned policy action (distinct
-from post-hoc thresholding rejection~\cite{Ganeshkumar2017RejectMI}) at
-canonical state-of-the-art conditions, ITR $\sim\!2\times$ typical
-\bcia{} values.
+On mandatory classification, cropped multi-window
+averaging~\cite{Schirrmeister2017DeepLearning} on EEG-Conformer
+gives $+7.8$pp over single-shot ($66.7\!\to\!74.5\%$ on 9
+subjects) and $+7.0$pp over EEGNet with the same recipe --- a
+reproducibility measurement, not a novel recipe. The 9-subject
+mean $74.5\%$ sits below published Conformer ($78.7\%$), CTNet
+($82.5\%$), and Transformer-2025 ($86.5\%$) due to our truncated
+training budget ($80$ vs.~$2$k epochs).
+
+The selective-decoder block in Table~\ref{tab:sota} reports the
+accuracy--throughput Pareto frontier on the \emph{same} canonical
+3-subject panel: confidence-threshold dynamic stopping with low
+$\tau$ achieves extreme \itr{} ($\!>\!300$~b/m at $\tau\!=\!0.65$)
+but commits at near-chance accuracy ($\le 60\%$); raising $\tau$
+trades \itr{} for accuracy ($66.5$~b/m at $70\%$ acc with
+$\tau\!=\!0.9$). \nettype{} CVaR+CMDP sits on the high-accuracy
+end of this frontier: commit accuracy $86.2\!\pm\!5.8\%$,
+\itr{}~$34$~b/m, wrong-commit $\le 5\%$ under $\epsilon\!=\!0.10$
+--- $\sim\!1.7\times$ the mandatory EEGNet-fixed \itr{}
+($20.7$~b/m) while substantially exceeding its accuracy
+($0.82 \to 0.86$). To our knowledge this is the first offline-RL
+BCI decoder with \textsc{Defer} as a \emph{learned} policy action,
+distinct from post-hoc
+thresholding~\cite{Ganeshkumar2017RejectMI}, evaluated at
+canonical-protocol conditions.
 
 \subsection{Multi-class and cross-dataset transfer}\label{sec:results:bci2a}
 

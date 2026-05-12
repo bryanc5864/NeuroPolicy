@@ -62,10 +62,15 @@ property required for offline policy selection, and the first
 such calibrated OPE estimate published for BCI motor imagery.
 Under the standard \bcia{} 4-class evaluation protocol, the
 trained agent reaches $86.2\!\pm\!5.8\%$ commit accuracy at
-$34.2$~bits/min~\itr{} with \textsc{Defer} as a \emph{learned}
-action; the \itr{} is roughly $2\times$ the typical value reported
-on this benchmark, gained by deferring uncertain trials instead of
-guessing wrong. A monotonic electrode-count to
+$34.2$~bits/min~\itr{} with wrong-commit rate $\le 5\%$, occupying
+the high-accuracy point of the accuracy--throughput Pareto frontier
+we benchmark: head-to-head against confidence-threshold
+EEGNet baselines on the same data, threshold-tuned variants
+reach higher \itr{} ($66$--$850$~b/m) but at much lower commit
+accuracy ($0.56$--$0.70$); the mandatory EEGNet baseline reaches
+$0.82$ accuracy at only $20.7$~b/m. The agent learns to commit
+only when the encoder is confident, giving the best
+accuracy / wrong-rate operating point in this regime. A monotonic electrode-count to
 cross-subject-significance trend emerges across three datasets:
 leave-one-subject-out (LOSO) classification on 3-channel \bcib{}
 and 22-channel \bcia{} is not significant (paired Wilcoxon
