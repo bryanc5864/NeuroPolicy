@@ -249,9 +249,20 @@ policies from any WIS deployment set.}
 \section{\fqe{} Bias and Slope-Corrected Impossibility}\label{app:fqe_bias}
 % =========================================================================
 
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\columnwidth]{../figures/m21_fqe_bias.png}
+\caption{Fitted-Q estimator shrinks toward zero on the
+$N\!=\!9$~LOSO OPE corpus. Linear fit
+$V_{\fqe}\!=\!0.57\,V_{\text{GT}}\!+\!0.70$ ($r\!=\!+0.62$);
+weak-decodability subjects (red) exhibit $44\%$ larger shrinkage.}
+\label{fig:app:fqe_bias}
+\end{figure}
+
 \fqe{} shrinks toward zero
 ($V_{\fqe}\!=\!0.57\,V_{\text{GT}}\!+\!0.70$, $r\!=\!+0.62$;
-$44\%$ more on weak-decodability subjects). Any monotone affine
+$44\%$ more on weak-decodability subjects, see
+Fig.~\ref{fig:app:fqe_bias}). Any monotone affine
 correction $\hat V = (V_{\fqe} - b)/m$ preserves within-subject
 argmax over policies, so the LOSO-corrected $\Delta$ versus naive
 \fqe{} on policy selection is identically zero ($+0.000$) on all 9

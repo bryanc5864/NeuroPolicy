@@ -164,7 +164,7 @@ test setting.
 
 \subsection{Cross-subject LOSO classification}\label{sec:results:loso}
 
-\begin{figure}[t]
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=\columnwidth]{../figures/m8_loso_acc_vs_itr.png}
 \caption{LOSO scatter on \bcib{}: commit accuracy versus \itr{} for
@@ -172,20 +172,9 @@ each held-out subject and three \cql{} configurations
 ($\alpha\!=\!1$, $\alpha\!=\!3$, CMDP $\epsilon\!=\!0.10$). Stars
 mark per-config means. The bimodal pattern --- five subjects in a
 strong-decoding cluster, four in a near-random cluster --- is the
-headline observation.}
+headline observation. Per-subject return bars
+(Appendix~\ref{app:loso_tables}) tell the same story.}
 \label{fig:m8_acc_itr}
-\end{figure}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{../figures/m8_loso_return_per_subject.png}
-\caption{Per-subject episode return on \bcib{} LOSO. Subjects are
-ordered as in the dataset; bars show \cql{}($\alpha\!=\!1$),
-\cql{}($\alpha\!=\!3$), CMDP($\epsilon\!=\!0.10$), and the random
-baseline. The three \cql{} configurations are essentially
-indistinguishable, which we attribute to encoder feature quality
-rather than the RL hyperparameters.}
-\label{fig:m8_per_subj}
 \end{figure}
 
 We sweep nine \bcib{} subjects through LOSO, training a separate
@@ -208,66 +197,40 @@ subjects show clear wins ($\Delta \in \{+0.21, +0.69, +0.69, +0.72,
 2, 3, 6); one ties.
 
 The three \cql{} configurations are within $\pm 0.02$ return of
-each other across all subjects (Fig.~\ref{fig:m8_per_subj}), which
+each other across all subjects (see
+Appendix~\ref{app:loso_tables}), which
 we interpret as evidence that, with the supervised-pretrained
 \eegnet{} stand-in encoder, neither the conservatism knob
 $\alpha_{\cql}$ nor the CMDP constraint differentiates the agent.
 
 \subsection{Comparison against baselines}\label{sec:results:baselines}
 
-\begin{table}[t]
+\begin{table}[!htbp]
 \centering
-\caption{Aggregate LOSO results on \bcib{} ($N\!=\!9$ subjects).
-All methods evaluated through the same environment (same encoder,
-same state representation where applicable). Best per column
-highlighted in \textbf{bold}. EEGNet+thr$_{0.75}$ achieves the
-highest mean episode return; \nettype{} is competitive on accuracy
-and matches EEGNet-fixed on \itr{}. Both significantly improve
-over CSP+LDA fixed-window.}
+\caption{LOSO baseline comparison on \bcib{} ($N\!=\!9$ subjects).
+Left: aggregate mean$\pm$std on episode return / commit accuracy /
+\itr{} / decision latency. Right: paired one-sided Wilcoxon test
+\nettype{} ($\alpha\!=\!1$) vs.\ each baseline.}
 \label{tab:loso_baselines}
-\small
-\begin{tabular}{l r r r r}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{l r r r r | r r r}
 \toprule
-Method & Return & Acc & \itr{} & Latency \\
-       &        &     & (b/m)  & (s)     \\
+Method & Return & Acc & \itr{}(b/m) & Lat.(s) & $\Delta$ ret & Wins & $p$ \\
 \midrule
-random                & $-1.58 \pm 0.09$ & $0.51$ & $0.2$  & $0.2$ \\
-CSP+LDA fixed         & $-1.80 \pm 0.50$ & $0.58$ & $0.8$  & $3.0$ \\
-\eegnet{} fixed       & $-1.39 \pm 0.59$ & $0.65$ & $1.9$  & $3.0$ \\
-\eegnet{}+thr $0.55$  & $-1.41 \pm 0.26$ & $0.60$ & $\mathbf{128.2}$ & $0.02$\\
-\eegnet{}+thr $0.65$  & $-1.35 \pm 0.30$ & $0.61$ & $23.6$ & $0.15$\\
-\eegnet{}+thr $0.75$  & $\mathbf{-1.29 \pm 0.40}$ & $0.63$ & $10.6$ & $0.51$\\
+random              & $-1.58$       & $0.51$ & $0.2$  & $0.2$  & $+0.21$ & $6/9$ & $0.10$ \\
+CSP+LDA fixed       & $-1.80$       & $0.58$ & $0.8$  & $3.0$  & $\mathbf{+0.44}$ & $8/9$ & $\mathbf{0.037}$ \\
+\eegnet{} fixed     & $-1.39$       & $0.65$ & $1.9$  & $3.0$  & $+0.02$ & $4/9$ & $0.29$ \\
+\eegnet{}+thr$0.55$ & $-1.41$       & $0.60$ & $\mathbf{128.2}$ & $0.02$ & $+0.04$ & $4/9$ & $0.37$ \\
+\eegnet{}+thr$0.65$ & $-1.35$       & $0.61$ & $23.6$ & $0.15$ & $-0.01$ & $4/9$ & $0.59$ \\
+\eegnet{}+thr$0.75$ & $\mathbf{-1.29}$ & $0.63$ & $10.6$ & $0.51$ & $-0.08$ & $4/9$ & $0.79$ \\
 \midrule
-\nettype{} ($\alpha\!=\!1$) & $-1.37 \pm 0.58$ & $\mathbf{0.65 \pm 0.10}$ & $1.9$ & $3.0$ \\
+\nettype{}          & $-1.37$       & $\mathbf{0.65}$ & $1.9$ & $3.0$ & --- & --- & --- \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
-\centering
-\caption{Paired Wilcoxon tests, \nettype{} ($\alpha\!=\!1$) versus
-each baseline, one-sided alternative \nettype{} $>$ baseline,
-$N\!=\!9$. \nettype{} significantly beats CSP+LDA fixed-window;
-ties or slightly loses to all \eegnet{}-based baselines. The
-strongest hand-tuned baseline (EEGNet+thr$_{0.75}$) achieves a
-marginally higher mean return.}
-\label{tab:wilcoxon}
-\small
-\begin{tabular}{l r r r}
-\toprule
-Comparison & $\Delta$ Return & Wins & $p$ (1-sided) \\
-\midrule
-\nettype{} > CSP+LDA fixed       & $+0.435$ & $8/9$ & $\mathbf{0.037}$ \\
-\nettype{} > random              & $+0.212$ & $6/9$ & $0.102$ \\
-\nettype{} > \eegnet{} fixed     & $+0.020$ & $4/9$ & $0.285$ \\
-\nettype{} > \eegnet{}+thr$_{0.55}$ & $+0.043$ & $4/9$ & $0.367$ \\
-\nettype{} > \eegnet{}+thr$_{0.65}$ & $-0.014$ & $4/9$ & $0.590$ \\
-\nettype{} > \eegnet{}+thr$_{0.75}$ & $-0.079$ & $4/9$ & $0.787$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{figure}[t]
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=\columnwidth]{../figures/m4_baselines_vs_neuropolicy.png}
 \caption{Paired difference (per-subject \nettype{} return $-$
@@ -280,8 +243,8 @@ encoder.}
 \label{fig:m4_diffs}
 \end{figure}
 
-Tables~\ref{tab:loso_baselines} and~\ref{tab:wilcoxon} and
-Fig.~\ref{fig:m4_diffs} report the head-to-head LOSO comparison.
+Table~\ref{tab:loso_baselines} and Fig.~\ref{fig:m4_diffs} report the
+head-to-head LOSO comparison.
 \nettype{} significantly improves over CSP+LDA fixed-window
 ($\Delta\!=\!+0.435$, $8/9$ wins, paired Wilcoxon $p\!=\!0.037$
 one-sided), but ties or slightly loses to every \eegnet{}-based
@@ -411,16 +374,42 @@ demonstrating dataset-agnostic generalisation across action-space
 sizes ($K\!\in\!\{2, 4\}$) and channel counts $\{3, 22, 62\}$.
 
 \paragraph*{Lee2019 LOSO classification (first published benchmark)}
-On a 10-subject LOSO subset $\{1, 5, 10, 15, 20, 25, 30, 35, 40,
-45\}$ with EEGNet and scalar~\cql{}+CMDP $\epsilon\!=\!0.10$:
-\textbf{commit accuracy $0.696\!\pm\!0.104$ vs random $0.481$,
-$10/10$ subjects beat random,
+On a 10-subject LOSO subset with EEGNet and scalar~\cql{}+CMDP
+$\epsilon\!=\!0.10$: \textbf{commit accuracy
+$0.696\!\pm\!0.104$ vs random $0.481$, $10/10$ subjects beat random,
 $\Delta_{\text{ret}}\!=\!+0.668\!\pm\!0.391$, paired Wilcoxon
-$p\!=\!0.001$ (1-sided)} --- the first statistically significant
-LOSO improvement obtained on any of the three datasets,
-completing the channel-count to LOSO-significance trend
-($p\!=\!0.10$, $0.15$, $0.001$ on the $\{3, 22, 62\}$-channel
-datasets respectively).
+$p\!=\!0.001$ (1-sided)} (Fig.~\ref{fig:lee2019_loso}) --- the
+first statistically significant LOSO improvement obtained on any
+of the three datasets, completing the channel-count to
+LOSO-significance trend
+(Fig.~\ref{fig:channel_sig}: $p\!=\!0.10$, $0.15$, $0.001$ on the
+$\{3, 22, 62\}$-channel datasets).
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\columnwidth]{../figures/lee2019_loso.png}
+\caption{Lee2019 (62-channel) LOSO classification, all 10
+held-out subjects --- the first published Lee2019 LOSO benchmark
+for offline-RL BCI. \nettype{} (green) beats the random baseline
+(grey) on every subject; commit accuracy is uniformly above the
+$0.5$ chance line. Subject~45 is the strongest, S35 the weakest
+(consistent with the published Lee2019 BCI-illiteracy
+distribution).}
+\label{fig:lee2019_loso}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\columnwidth]{../figures/channel_significance.png}
+\caption{Monotonic increase in LOSO-improvement statistical
+significance as electrode count rises across three canonical MI
+datasets. The 62-channel Lee2019 result decisively clears the
+$p\!=\!0.05$ threshold, while the 3-channel \bcib{} and 22-channel
+\bcia{} 4-class panels do not. $\Delta$acc denotes the mean
+commit-accuracy improvement of \nettype{} over the random
+baseline on each dataset.}
+\label{fig:channel_sig}
+\end{figure}
 
 \subsection{Foundation-model encoder cross-subject LOSO}\label{sec:results:labram_loso}
 
