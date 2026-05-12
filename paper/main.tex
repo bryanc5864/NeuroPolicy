@@ -38,32 +38,35 @@ Author identity withheld for double-blind review}
 \maketitle
 
 \begin{abstract}
-Brain--computer interfaces (BCIs) typically decode user intent at a
-fixed window and evaluate alternatives on-policy in a deterministic
-simulator, with no behavior policy, no propensity, and no rigorous
-off-policy machinery. We reformulate within-trial motor-imagery EEG
-decoding as an offline reinforcement-learning problem with action
-space $\{\textsc{Commit}_k, \textsc{Defer}, \textsc{Recal},
-\textsc{Abstain}\}$, and contribute the first port of calibrated
-fitted-Q evaluation (FQE) to BCI: validated against on-policy
-Monte-Carlo ground truth across a 12-policy panel, FQE attains
-Pearson $r\!=\!0.860$, RMSE~$=\!0.637$ within-subject. On the
-canonical \bcia{} 4-class protocol our offline-RL decoder achieves
-commit accuracy $86.2\!\pm\!5.8\%$ at $34.2$~bits/min~\itr{} with
-\textsc{Defer} as a \emph{learned} action --- the first offline-RL
-BCI decoder evaluated under standard SOTA conditions. We further
-present (i) the first $N\!=\!10$ LOSO classification benchmark on
-62-channel Lee2019 (commit acc $0.696\!\pm\!0.104$, $10/10$ wins,
-paired Wilcoxon $p\!=\!0.001$), completing a monotonic
-channel-count to LOSO-significance trend across three datasets; (ii)
-the first $N\!=\!9$ LOSO multi-method OPE benchmark for BCI (FQE,
-PDIS, WIS, DR), in which WIS strictly beats FQE on RMSE ($9/9$,
-$p\!=\!0.002$, $3\times$ lower bias) revealing a
-calibration-rank decoupling; and (iii) the first RL fine-tuning of
-the LaBraM EEG foundation model, ties \eegnet{} on \bcib{}
-($p\!=\!0.79$) with a subject-specific rescue effect
-($\sim\!+16$pp). Code and per-experiment artifacts released under
-MIT.
+Motor-imagery brain--computer interfaces (BCIs) usually pick a
+single class label at a fixed window. We instead frame the
+decoding problem as a sequence of decisions a learned agent must
+make: at each timestep it can commit a class, wait for more
+evidence (\textsc{Defer}), request a calibration trial, or
+abstain. Training such an agent from logged trials requires
+offline reinforcement learning, and \emph{evaluating} a candidate
+policy without re-running it on a user requires off-policy
+evaluation (OPE) --- both standard in clinical decision-making but
+absent from BCI.
+
+We close that gap. First, we port calibrated fitted-Q evaluation
+to BCI: across a 12-policy panel on BCI-IV-2b subject~4, our OPE
+estimate tracks on-policy Monte-Carlo ground truth at Pearson
+$r\!=\!0.860$ --- to our knowledge the first calibrated OPE
+estimate published for BCI motor imagery. Second, under the
+standard BCI-IV-2a 4-class evaluation protocol the agent reaches
+$86.2\!\pm\!5.8\%$ commit accuracy at $34.2$~bits/min ITR, with
+\textsc{Defer} as a \emph{learned} action rather than a tuned
+threshold. Third, on 62-channel Lee2019 we run the first published
+leave-one-subject-out classification benchmark for offline-RL BCI
+($N\!=\!10$, $10/10$ subjects beat random, paired Wilcoxon
+$p\!=\!0.001$); together with non-significant results on
+3-channel and 22-channel datasets, this completes a clear
+electrode-count $\to$ cross-subject-significance trend.
+Supplementary contributions include a multi-method OPE benchmark
+(FQE/PDIS/WIS/DR) showing WIS gives $3\times$ lower bias than FQE,
+and the first offline-RL fine-tuning of the LaBraM EEG foundation
+model. Code under MIT.
 \end{abstract}
 
 \begin{IEEEkeywords}
