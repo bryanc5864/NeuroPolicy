@@ -1,0 +1,263 @@
+{
+  "n_rows": 26,
+  "rows": [
+    {
+      "dataset": "bci2b",
+      "sid": 1,
+      "n_channels": 3,
+      "log2_channels": 1.584962500721156,
+      "decodability": 0.6389280677009873,
+      "ope_r": 0.06938932519562772
+    },
+    {
+      "dataset": "bci2b",
+      "sid": 4,
+      "n_channels": 3,
+      "log2_channels": 1.584962500721156,
+      "decodability": 0.7560975609756098,
+      "ope_r": 0.817663703617099
+    },
+    {
+      "dataset": "bci2b",
+      "sid": 7,
+      "n_channels": 3,
+      "log2_channels": 1.584962500721156,
+      "decodability": 0.7451851851851852,
+      "ope_r": 0.770301300936753
+    },
+    {
+      "dataset": "bci2b",
+      "sid": 2,
+      "n_channels": 3,
+      "log2_channels": 1.584962500721156,
+      "decodability": 0.5391432791728212,
+      "ope_r": -0.7685834273887663
+    },
+    {
+      "dataset": "bci2b",
+      "sid": 3,
+      "n_channels": 3,
+      "log2_channels": 1.584962500721156,
+      "decodability": 0.5217391304347826,
+      "ope_r": -0.9105447662049223
+    },
+    {
+      "dataset": "bci2b",
+      "sid": 5,
+      "n_channels": 3,
+      "log2_channels": 1.584962500721156,
+      "decodability": 0.7441860465116279,
+      "ope_r": 0.49984853649560146
+    },
+    {
+      "dataset": "bci2b",
+      "sid": 6,
+      "n_channels": 3,
+      "log2_channels": 1.584962500721156,
+      "decodability": 0.5650349650349651,
+      "ope_r": -0.16145085688699906
+    },
+    {
+      "dataset": "bci2b",
+      "sid": 8,
+      "n_channels": 3,
+      "log2_channels": 1.584962500721156,
+      "decodability": 0.5941807044410413,
+      "ope_r": 0.720594679415495
+    },
+    {
+      "dataset": "bci2b",
+      "sid": 9,
+      "n_channels": 3,
+      "log2_channels": 1.584962500721156,
+      "decodability": 0.7478510028653295,
+      "ope_r": 0.4974323897657997
+    },
+    {
+      "dataset": "bci2a",
+      "sid": 1,
+      "n_channels": 22,
+      "log2_channels": 4.459431618637297,
+      "decodability": 0.7295373665480427,
+      "ope_r": 0.882751166850855
+    },
+    {
+      "dataset": "bci2a",
+      "sid": 2,
+      "n_channels": 22,
+      "log2_channels": 4.459431618637297,
+      "decodability": 0.3074141048824593,
+      "ope_r": -0.5540359759377664
+    },
+    {
+      "dataset": "bci2a",
+      "sid": 3,
+      "n_channels": 22,
+      "log2_channels": 4.459431618637297,
+      "decodability": 0.7439252336448599,
+      "ope_r": 0.8641551061712895
+    },
+    {
+      "dataset": "bci2a",
+      "sid": 4,
+      "n_channels": 22,
+      "log2_channels": 4.459431618637297,
+      "decodability": 0.3835125448028674,
+      "ope_r": 0.6836058100430487
+    },
+    {
+      "dataset": "bci2a",
+      "sid": 5,
+      "n_channels": 22,
+      "log2_channels": 4.459431618637297,
+      "decodability": 0.31504424778761064,
+      "ope_r": -0.8022598524947966
+    },
+    {
+      "dataset": "bci2a",
+      "sid": 6,
+      "n_channels": 22,
+      "log2_channels": 4.459431618637297,
+      "decodability": 0.2842535787321063,
+      "ope_r": 0.5784506634207855
+    },
+    {
+      "dataset": "bci2a",
+      "sid": 7,
+      "n_channels": 22,
+      "log2_channels": 4.459431618637297,
+      "decodability": 0.38114754098360654,
+      "ope_r": 0.6991342074156722
+    },
+    {
+      "dataset": "bci2a",
+      "sid": 8,
+      "n_channels": 22,
+      "log2_channels": 4.459431618637297,
+      "decodability": 0.4935064935064935,
+      "ope_r": 0.9012451583682103
+    },
+    {
+      "dataset": "bci2a",
+      "sid": 9,
+      "n_channels": 22,
+      "log2_channels": 4.459431618637297,
+      "decodability": 0.5932914046121593,
+      "ope_r": 0.8767154267595688
+    },
+    {
+      "dataset": "lee2019",
+      "sid": 1,
+      "n_channels": 62,
+      "log2_channels": 5.954196310386875,
+      "decodability": 0.75,
+      "ope_r": 0.8555539668950168
+    },
+    {
+      "dataset": "lee2019",
+      "sid": 5,
+      "n_channels": 62,
+      "log2_channels": 5.954196310386875,
+      "decodability": 0.7076923251152039,
+      "ope_r": 0.8165716826608962
+    },
+    {
+      "dataset": "lee2019",
+      "sid": 10,
+      "n_channels": 62,
+      "log2_channels": 5.954196310386875,
+      "decodability": 0.7826923131942749,
+      "ope_r": 0.8387371840956426
+    },
+    {
+      "dataset": "lee2019",
+      "sid": 15,
+      "n_channels": 62,
+      "log2_channels": 5.954196310386875,
+      "decodability": 0.767307698726654,
+      "ope_r": 0.5343340964652088
+    },
+    {
+      "dataset": "lee2019",
+      "sid": 20,
+      "n_channels": 62,
+      "log2_channels": 5.954196310386875,
+      "decodability": 0.7769230604171753,
+      "ope_r": 0.9684556992856918
+    },
+    {
+      "dataset": "lee2019",
+      "sid": 25,
+      "n_channels": 62,
+      "log2_channels": 5.954196310386875,
+      "decodability": 0.7571429014205933,
+      "ope_r": 0.8483265964203982
+    },
+    {
+      "dataset": "lee2019",
+      "sid": 30,
+      "n_channels": 62,
+      "log2_channels": 5.954196310386875,
+      "decodability": 0.7560439705848694,
+      "ope_r": 0.5294750170426682
+    },
+    {
+      "dataset": "lee2019",
+      "sid": 35,
+      "n_channels": 62,
+      "log2_channels": 5.954196310386875,
+      "decodability": 0.7461538910865784,
+      "ope_r": -0.6540493400024906
+    }
+  ],
+  "univariate": {
+    "log2_channels": {
+      "pearson_r": 0.2876249106382268
+    },
+    "decodability": {
+      "pearson_r": 0.4200015816543127
+    }
+  },
+  "full_corpus_beta": [
+    -0.8323824815167017,
+    0.08259296001202138,
+    1.4643254315174088
+  ],
+  "full_corpus_r2": 0.2355054545472317,
+  "lodo": {
+    "bci2a": {
+      "rmse": 1.5483904618532855,
+      "n_test": 9,
+      "pred_actual_r": 0.613978704536514,
+      "pred_actual_p": 0.07859545756163513,
+      "beta": [
+        -3.30931153885189,
+        -0.034403736478713975,
+        5.43529257120797
+      ]
+    },
+    "bci2b": {
+      "rmse": 1.7450012996114685,
+      "n_test": 9,
+      "pred_actual_r": 0.8273129732534912,
+      "pred_actual_p": 0.005924998844149133,
+      "beta": [
+        0.9242488194690036,
+        -0.3432029027525515,
+        2.2653033281005936
+      ]
+    },
+    "lee2019": {
+      "rmse": 1.2530716832072586,
+      "n_test": 8,
+      "pred_actual_r": 0.16323190189399903,
+      "pred_actual_p": 0.6993332991689954,
+      "beta": [
+        -2.2391628546175997,
+        0.28842520306287145,
+        3.002698160641021
+      ]
+    }
+  },
+  "formula_text": "OPE_r \u2248 -0.8324 + +0.0826\u00b7log2(channels) + +1.4643\u00b7decodability"
+}

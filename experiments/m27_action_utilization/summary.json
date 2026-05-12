@@ -1,0 +1,879 @@
+{
+  "per_source": {
+    "M9_bci2b_within_sub4": {
+      "wrong_commit": 0.0045423128313112,
+      "correct_commit": 0.05211272259048338,
+      "abstain": 0.0,
+      "abstain_timeout": 0.028457110588677916,
+      "recal": 0.0,
+      "defer": 0.9148878539895275,
+      "n_agents": 8
+    },
+    "M10_bci2a_within_sub3": {
+      "wrong_commit": 0.004326809020304217,
+      "correct_commit": 0.04571110060909253,
+      "abstain": 0.0,
+      "abstain_timeout": 0.03946373786752392,
+      "recal": 0.0,
+      "defer": 0.9104983525030793,
+      "n_agents": 8
+    },
+    "M11_lee2019_within_sub1": {
+      "wrong_commit": 0.015687326520442028,
+      "correct_commit": 0.034869791549844084,
+      "abstain": 0.0,
+      "abstain_timeout": 0.03421427319806025,
+      "recal": 0.0,
+      "defer": 0.9152286087316536,
+      "n_agents": 8
+    },
+    "M12_cvar_sweep_bci2b_sub4": {
+      "wrong_commit": 0.0014204545454545455,
+      "correct_commit": 0.026245942996585274,
+      "abstain": 0.0,
+      "abstain_timeout": 0.051085021905805036,
+      "recal": 0.0,
+      "defer": 0.9212485805521551,
+      "n_agents": 8
+    },
+    "M8_loso_bci2b": {
+      "wrong_commit": 0.026407683423858578,
+      "correct_commit": 0.04938457206735575,
+      "abstain": 0.0,
+      "abstain_timeout": 0.0015523159378262338,
+      "recal": 0.0,
+      "defer": 0.9226554285709595,
+      "n_agents": 27
+    },
+    "M15_loso_bci2a": {
+      "wrong_commit": 0.03752067541235543,
+      "correct_commit": 0.03340233465700788,
+      "abstain": 0.0,
+      "abstain_timeout": 0.006213223601262193,
+      "recal": 0.0,
+      "defer": 0.9228637663293744,
+      "n_agents": 9
+    },
+    "M13b_labram_bci2a_sub3": {
+      "wrong_commit": 0.01156313706679458,
+      "correct_commit": 0.011574700632141572,
+      "abstain": 0.0,
+      "abstain_timeout": 0.05691715347849177,
+      "recal": 0.0,
+      "defer": 0.919945008822572,
+      "n_agents": 2
+    },
+    "M14_labram_loso_bci2b": {
+      "wrong_commit": 0.02632383415407151,
+      "correct_commit": 0.0505876927574554,
+      "abstain": 0.0,
+      "abstain_timeout": 1.155001155001155e-05,
+      "recal": 0.0,
+      "defer": 0.9230769230769231,
+      "n_agents": 9
+    },
+    "M16_labram_loso_bci2a": {
+      "wrong_commit": 0.040131274493720226,
+      "correct_commit": 0.03308849668655269,
+      "abstain": 0.0,
+      "abstain_timeout": 0.0037996089012430675,
+      "recal": 0.0,
+      "defer": 0.922980619918484,
+      "n_agents": 9
+    }
+  },
+  "overall": {
+    "wrong_commit": 0.021360579618854444,
+    "correct_commit": 0.041838136658637205,
+    "abstain": 0.0,
+    "abstain_timeout": 0.016724175322560528,
+    "recal": 0.0,
+    "defer": 0.9200771083999478,
+    "n_agents": 88
+  },
+  "used": {
+    "wrong_commit": 0.9431818181818182,
+    "correct_commit": 1.0,
+    "abstain": 0.0,
+    "abstain_timeout": 0.8522727272727273,
+    "recal": 0.0,
+    "defer": 1.0
+  },
+  "n_rows": 88,
+  "shares": [
+    {
+      "source": "M9_bci2b_within_sub4",
+      "variant": "/scalar_a1/val",
+      "defer": 0.9096091205211726,
+      "abstain_timeout": 0.019543973941368076,
+      "correct_commit": 0.061074918566775244,
+      "wrong_commit": 0.009771986970684038,
+      "_total": 1228
+    },
+    {
+      "source": "M9_bci2b_within_sub4",
+      "variant": "/scalar_a1/test",
+      "defer": 0.9077306733167082,
+      "correct_commit": 0.0656691604322527,
+      "abstain_timeout": 0.021612635078969242,
+      "wrong_commit": 0.004987531172069825,
+      "_total": 1203
+    },
+    {
+      "source": "M9_bci2b_within_sub4",
+      "variant": "/scalar_a1_cmdp_eps0.10/val",
+      "wrong_commit": 0.00878594249201278,
+      "defer": 0.9113418530351438,
+      "correct_commit": 0.05750798722044728,
+      "abstain_timeout": 0.022364217252396165,
+      "_total": 1252
+    },
+    {
+      "source": "M9_bci2b_within_sub4",
+      "variant": "/scalar_a1_cmdp_eps0.10/test",
+      "defer": 0.9106280193236715,
+      "correct_commit": 0.05958132045088567,
+      "abstain_timeout": 0.0249597423510467,
+      "wrong_commit": 0.004830917874396135,
+      "_total": 1242
+    },
+    {
+      "source": "M9_bci2b_within_sub4",
+      "variant": "/cvar_a0.25/val",
+      "defer": 0.9196816208393632,
+      "abstain_timeout": 0.0361794500723589,
+      "correct_commit": 0.041968162083936326,
+      "wrong_commit": 0.002170767004341534,
+      "_total": 1382
+    },
+    {
+      "source": "M9_bci2b_within_sub4",
+      "variant": "/cvar_a0.25/test",
+      "defer": 0.9210526315789473,
+      "correct_commit": 0.041963015647226175,
+      "abstain_timeout": 0.03485064011379801,
+      "wrong_commit": 0.0021337126600284497,
+      "_total": 1406
+    },
+    {
+      "source": "M9_bci2b_within_sub4",
+      "variant": "/cvar_a0.25_cmdp_eps0.10/val",
+      "defer": 0.9188002926115582,
+      "wrong_commit": 0.0036576444769568397,
+      "abstain_timeout": 0.03438185808339429,
+      "correct_commit": 0.04316020482809071,
+      "_total": 1367
+    },
+    {
+      "source": "M9_bci2b_within_sub4",
+      "variant": "/cvar_a0.25_cmdp_eps0.10/test",
+      "defer": 0.9202586206896551,
+      "correct_commit": 0.04597701149425287,
+      "abstain_timeout": 0.033764367816091954,
+      "_total": 1392
+    },
+    {
+      "source": "M10_bci2a_within_sub3",
+      "variant": "/scalar_a1/val",
+      "defer": 0.9090909090909091,
+      "abstain_timeout": 0.03171247357293869,
+      "correct_commit": 0.05179704016913319,
+      "wrong_commit": 0.007399577167019027,
+      "_total": 946
+    },
+    {
+      "source": "M10_bci2a_within_sub3",
+      "variant": "/scalar_a1/test",
+      "defer": 0.9078389830508474,
+      "abstain_timeout": 0.028601694915254237,
+      "correct_commit": 0.059322033898305086,
+      "wrong_commit": 0.00423728813559322,
+      "_total": 944
+    },
+    {
+      "source": "M10_bci2a_within_sub3",
+      "variant": "/scalar_a1_cmdp_eps0.10/val",
+      "defer": 0.9069264069264069,
+      "abstain_timeout": 0.023809523809523808,
+      "correct_commit": 0.05844155844155844,
+      "wrong_commit": 0.010822510822510822,
+      "_total": 924
+    },
+    {
+      "source": "M10_bci2a_within_sub3",
+      "variant": "/scalar_a1_cmdp_eps0.10/test",
+      "defer": 0.9124748490945674,
+      "abstain_timeout": 0.03118712273641851,
+      "correct_commit": 0.05432595573440644,
+      "wrong_commit": 0.002012072434607646,
+      "_total": 994
+    },
+    {
+      "source": "M10_bci2a_within_sub3",
+      "variant": "/cvar_a0.25/val",
+      "defer": 0.9152709359605912,
+      "abstain_timeout": 0.054187192118226604,
+      "wrong_commit": 0.002955665024630542,
+      "correct_commit": 0.027586206896551724,
+      "_total": 1015
+    },
+    {
+      "source": "M10_bci2a_within_sub3",
+      "variant": "/cvar_a0.25/test",
+      "defer": 0.9091858037578288,
+      "abstain_timeout": 0.0511482254697286,
+      "correct_commit": 0.038622129436325675,
+      "wrong_commit": 0.0010438413361169101,
+      "_total": 958
+    },
+    {
+      "source": "M10_bci2a_within_sub3",
+      "variant": "/cvar_a0.25_cmdp_eps0.10/val",
+      "defer": 0.9116135662898253,
+      "abstain_timeout": 0.04933196300102775,
+      "wrong_commit": 0.0041109969167523125,
+      "correct_commit": 0.03494347379239465,
+      "_total": 973
+    },
+    {
+      "source": "M10_bci2a_within_sub3",
+      "variant": "/cvar_a0.25_cmdp_eps0.10/test",
+      "defer": 0.9115853658536586,
+      "abstain_timeout": 0.04573170731707317,
+      "correct_commit": 0.04065040650406504,
+      "wrong_commit": 0.0020325203252032522,
+      "_total": 984
+    },
+    {
+      "source": "M11_lee2019_within_sub1",
+      "variant": "/scalar_a1/val",
+      "defer": 0.918918918918919,
+      "correct_commit": 0.02702702702702703,
+      "abstain_timeout": 0.043243243243243246,
+      "wrong_commit": 0.010810810810810811,
+      "_total": 185
+    },
+    {
+      "source": "M11_lee2019_within_sub1",
+      "variant": "/scalar_a1/test",
+      "defer": 0.9175824175824175,
+      "correct_commit": 0.03296703296703297,
+      "wrong_commit": 0.016483516483516484,
+      "abstain_timeout": 0.03296703296703297,
+      "_total": 182
+    },
+    {
+      "source": "M11_lee2019_within_sub1",
+      "variant": "/scalar_a1_cmdp_eps0.10/val",
+      "defer": 0.9166666666666666,
+      "correct_commit": 0.03333333333333333,
+      "abstain_timeout": 0.03888888888888889,
+      "wrong_commit": 0.011111111111111112,
+      "_total": 180
+    },
+    {
+      "source": "M11_lee2019_within_sub1",
+      "variant": "/scalar_a1_cmdp_eps0.10/test",
+      "defer": 0.9210526315789473,
+      "correct_commit": 0.031578947368421054,
+      "wrong_commit": 0.015789473684210527,
+      "abstain_timeout": 0.031578947368421054,
+      "_total": 190
+    },
+    {
+      "source": "M11_lee2019_within_sub1",
+      "variant": "/cvar_a0.25/val",
+      "defer": 0.9137931034482759,
+      "correct_commit": 0.028735632183908046,
+      "abstain_timeout": 0.04597701149425287,
+      "wrong_commit": 0.011494252873563218,
+      "_total": 174
+    },
+    {
+      "source": "M11_lee2019_within_sub1",
+      "variant": "/cvar_a0.25/test",
+      "defer": 0.9096385542168675,
+      "correct_commit": 0.04216867469879518,
+      "wrong_commit": 0.024096385542168676,
+      "abstain_timeout": 0.024096385542168676,
+      "_total": 166
+    },
+    {
+      "source": "M11_lee2019_within_sub1",
+      "variant": "/cvar_a0.25_cmdp_eps0.10/val",
+      "defer": 0.9162011173184358,
+      "correct_commit": 0.027932960893854747,
+      "abstain_timeout": 0.0446927374301676,
+      "wrong_commit": 0.0111731843575419,
+      "_total": 179
+    },
+    {
+      "source": "M11_lee2019_within_sub1",
+      "variant": "/cvar_a0.25_cmdp_eps0.10/test",
+      "defer": 0.9079754601226994,
+      "correct_commit": 0.05521472392638037,
+      "wrong_commit": 0.024539877300613498,
+      "abstain_timeout": 0.012269938650306749,
+      "_total": 163
+    },
+    {
+      "source": "M12_cvar_sweep_bci2b_sub4",
+      "variant": "/points[0]/val",
+      "defer": 0.9211647727272727,
+      "wrong_commit": 0.002840909090909091,
+      "abstain_timeout": 0.05397727272727273,
+      "correct_commit": 0.022017045454545456,
+      "_total": 1408
+    },
+    {
+      "source": "M12_cvar_sweep_bci2b_sub4",
+      "variant": "/points[0]/test",
+      "defer": 0.9213323883770376,
+      "correct_commit": 0.03047484053862509,
+      "abstain_timeout": 0.04819277108433735,
+      "_total": 1411
+    },
+    {
+      "source": "M12_cvar_sweep_bci2b_sub4",
+      "variant": "/points[1]/val",
+      "defer": 0.9211647727272727,
+      "wrong_commit": 0.002840909090909091,
+      "abstain_timeout": 0.05397727272727273,
+      "correct_commit": 0.022017045454545456,
+      "_total": 1408
+    },
+    {
+      "source": "M12_cvar_sweep_bci2b_sub4",
+      "variant": "/points[1]/test",
+      "defer": 0.9213323883770376,
+      "correct_commit": 0.03047484053862509,
+      "abstain_timeout": 0.04819277108433735,
+      "_total": 1411
+    },
+    {
+      "source": "M12_cvar_sweep_bci2b_sub4",
+      "variant": "/points[2]/val",
+      "defer": 0.9211647727272727,
+      "wrong_commit": 0.002840909090909091,
+      "abstain_timeout": 0.05397727272727273,
+      "correct_commit": 0.022017045454545456,
+      "_total": 1408
+    },
+    {
+      "source": "M12_cvar_sweep_bci2b_sub4",
+      "variant": "/points[2]/test",
+      "defer": 0.9213323883770376,
+      "correct_commit": 0.03047484053862509,
+      "abstain_timeout": 0.04819277108433735,
+      "_total": 1411
+    },
+    {
+      "source": "M12_cvar_sweep_bci2b_sub4",
+      "variant": "/points[3]/val",
+      "defer": 0.9211647727272727,
+      "wrong_commit": 0.002840909090909091,
+      "abstain_timeout": 0.05397727272727273,
+      "correct_commit": 0.022017045454545456,
+      "_total": 1408
+    },
+    {
+      "source": "M12_cvar_sweep_bci2b_sub4",
+      "variant": "/points[3]/test",
+      "defer": 0.9213323883770376,
+      "correct_commit": 0.03047484053862509,
+      "abstain_timeout": 0.04819277108433735,
+      "_total": 1411
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[0]/results/cql_a1/metrics",
+      "defer": 0.92306048300919,
+      "wrong_commit": 0.0269288309467835,
+      "correct_commit": 0.04776661679846121,
+      "abstain_timeout": 0.0022440692455652916,
+      "_total": 9358
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[0]/results/cql_a3/metrics",
+      "defer": 0.9230769230769231,
+      "wrong_commit": 0.0280982905982906,
+      "correct_commit": 0.04861111111111111,
+      "abstain_timeout": 0.00021367521367521368,
+      "_total": 9360
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[0]/results/cmdp_eps0.1/metrics",
+      "defer": 0.9228709159078736,
+      "correct_commit": 0.048527048741296194,
+      "wrong_commit": 0.027423674343867166,
+      "abstain_timeout": 0.0011783610069630423,
+      "_total": 9335
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[1]/results/cql_a1/metrics",
+      "defer": 0.9230769230769231,
+      "correct_commit": 0.041289592760180995,
+      "wrong_commit": 0.035407239819004524,
+      "abstain_timeout": 0.00022624434389140272,
+      "_total": 8840
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[1]/results/cql_a3/metrics",
+      "defer": 0.9230769230769231,
+      "correct_commit": 0.041289592760180995,
+      "wrong_commit": 0.035633484162895926,
+      "_total": 8840
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[1]/results/cmdp_eps0.1/metrics",
+      "defer": 0.9230769230769231,
+      "correct_commit": 0.041289592760180995,
+      "wrong_commit": 0.03529411764705882,
+      "abstain_timeout": 0.00033936651583710406,
+      "_total": 8840
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[2]/results/cql_a1/metrics",
+      "defer": 0.9225806451612903,
+      "correct_commit": 0.04032258064516129,
+      "wrong_commit": 0.03645161290322581,
+      "abstain_timeout": 0.0006451612903225806,
+      "_total": 9300
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[2]/results/cql_a3/metrics",
+      "defer": 0.9230769230769231,
+      "correct_commit": 0.03974358974358974,
+      "wrong_commit": 0.03707264957264957,
+      "abstain_timeout": 0.00010683760683760684,
+      "_total": 9360
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[2]/results/cmdp_eps0.1/metrics",
+      "defer": 0.9223803363518758,
+      "correct_commit": 0.040103492884864166,
+      "wrong_commit": 0.03676153514445882,
+      "abstain_timeout": 0.0007546356188012075,
+      "_total": 9276
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[3]/results/cql_a1/metrics",
+      "defer": 0.9227476772105648,
+      "correct_commit": 0.058356822215262553,
+      "wrong_commit": 0.018477920450986535,
+      "abstain_timeout": 0.00041758012318613634,
+      "_total": 9579
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[3]/results/cql_a3/metrics",
+      "defer": 0.9230769230769231,
+      "correct_commit": 0.0577962577962578,
+      "wrong_commit": 0.01891891891891892,
+      "abstain_timeout": 0.0002079002079002079,
+      "_total": 9620
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[3]/results/cmdp_eps0.1/metrics",
+      "defer": 0.9227718639115007,
+      "correct_commit": 0.05823418910457107,
+      "wrong_commit": 0.01878522229179712,
+      "abstain_timeout": 0.0002087246921310791,
+      "_total": 9582
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[4]/results/cql_a1/metrics",
+      "defer": 0.9230769230769231,
+      "correct_commit": 0.05706860706860707,
+      "wrong_commit": 0.01943866943866944,
+      "abstain_timeout": 0.0004158004158004158,
+      "_total": 9620
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[4]/results/cql_a3/metrics",
+      "defer": 0.9230769230769231,
+      "correct_commit": 0.056652806652806656,
+      "wrong_commit": 0.01995841995841996,
+      "abstain_timeout": 0.00031185031185031187,
+      "_total": 9620
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[4]/results/cmdp_eps0.1/metrics",
+      "defer": 0.9229808492922564,
+      "correct_commit": 0.05661948376353039,
+      "wrong_commit": 0.019462947543713572,
+      "abstain_timeout": 0.0009367194004995837,
+      "_total": 9608
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[5]/results/cql_a1/metrics",
+      "defer": 0.9230687039213591,
+      "correct_commit": 0.0432738540442355,
+      "wrong_commit": 0.033230045945079605,
+      "abstain_timeout": 0.0004273960893257827,
+      "_total": 9359
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[5]/results/cql_a3/metrics",
+      "defer": 0.9230769230769231,
+      "correct_commit": 0.043696581196581194,
+      "wrong_commit": 0.0327991452991453,
+      "abstain_timeout": 0.00042735042735042735,
+      "_total": 9360
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[5]/results/cmdp_eps0.1/metrics",
+      "defer": 0.92306048300919,
+      "correct_commit": 0.04317161786706561,
+      "wrong_commit": 0.03323359692241932,
+      "abstain_timeout": 0.0005343022013250694,
+      "_total": 9358
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[6]/results/cql_a1/metrics",
+      "defer": 0.9226804123711341,
+      "correct_commit": 0.05573453608247423,
+      "wrong_commit": 0.01825601374570447,
+      "abstain_timeout": 0.003329037800687285,
+      "_total": 9312
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[6]/results/cql_a3/metrics",
+      "defer": 0.922879177377892,
+      "wrong_commit": 0.01960154241645244,
+      "correct_commit": 0.05741216795201371,
+      "abstain_timeout": 0.00010711225364181663,
+      "_total": 9336
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[6]/results/cmdp_eps0.1/metrics",
+      "defer": 0.922879177377892,
+      "wrong_commit": 0.01842330762639246,
+      "correct_commit": 0.05387746358183376,
+      "abstain_timeout": 0.004820051413881748,
+      "_total": 9336
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[7]/results/cql_a1/metrics",
+      "defer": 0.9188987301248532,
+      "correct_commit": 0.04599295699498453,
+      "wrong_commit": 0.02977270301995518,
+      "abstain_timeout": 0.005335609860207022,
+      "_total": 9371
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[7]/results/cql_a3/metrics",
+      "defer": 0.9228661321424947,
+      "correct_commit": 0.04709225616563483,
+      "wrong_commit": 0.0289252004465645,
+      "abstain_timeout": 0.0011164112453059983,
+      "_total": 9853
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[7]/results/cmdp_eps0.1/metrics",
+      "defer": 0.9199325747998315,
+      "correct_commit": 0.04087652760219132,
+      "wrong_commit": 0.027918246944795617,
+      "abstain_timeout": 0.011272650653181627,
+      "_total": 9492
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[8]/results/cql_a1/metrics",
+      "defer": 0.922522328634456,
+      "correct_commit": 0.05531044872484666,
+      "wrong_commit": 0.019046594210696224,
+      "abstain_timeout": 0.0031206284300010763,
+      "_total": 9293
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[8]/results/cql_a3/metrics",
+      "defer": 0.9230687039213591,
+      "wrong_commit": 0.018805427930334438,
+      "correct_commit": 0.057271075969654875,
+      "abstain_timeout": 0.0008547921786515654,
+      "_total": 9359
+    },
+    {
+      "source": "M8_loso_bci2b",
+      "variant": "/per_subject[8]/results/cmdp_eps0.1/metrics",
+      "defer": 0.9227550691985839,
+      "correct_commit": 0.05600257483102671,
+      "wrong_commit": 0.018882094195901727,
+      "abstain_timeout": 0.002360261774487716,
+      "_total": 9321
+    },
+    {
+      "source": "M15_loso_bci2a",
+      "variant": "/per_subject[0]/results/cmdp_eps0.1/metrics",
+      "defer": 0.9226845637583893,
+      "correct_commit": 0.05503355704697987,
+      "wrong_commit": 0.020402684563758388,
+      "abstain_timeout": 0.0018791946308724832,
+      "_total": 7450
+    },
+    {
+      "source": "M15_loso_bci2a",
+      "variant": "/per_subject[1]/results/cmdp_eps0.1/metrics",
+      "defer": 0.9227882037533512,
+      "wrong_commit": 0.05134048257372654,
+      "correct_commit": 0.022788203753351208,
+      "abstain_timeout": 0.0030831099195710457,
+      "_total": 7460
+    },
+    {
+      "source": "M15_loso_bci2a",
+      "variant": "/per_subject[2]/results/cmdp_eps0.1/metrics",
+      "defer": 0.9227985524728589,
+      "correct_commit": 0.05334405575660099,
+      "wrong_commit": 0.018362149845865164,
+      "abstain_timeout": 0.005495241924674977,
+      "_total": 7461
+    },
+    {
+      "source": "M15_loso_bci2a",
+      "variant": "/per_subject[3]/results/cmdp_eps0.1/metrics",
+      "defer": 0.9227364185110664,
+      "wrong_commit": 0.04614352783366868,
+      "abstain_timeout": 0.002414486921529175,
+      "correct_commit": 0.028705566733735748,
+      "_total": 7455
+    },
+    {
+      "source": "M15_loso_bci2a",
+      "variant": "/per_subject[4]/results/cmdp_eps0.1/metrics",
+      "defer": 0.922943143812709,
+      "wrong_commit": 0.05177257525083612,
+      "correct_commit": 0.023812709030100333,
+      "abstain_timeout": 0.001471571906354515,
+      "_total": 7475
+    },
+    {
+      "source": "M15_loso_bci2a",
+      "variant": "/per_subject[5]/results/cmdp_eps0.1/metrics",
+      "defer": 0.9230563718942025,
+      "correct_commit": 0.01856799358803099,
+      "abstain_timeout": 0.011621693828479829,
+      "wrong_commit": 0.04675394068928667,
+      "_total": 7486
+    },
+    {
+      "source": "M15_loso_bci2a",
+      "variant": "/per_subject[6]/results/cmdp_eps0.1/metrics",
+      "defer": 0.9230460921843687,
+      "correct_commit": 0.024849699398797595,
+      "abstain_timeout": 0.01175684702738811,
+      "wrong_commit": 0.04034736138944556,
+      "_total": 7485
+    },
+    {
+      "source": "M15_loso_bci2a",
+      "variant": "/per_subject[7]/results/cmdp_eps0.1/metrics",
+      "defer": 0.9227053140096618,
+      "abstain_timeout": 0.004965110037573806,
+      "correct_commit": 0.03569511540526033,
+      "wrong_commit": 0.03663446054750403,
+      "_total": 7452
+    },
+    {
+      "source": "M15_loso_bci2a",
+      "variant": "/per_subject[8]/results/cmdp_eps0.1/metrics",
+      "defer": 0.9230152365677626,
+      "correct_commit": 0.037824111200213846,
+      "abstain_timeout": 0.013231756214915798,
+      "wrong_commit": 0.025928896017107725,
+      "_total": 7482
+    },
+    {
+      "source": "M13b_labram_bci2a_sub3",
+      "variant": "/labram_finetuned/val",
+      "defer": 0.9200743494423792,
+      "abstain_timeout": 0.056691449814126396,
+      "correct_commit": 0.013011152416356878,
+      "wrong_commit": 0.010223048327137546,
+      "_total": 1076
+    },
+    {
+      "source": "M13b_labram_bci2a_sub3",
+      "variant": "/labram_finetuned/test",
+      "defer": 0.919815668202765,
+      "wrong_commit": 0.012903225806451613,
+      "abstain_timeout": 0.05714285714285714,
+      "correct_commit": 0.010138248847926268,
+      "_total": 1085
+    },
+    {
+      "source": "M14_labram_loso_bci2b",
+      "variant": "/per_subject[0]/results/labram_cmdp/metrics",
+      "defer": 0.9230769230769231,
+      "correct_commit": 0.052564102564102565,
+      "wrong_commit": 0.02435897435897436,
+      "_total": 9360
+    },
+    {
+      "source": "M14_labram_loso_bci2b",
+      "variant": "/per_subject[1]/results/labram_cmdp/metrics",
+      "defer": 0.9230769230769231,
+      "correct_commit": 0.03800904977375565,
+      "wrong_commit": 0.03891402714932127,
+      "_total": 8840
+    },
+    {
+      "source": "M14_labram_loso_bci2b",
+      "variant": "/per_subject[2]/results/labram_cmdp/metrics",
+      "defer": 0.9230769230769231,
+      "correct_commit": 0.03952991452991453,
+      "wrong_commit": 0.03739316239316239,
+      "_total": 9360
+    },
+    {
+      "source": "M14_labram_loso_bci2b",
+      "variant": "/per_subject[3]/results/labram_cmdp/metrics",
+      "defer": 0.9230769230769231,
+      "correct_commit": 0.058212058212058215,
+      "wrong_commit": 0.018607068607068608,
+      "abstain_timeout": 0.00010395010395010396,
+      "_total": 9620
+    },
+    {
+      "source": "M14_labram_loso_bci2b",
+      "variant": "/per_subject[4]/results/labram_cmdp/metrics",
+      "defer": 0.9230769230769231,
+      "correct_commit": 0.0524948024948025,
+      "wrong_commit": 0.02442827442827443,
+      "_total": 9620
+    },
+    {
+      "source": "M14_labram_loso_bci2b",
+      "variant": "/per_subject[5]/results/labram_cmdp/metrics",
+      "defer": 0.9230769230769231,
+      "wrong_commit": 0.033867521367521365,
+      "correct_commit": 0.043055555555555555,
+      "_total": 9360
+    },
+    {
+      "source": "M14_labram_loso_bci2b",
+      "variant": "/per_subject[6]/results/labram_cmdp/metrics",
+      "defer": 0.9230769230769231,
+      "wrong_commit": 0.020512820512820513,
+      "correct_commit": 0.05641025641025641,
+      "_total": 9360
+    },
+    {
+      "source": "M14_labram_loso_bci2b",
+      "variant": "/per_subject[7]/results/labram_cmdp/metrics",
+      "defer": 0.9230769230769231,
+      "wrong_commit": 0.018319838056680162,
+      "correct_commit": 0.05860323886639676,
+      "_total": 9880
+    },
+    {
+      "source": "M14_labram_loso_bci2b",
+      "variant": "/per_subject[8]/results/labram_cmdp/metrics",
+      "defer": 0.9230769230769231,
+      "correct_commit": 0.05641025641025641,
+      "wrong_commit": 0.020512820512820513,
+      "_total": 9360
+    },
+    {
+      "source": "M16_labram_loso_bci2a",
+      "variant": "/per_subject[0]/results/labram_cmdp/metrics",
+      "defer": 0.9230769230769231,
+      "correct_commit": 0.04767628205128205,
+      "wrong_commit": 0.02844551282051282,
+      "abstain_timeout": 0.0008012820512820513,
+      "_total": 7488
+    },
+    {
+      "source": "M16_labram_loso_bci2a",
+      "variant": "/per_subject[1]/results/labram_cmdp/metrics",
+      "defer": 0.9230769230769231,
+      "correct_commit": 0.02310363247863248,
+      "wrong_commit": 0.05381944444444445,
+      "_total": 7488
+    },
+    {
+      "source": "M16_labram_loso_bci2a",
+      "variant": "/per_subject[2]/results/labram_cmdp/metrics",
+      "defer": 0.9228088984186545,
+      "correct_commit": 0.049986598767086575,
+      "wrong_commit": 0.024926293218976145,
+      "abstain_timeout": 0.002278209595282766,
+      "_total": 7462
+    },
+    {
+      "source": "M16_labram_loso_bci2a",
+      "variant": "/per_subject[3]/results/labram_cmdp/metrics",
+      "defer": 0.9230769230769231,
+      "wrong_commit": 0.04767628205128205,
+      "abstain_timeout": 0.008146367521367522,
+      "correct_commit": 0.021100427350427352,
+      "_total": 7488
+    },
+    {
+      "source": "M16_labram_loso_bci2a",
+      "variant": "/per_subject[4]/results/labram_cmdp/metrics",
+      "defer": 0.9226118500604595,
+      "correct_commit": 0.02404944242912804,
+      "wrong_commit": 0.05333870751041247,
+      "_total": 7443
+    },
+    {
+      "source": "M16_labram_loso_bci2a",
+      "variant": "/per_subject[5]/results/labram_cmdp/metrics",
+      "defer": 0.9230769230769231,
+      "wrong_commit": 0.03872863247863248,
+      "abstain_timeout": 0.022302350427350428,
+      "correct_commit": 0.015892094017094016,
+      "_total": 7488
+    },
+    {
+      "source": "M16_labram_loso_bci2a",
+      "variant": "/per_subject[6]/results/labram_cmdp/metrics",
+      "defer": 0.9230460921843687,
+      "correct_commit": 0.02578490313961256,
+      "wrong_commit": 0.0511690046760187,
+      "_total": 7485
+    },
+    {
+      "source": "M16_labram_loso_bci2a",
+      "variant": "/per_subject[7]/results/labram_cmdp/metrics",
+      "defer": 0.9230358097274185,
+      "correct_commit": 0.05024051309460182,
+      "wrong_commit": 0.02672367717797969,
+      "_total": 7484
+    },
+    {
+      "source": "M16_labram_loso_bci2a",
+      "variant": "/per_subject[8]/results/labram_cmdp/metrics",
+      "defer": 0.9230152365677626,
+      "correct_commit": 0.03996257685110933,
+      "wrong_commit": 0.0363539160652232,
+      "abstain_timeout": 0.0006682705159048383,
+      "_total": 7482
+    }
+  ]
+}

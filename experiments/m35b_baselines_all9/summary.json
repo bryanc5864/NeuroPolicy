@@ -1,0 +1,450 @@
+{
+  "subjects": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "fb_bands": [
+    [
+      4,
+      8
+    ],
+    [
+      8,
+      12
+    ],
+    [
+      12,
+      16
+    ],
+    [
+      16,
+      20
+    ],
+    [
+      20,
+      24
+    ],
+    [
+      24,
+      28
+    ],
+    [
+      28,
+      32
+    ]
+  ],
+  "per_subject": {
+    "1": {
+      "subject_id": 1,
+      "n_trials": 576,
+      "n_classes": 4,
+      "n_train_trials": 230,
+      "n_test_trials": 288,
+      "per_seed": {
+        "0": {
+          "eegnet_mandatory_acc": 0.8055555555555556,
+          "eegnet_val_acc": 0.673740029335022
+        },
+        "1": {
+          "eegnet_mandatory_acc": 0.8298611111111112,
+          "eegnet_val_acc": 0.6962864398956299
+        },
+        "2": {
+          "eegnet_mandatory_acc": 0.8402777777777778,
+          "eegnet_val_acc": 0.6352785229682922
+        },
+        "3": {
+          "eegnet_mandatory_acc": 0.8263888888888888,
+          "eegnet_val_acc": 0.6419097781181335
+        },
+        "4": {
+          "eegnet_mandatory_acc": 0.84375,
+          "eegnet_val_acc": 0.6591511964797974
+        }
+      },
+      "csp_lda_acc": 0.6388888888888888,
+      "fbcsp_lda_acc": 0.7291666666666666,
+      "eegnet_mandatory_acc_mean": 0.8291666666666668,
+      "eegnet_mandatory_acc_std": 0.015015102993360866,
+      "eegnet_mandatory_accs_per_seed": [
+        0.8055555555555556,
+        0.8298611111111112,
+        0.8402777777777778,
+        0.8263888888888888,
+        0.84375
+      ]
+    },
+    "2": {
+      "subject_id": 2,
+      "n_trials": 576,
+      "n_classes": 4,
+      "n_train_trials": 230,
+      "n_test_trials": 288,
+      "per_seed": {
+        "0": {
+          "eegnet_mandatory_acc": 0.4895833333333333,
+          "eegnet_val_acc": 0.4641909599304199
+        },
+        "1": {
+          "eegnet_mandatory_acc": 0.4895833333333333,
+          "eegnet_val_acc": 0.4840848743915558
+        },
+        "2": {
+          "eegnet_mandatory_acc": 0.4722222222222222,
+          "eegnet_val_acc": 0.4482758641242981
+        },
+        "3": {
+          "eegnet_mandatory_acc": 0.4618055555555556,
+          "eegnet_val_acc": 0.44429707527160645
+        },
+        "4": {
+          "eegnet_mandatory_acc": 0.4722222222222222,
+          "eegnet_val_acc": 0.4575596749782562
+        }
+      },
+      "csp_lda_acc": 0.46875,
+      "fbcsp_lda_acc": 0.4861111111111111,
+      "eegnet_mandatory_acc_mean": 0.4770833333333333,
+      "eegnet_mandatory_acc_std": 0.012177554108854278,
+      "eegnet_mandatory_accs_per_seed": [
+        0.4895833333333333,
+        0.4895833333333333,
+        0.4722222222222222,
+        0.4618055555555556,
+        0.4722222222222222
+      ]
+    },
+    "3": {
+      "subject_id": 3,
+      "n_trials": 576,
+      "n_classes": 4,
+      "n_train_trials": 230,
+      "n_test_trials": 288,
+      "per_seed": {
+        "0": {
+          "eegnet_mandatory_acc": 0.8576388888888888,
+          "eegnet_val_acc": 0.738726794719696
+        },
+        "1": {
+          "eegnet_mandatory_acc": 0.8506944444444444,
+          "eegnet_val_acc": 0.7413793206214905
+        },
+        "2": {
+          "eegnet_mandatory_acc": 0.8715277777777778,
+          "eegnet_val_acc": 0.7241379022598267
+        },
+        "3": {
+          "eegnet_mandatory_acc": 0.8819444444444444,
+          "eegnet_val_acc": 0.7400530576705933
+        },
+        "4": {
+          "eegnet_mandatory_acc": 0.8645833333333334,
+          "eegnet_val_acc": 0.6962864398956299
+        }
+      },
+      "csp_lda_acc": 0.7048611111111112,
+      "fbcsp_lda_acc": 0.6840277777777778,
+      "eegnet_mandatory_acc_mean": 0.8652777777777777,
+      "eegnet_mandatory_acc_std": 0.012127950830953468,
+      "eegnet_mandatory_accs_per_seed": [
+        0.8576388888888888,
+        0.8506944444444444,
+        0.8715277777777778,
+        0.8819444444444444,
+        0.8645833333333334
+      ]
+    },
+    "4": {
+      "subject_id": 4,
+      "n_trials": 576,
+      "n_classes": 4,
+      "n_train_trials": 230,
+      "n_test_trials": 288,
+      "per_seed": {
+        "0": {
+          "eegnet_mandatory_acc": 0.5138888888888888,
+          "eegnet_val_acc": 0.38461539149284363
+        },
+        "1": {
+          "eegnet_mandatory_acc": 0.6041666666666666,
+          "eegnet_val_acc": 0.3726790249347687
+        },
+        "2": {
+          "eegnet_mandatory_acc": 0.6006944444444444,
+          "eegnet_val_acc": 0.3965517282485962
+        },
+        "3": {
+          "eegnet_mandatory_acc": 0.5902777777777778,
+          "eegnet_val_acc": 0.3527851402759552
+        },
+        "4": {
+          "eegnet_mandatory_acc": 0.5798611111111112,
+          "eegnet_val_acc": 0.380636602640152
+        }
+      },
+      "csp_lda_acc": 0.5520833333333334,
+      "fbcsp_lda_acc": 0.6631944444444444,
+      "eegnet_mandatory_acc_mean": 0.5777777777777777,
+      "eegnet_mandatory_acc_std": 0.03695919191870882,
+      "eegnet_mandatory_accs_per_seed": [
+        0.5138888888888888,
+        0.6041666666666666,
+        0.6006944444444444,
+        0.5902777777777778,
+        0.5798611111111112
+      ]
+    },
+    "5": {
+      "subject_id": 5,
+      "n_trials": 576,
+      "n_classes": 4,
+      "n_train_trials": 230,
+      "n_test_trials": 288,
+      "per_seed": {
+        "0": {
+          "eegnet_mandatory_acc": 0.4826388888888889,
+          "eegnet_val_acc": 0.4323607385158539
+        },
+        "1": {
+          "eegnet_mandatory_acc": 0.5173611111111112,
+          "eegnet_val_acc": 0.4986737370491028
+        },
+        "2": {
+          "eegnet_mandatory_acc": 0.5173611111111112,
+          "eegnet_val_acc": 0.4774535596370697
+        },
+        "3": {
+          "eegnet_mandatory_acc": 0.59375,
+          "eegnet_val_acc": 0.5305039882659912
+        },
+        "4": {
+          "eegnet_mandatory_acc": 0.5833333333333334,
+          "eegnet_val_acc": 0.5424402952194214
+        }
+      },
+      "csp_lda_acc": 0.2881944444444444,
+      "fbcsp_lda_acc": 0.3680555555555556,
+      "eegnet_mandatory_acc_mean": 0.538888888888889,
+      "eegnet_mandatory_acc_std": 0.04763402955456254,
+      "eegnet_mandatory_accs_per_seed": [
+        0.4826388888888889,
+        0.5173611111111112,
+        0.5173611111111112,
+        0.59375,
+        0.5833333333333334
+      ]
+    },
+    "6": {
+      "subject_id": 6,
+      "n_trials": 576,
+      "n_classes": 4,
+      "n_train_trials": 230,
+      "n_test_trials": 288,
+      "per_seed": {
+        "0": {
+          "eegnet_mandatory_acc": 0.4826388888888889,
+          "eegnet_val_acc": 0.3315649926662445
+        },
+        "1": {
+          "eegnet_mandatory_acc": 0.4965277777777778,
+          "eegnet_val_acc": 0.3740052878856659
+        },
+        "2": {
+          "eegnet_mandatory_acc": 0.4583333333333333,
+          "eegnet_val_acc": 0.3673740029335022
+        },
+        "3": {
+          "eegnet_mandatory_acc": 0.4756944444444444,
+          "eegnet_val_acc": 0.3607426881790161
+        },
+        "4": {
+          "eegnet_mandatory_acc": 0.4756944444444444,
+          "eegnet_val_acc": 0.36339521408081055
+        }
+      },
+      "csp_lda_acc": 0.3854166666666667,
+      "fbcsp_lda_acc": 0.4548611111111111,
+      "eegnet_mandatory_acc_mean": 0.47777777777777775,
+      "eegnet_mandatory_acc_std": 0.013801810357188755,
+      "eegnet_mandatory_accs_per_seed": [
+        0.4826388888888889,
+        0.4965277777777778,
+        0.4583333333333333,
+        0.4756944444444444,
+        0.4756944444444444
+      ]
+    },
+    "7": {
+      "subject_id": 7,
+      "n_trials": 576,
+      "n_classes": 4,
+      "n_train_trials": 230,
+      "n_test_trials": 288,
+      "per_seed": {
+        "0": {
+          "eegnet_mandatory_acc": 0.8298611111111112,
+          "eegnet_val_acc": 0.7307692170143127
+        },
+        "1": {
+          "eegnet_mandatory_acc": 0.7222222222222222,
+          "eegnet_val_acc": 0.6803713440895081
+        },
+        "2": {
+          "eegnet_mandatory_acc": 0.7673611111111112,
+          "eegnet_val_acc": 0.7413793206214905
+        },
+        "3": {
+          "eegnet_mandatory_acc": 0.8402777777777778,
+          "eegnet_val_acc": 0.7519893646240234
+        },
+        "4": {
+          "eegnet_mandatory_acc": 0.6736111111111112,
+          "eegnet_val_acc": 0.644562304019928
+        }
+      },
+      "csp_lda_acc": 0.6111111111111112,
+      "fbcsp_lda_acc": 0.6701388888888888,
+      "eegnet_mandatory_acc_mean": 0.7666666666666667,
+      "eegnet_mandatory_acc_std": 0.0707941749059715,
+      "eegnet_mandatory_accs_per_seed": [
+        0.8298611111111112,
+        0.7222222222222222,
+        0.7673611111111112,
+        0.8402777777777778,
+        0.6736111111111112
+      ]
+    },
+    "8": {
+      "subject_id": 8,
+      "n_trials": 576,
+      "n_classes": 4,
+      "n_train_trials": 230,
+      "n_test_trials": 288,
+      "per_seed": {
+        "0": {
+          "eegnet_mandatory_acc": 0.7777777777777778,
+          "eegnet_val_acc": 0.6896551847457886
+        },
+        "1": {
+          "eegnet_mandatory_acc": 0.7430555555555556,
+          "eegnet_val_acc": 0.6936339139938354
+        },
+        "2": {
+          "eegnet_mandatory_acc": 0.7951388888888888,
+          "eegnet_val_acc": 0.7042440176010132
+        },
+        "3": {
+          "eegnet_mandatory_acc": 0.7673611111111112,
+          "eegnet_val_acc": 0.6870026588439941
+        },
+        "4": {
+          "eegnet_mandatory_acc": 0.7534722222222222,
+          "eegnet_val_acc": 0.6724137663841248
+        }
+      },
+      "csp_lda_acc": 0.7395833333333334,
+      "fbcsp_lda_acc": 0.7048611111111112,
+      "eegnet_mandatory_acc_mean": 0.7673611111111112,
+      "eegnet_mandatory_acc_std": 0.020394687716094997,
+      "eegnet_mandatory_accs_per_seed": [
+        0.7777777777777778,
+        0.7430555555555556,
+        0.7951388888888888,
+        0.7673611111111112,
+        0.7534722222222222
+      ]
+    },
+    "9": {
+      "subject_id": 9,
+      "n_trials": 576,
+      "n_classes": 4,
+      "n_train_trials": 230,
+      "n_test_trials": 288,
+      "per_seed": {
+        "0": {
+          "eegnet_mandatory_acc": 0.7708333333333334,
+          "eegnet_val_acc": 0.5901856422424316
+        },
+        "1": {
+          "eegnet_mandatory_acc": 0.8020833333333334,
+          "eegnet_val_acc": 0.5888593792915344
+        },
+        "2": {
+          "eegnet_mandatory_acc": 0.7847222222222222,
+          "eegnet_val_acc": 0.5888593792915344
+        },
+        "3": {
+          "eegnet_mandatory_acc": 0.7395833333333334,
+          "eegnet_val_acc": 0.5901856422424316
+        },
+        "4": {
+          "eegnet_mandatory_acc": 0.7673611111111112,
+          "eegnet_val_acc": 0.5530503988265991
+        }
+      },
+      "csp_lda_acc": 0.7534722222222222,
+      "fbcsp_lda_acc": 0.5729166666666666,
+      "eegnet_mandatory_acc_mean": 0.7729166666666667,
+      "eegnet_mandatory_acc_std": 0.023110501794852405,
+      "eegnet_mandatory_accs_per_seed": [
+        0.7708333333333334,
+        0.8020833333333334,
+        0.7847222222222222,
+        0.7395833333333334,
+        0.7673611111111112
+      ]
+    }
+  },
+  "aggregate": {
+    "csp_lda_mean": 0.5713734567901235,
+    "fbcsp_lda_mean": 0.5925925925925927,
+    "eegnet_mandatory_mean": 0.6747685185185186,
+    "csp_lda_per_subject": [
+      0.6388888888888888,
+      0.46875,
+      0.7048611111111112,
+      0.5520833333333334,
+      0.2881944444444444,
+      0.3854166666666667,
+      0.6111111111111112,
+      0.7395833333333334,
+      0.7534722222222222
+    ],
+    "fbcsp_lda_per_subject": [
+      0.7291666666666666,
+      0.4861111111111111,
+      0.6840277777777778,
+      0.6631944444444444,
+      0.3680555555555556,
+      0.4548611111111111,
+      0.6701388888888888,
+      0.7048611111111112,
+      0.5729166666666666
+    ],
+    "eegnet_mandatory_per_subject": [
+      0.8291666666666668,
+      0.4770833333333333,
+      0.8652777777777777,
+      0.5777777777777777,
+      0.538888888888889,
+      0.47777777777777775,
+      0.7666666666666667,
+      0.7673611111111112,
+      0.7729166666666667
+    ]
+  }
+}

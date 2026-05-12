@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# Data caches (downloaded MOABB datasets, MNE data)
+data_cache/
+**/data_cache/
+**/MNE-*/
+**/MNE-eeg/
+
+# Model checkpoints
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+
+# Logs (run-time outputs; archived elsewhere)
+logs/
+*.log
+
+# LaTeX intermediates
+*.aux
+*.bbl
+*.blg
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+paper/_minted-*/
+paper/main.log
+paper/supplementary.log
+paper/main.bbl
+paper/supplementary.bbl
+
+# Accidental nested copies
+paper/C-/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Large experiment binaries (keep summary.json only)
+experiments/**/*.npz
+experiments/**/*.pkl
+experiments/**/*.pt
+experiments/**/buffer_*.npz
+experiments/**/episodes_*.npz
+
+# Background task outputs
+.claude/

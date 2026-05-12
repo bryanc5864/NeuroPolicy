@@ -1,0 +1,69 @@
+% Section: Introduction
+
+A motor-imagery (MI) brain--computer interface (BCI) must decide
+\emph{what} the user intends and \emph{when} to commit that decision.
+Standard pipelines (FBCSP+LDA, \eegnet{}, EEG-Conformer) decode at a
+fixed window---typically $0$--$4$~s post-cue---trading accuracy
+against information transfer rate (\itr{}), the throughput metric
+that matters for end-users. Dynamic-stopping classifiers
+\cite{Verschore2012,BianchiLiti2019P300} and SPRT
+variants~\cite{Liu2017MotorImageryBTSPRT} introduce evidence-based early
+termination, but these are hand-tuned thresholds on confidence
+statistics, not learned policies.
+
+Recent
+work~\cite{Sunger2024MarkovType,Aung2024EEG_RL_Net,Fidencio2025ErrPRL}
+frames BCI decoding as sequential decision-making, but none use
+offline reinforcement learning, none expose an explicit
+\textsc{Defer} action as part of the learned policy, none address
+motor imagery at scale, and---critically---none employ a calibrated
+off-policy evaluator. Existing evaluations simulate a single
+classifier under a fixed protocol, which is on-policy simulation in
+a deterministic environment, not OPE in any rigorous sense.
+Meanwhile, offline RL with calibrated OPE has matured in adjacent
+clinical domains (sepsis, ventilator weaning, anesthesia depth
+control)~\cite{Kumar2020CQL,Le2019BatchRL,TangWiens2021OPESelection,Voloshin2021OPEBench},
+but this machinery has not been ported to BCI.
+
+This paper fills that methodological gap. We frame within-trial MI
+EEG decoding as an offline RL problem with a clinically meaningful
+action space $\{\text{commit-class}_1, \ldots, \textsc{Defer},
+\textsc{Request\_Recal}, \textsc{Abstain}\}$, train a Conservative
+Q-Learning (\cql{}) agent on logged trajectories from two behavior
+policies, and validate the resulting policies with a calibrated
+fitted-Q evaluator against on-policy Monte-Carlo ground truth.
+
+\paragraph*{Contributions}
+(i)~\textbf{Calibrated OPE for BCI:} per-target-policy \fqe{}
+attains Pearson $r\!=\!0.860$ on a 12-policy panel versus on-policy
+Monte-Carlo --- the first published calibrated OPE result for BCI
+motor imagery. (ii)~\textbf{Selective offline-RL decoder:} a CVaR
+critic combined with a CMDP commit-error constraint reaches commit
+accuracy $86.2\!\pm\!5.8\%$ at $34.2$~bits/min~\itr{} on
+canonical-protocol \bcia{} --- the first offline-RL BCI decoder
+with \textsc{Defer} as a \emph{learned} action (distinct from
+post-hoc thresholding~\cite{Ganeshkumar2017RejectMI}).
+(iii)~\textbf{Cross-subject LOSO on three datasets:} 62-channel
+Lee2019 ($N\!=\!10$) yields commit accuracy
+$0.696\!\pm\!0.104$ vs random $0.481$, $10/10$ wins, paired
+Wilcoxon $p\!=\!0.001$ --- the first published Lee2019 LOSO
+classification benchmark for offline-RL BCI, completing a
+monotonic channel-count to LOSO-significance trend
+($p\!=\!0.10$/$0.15$/$0.001$ on $\{3, 22, 62\}$-channel datasets).
+(iv)~\textbf{Foundation-model RL fine-tuning:} first end-to-end
+offline-RL fine-tuning of the \labram{}~\cite{LaBraM2024} EEG
+foundation model on a BCI task; ties \eegnet{} in aggregate
+(paired Wilcoxon $p\!=\!0.79$) with a reproducible subject-specific
+encoder-rescue effect ($+16.8$pp on \bcib{}, $+15.9$pp on \bcia{}
+for the same held-out individual).
+(v)~\textbf{Open release} of the entire pipeline (data, MDP
+simulator, agent, OPE estimators, \labram{} integration) under the
+MIT license.
+
+\paragraph*{Topic match}
+The work falls in two named topical areas of the venue:
+\emph{Adaptive Control} and \emph{Neural Signal Processing}. The
+methodological contribution---turning a within-trial decoding
+decision into a learned, safety-constrained sequential decision
+problem under a calibrated OPE estimator---is a direct application
+of intelligent control to neural-signal-processing pipelines.

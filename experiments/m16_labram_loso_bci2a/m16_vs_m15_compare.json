@@ -1,0 +1,174 @@
+{
+  "per_subject": [
+    {
+      "subject_id": 1,
+      "eegnet_metrics": {
+        "return_mean": -0.9184461805555557,
+        "accuracy_on_commits": 0.7295373665480427,
+        "information_transfer_rate": 14.666624423567066,
+        "wrong_commit_rate": 0.2638888888888889
+      },
+      "labram_metrics": {
+        "return_mean": -1.5345052083333337,
+        "accuracy_on_commits": 0.6263157894736842,
+        "information_transfer_rate": 9.085311177362495,
+        "wrong_commit_rate": 0.3697916666666667
+      },
+      "delta_return": -0.616059027777778,
+      "delta_accuracy": -0.10322157707435853,
+      "delta_itr": -5.581313246204571
+    },
+    {
+      "subject_id": 2,
+      "eegnet_metrics": {
+        "return_mean": -3.348763020833333,
+        "accuracy_on_commits": 0.3074141048824593,
+        "information_transfer_rate": 0.2432549130605665,
+        "wrong_commit_rate": 0.6649305555555556
+      },
+      "labram_metrics": {
+        "return_mean": -3.497916666666667,
+        "accuracy_on_commits": 0.3003472222222222,
+        "information_transfer_rate": 0.1872331339648703,
+        "wrong_commit_rate": 0.6996527777777778
+      },
+      "delta_return": -0.14915364583333357,
+      "delta_accuracy": -0.007066882660237084,
+      "delta_itr": -0.05602177909569622
+    },
+    {
+      "subject_id": 3,
+      "eegnet_metrics": {
+        "return_mean": -0.8335720486111113,
+        "accuracy_on_commits": 0.7439252336448599,
+        "information_transfer_rate": 15.532642449755317,
+        "wrong_commit_rate": 0.2378472222222222
+      },
+      "labram_metrics": {
+        "return_mean": -1.2810112847222226,
+        "accuracy_on_commits": 0.667262969588551,
+        "information_transfer_rate": 11.141703048288496,
+        "wrong_commit_rate": 0.3229166666666667
+      },
+      "delta_return": -0.44743923611111125,
+      "delta_accuracy": -0.07666226405630883,
+      "delta_itr": -4.39093940146682
+    },
+    {
+      "subject_id": 4,
+      "eegnet_metrics": {
+        "return_mean": -2.929166666666667,
+        "accuracy_on_commits": 0.3835125448028674,
+        "information_transfer_rate": 1.2542897239158142,
+        "wrong_commit_rate": 0.5972222222222222
+      },
+      "labram_metrics": {
+        "return_mean": -3.1789279513888897,
+        "accuracy_on_commits": 0.3067961165048544,
+        "information_transfer_rate": 0.23714793584679758,
+        "wrong_commit_rate": 0.6197916666666666
+      },
+      "delta_return": -0.2497612847222226,
+      "delta_accuracy": -0.076716428298013,
+      "delta_itr": -1.0171417880690166
+    },
+    {
+      "subject_id": 5,
+      "eegnet_metrics": {
+        "return_mean": -3.3595703125000003,
+        "accuracy_on_commits": 0.31504424778761064,
+        "information_transfer_rate": 0.30979794366215474,
+        "wrong_commit_rate": 0.671875
+      },
+      "labram_metrics": {
+        "return_mean": -3.4334635416666672,
+        "accuracy_on_commits": 0.3107638888888889,
+        "information_transfer_rate": 0.2724404991051858,
+        "wrong_commit_rate": 0.6892361111111112
+      },
+      "delta_return": -0.07389322916666696,
+      "delta_accuracy": -0.004280358898721748,
+      "delta_itr": -0.03735744455696893
+    },
+    {
+      "subject_id": 6,
+      "eegnet_metrics": {
+        "return_mean": -3.1741970486111115,
+        "accuracy_on_commits": 0.2842535787321063,
+        "information_transfer_rate": 0.0877637665426515,
+        "wrong_commit_rate": 0.6076388888888888
+      },
+      "labram_metrics": {
+        "return_mean": -2.759353298611112,
+        "accuracy_on_commits": 0.29095354523227385,
+        "information_transfer_rate": 0.1247627509460081,
+        "wrong_commit_rate": 0.5034722222222222
+      },
+      "delta_return": 0.41484374999999973,
+      "delta_accuracy": 0.00669996650016752,
+      "delta_itr": 0.0369989844033566
+    },
+    {
+      "subject_id": 7,
+      "eegnet_metrics": {
+        "return_mean": -2.6767795138888895,
+        "accuracy_on_commits": 0.38114754098360654,
+        "information_transfer_rate": 1.2064899721249849,
+        "wrong_commit_rate": 0.5243055555555556
+      },
+      "labram_metrics": {
+        "return_mean": -3.2894531250000005,
+        "accuracy_on_commits": 0.3350694444444444,
+        "information_transfer_rate": 0.521983238026413,
+        "wrong_commit_rate": 0.6649305555555556
+      },
+      "delta_return": -0.6126736111111111,
+      "delta_accuracy": -0.04607809653916212,
+      "delta_itr": -0.6845067340985719
+    },
+    {
+      "subject_id": 8,
+      "eegnet_metrics": {
+        "return_mean": -2.239344618055556,
+        "accuracy_on_commits": 0.4935064935064935,
+        "information_transfer_rate": 3.9690603058028064,
+        "wrong_commit_rate": 0.4739583333333333
+      },
+      "labram_metrics": {
+        "return_mean": -1.3831597222222227,
+        "accuracy_on_commits": 0.6527777777777778,
+        "information_transfer_rate": 10.368060632741011,
+        "wrong_commit_rate": 0.3472222222222222
+      },
+      "delta_return": 0.8561848958333333,
+      "delta_accuracy": 0.15927128427128429,
+      "delta_itr": 6.399000326938205
+    },
+    {
+      "subject_id": 9,
+      "eegnet_metrics": {
+        "return_mean": -1.5805338541666671,
+        "accuracy_on_commits": 0.5932914046121593,
+        "information_transfer_rate": 7.620833849006019,
+        "wrong_commit_rate": 0.3368055555555556
+      },
+      "labram_metrics": {
+        "return_mean": -2.1462022569444446,
+        "accuracy_on_commits": 0.5236427320490368,
+        "information_transfer_rate": 4.936423948067855,
+        "wrong_commit_rate": 0.4722222222222222
+      },
+      "delta_return": -0.5656684027777774,
+      "delta_accuracy": -0.06964867256312257,
+      "delta_itr": -2.6844099009381637
+    }
+  ],
+  "mean_delta_return": -0.1604021990740742,
+  "std_delta_return": 0.5048212720429434,
+  "mean_delta_accuracy": -0.02418922547983023,
+  "mean_delta_itr": -0.8906323314542496,
+  "n_wins": 2,
+  "n_subjects": 9,
+  "wilcoxon_one_sided_p": 0.875,
+  "wilcoxon_two_sided_p": 0.30078125
+}

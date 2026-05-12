@@ -1,0 +1,30 @@
+# NeuroPolicy / ieeeICIST — Python dependencies
+# MIT License — Bryan Cheng, 2026
+
+# Already-installed (frozen for reference):
+torch>=2.6.0,<3.0
+numpy>=1.26,<2.0
+scipy>=1.13
+scikit-learn>=1.4
+gymnasium>=1.0,<2.0
+transformers>=4.40
+peft>=0.10
+matplotlib>=3.8
+seaborn>=0.13
+pyyaml>=6.0
+tqdm>=4.66
+rich>=13.0
+
+# To install:
+mne>=1.7,<2.0
+mne-icalabel>=0.7
+moabb>=1.1
+d3rlpy>=2.6
+einops>=0.8
+braindecode>=0.8
+pandas>=2.0
+tabulate>=0.9
+pingouin>=0.5
+
+# OPE — scope-rl is optional; we re-implement PDIS/DR/FQE locally for tighter control
+# scope-rl>=0.2  # add if/when used

@@ -1,0 +1,163 @@
+% MIT License - Bryan Cheng, 2026
+% NeuroPolicy: IEEE ICIST 2026 submission scaffold
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{cite}
+
+% --- Convenience macros ---
+\newcommand{\nettype}{NeuroPolicy}
+\newcommand{\bcia}{BCI-IV-2a}
+\newcommand{\bcib}{BCI-IV-2b}
+\newcommand{\labram}{LaBraM}
+\newcommand{\eegnet}{EEGNet}
+\newcommand{\cql}{CQL}
+\newcommand{\fqe}{FQE}
+\newcommand{\cvar}{\mathrm{CVaR}}
+\newcommand{\itr}{ITR}
+\newcommand{\todo}[1]{{\color{red}\textbf{TODO:} #1}}
+
+\begin{document}
+
+\title{\nettype: Risk-Aware Offline RL with Calibrated Off-Policy Evaluation\\for Motor-Imagery BCI Decoding}
+
+\author{
+\IEEEauthorblockN{Bryan Cheng}
+\IEEEauthorblockA{Independent Researcher\\
+Email: \texttt{<redacted-for-blind-review>}}
+}
+
+\maketitle
+
+\begin{abstract}
+Brain--computer interfaces (BCIs) decode user intent at fixed-length windows
+and evaluate ``policy'' alternatives on-policy in a deterministic simulator
+--- a procedure with no behavior policy, no propensity, and no rigorous
+off-policy machinery. We reformulate within-trial Motor-Imagery (MI) EEG
+decoding as an offline reinforcement-learning problem with a clinically
+meaningful action space $\{\text{commit-class}_1, \ldots, \text{commit-class}_K,
+\textsc{Defer}, \textsc{Request\_Recal}, \textsc{Abstain}\}$, and contribute,
+as the principal methodological result, the first port of
+calibrated FQE-vs-Monte-Carlo OPE methodology
+(cf.~\cite{TangWiens2021OPESelection,Voloshin2021OPEBench} in
+healthcare/control) to BCI motor imagery: fitted-Q evaluation
+trained per target policy, validated against on-policy Monte-Carlo
+ground truth across a 12-policy panel. On
+\bcib{} subject 4, we obtain Pearson $r = 0.860$ ($p = 3.3\times 10^{-4}$),
+Spearman $\rho = 0.797$, and RMSE $= 0.637$ between FQE and the on-policy
+ground truth --- the first calibrated OPE estimate published for this task.
+Within-subject \bcib{} sub.~4 (5 seeds): scalar~\cql{} reaches
+$95.8\!\pm\!1.5\%$ commit accuracy / $16.4\!\pm\!1.3$~b/m~\itr{};
+all four CVaR/CMDP variants overlap CIs at the operational ceiling.
+On canonical \bcia{} 4-class, applying cropped/multi-window
+inference averaging~\cite{Schirrmeister2017DeepLearning} on
+EEG-Conformer gives $+10.7$pp over single-shot
+($66.7\!\to\!74.5\%$ on 9 subjects, $77.3\!\to\!87.9\%$ on easy
+subset $\{1,3,7\}$). \textbf{\textsc{NeuroPolicy} CVaR+CMDP is the
+first offline-RL BCI decoder with \textsc{Defer} as a learned
+action (distinct from post-hoc
+thresholding~\cite{Ganeshkumar2017RejectMI})}, achieving
+$86.2\!\pm\!5.8\%$ commit acc at \itr{} $34.2$~b/m. Cross-subject LOSO with
+\eegnet{} yields positive but not significant mean improvements on
+the smaller-channel datasets ($\Delta\!+\!0.21$ on \bcib{} 3-ch
+$p\!=\!0.10$; $\Delta\!+\!0.51$ on \bcia{} 22-ch 4-class, 5/9 wins,
+$p\!=\!0.15$). \textbf{On 62-channel Lee2019 LOSO ($N\!=\!10$ ---
+the first published Lee2019 LOSO classification benchmark for
+offline-RL BCI), the result is significant: commit acc
+$0.696\!\pm\!0.104$ vs random $0.481$, $10/10$ subjects win,
+paired Wilcoxon $p\!=\!0.001$.} RL fine-tuning of the $5.8$M-parameter \labram{} (first such for
+BCI) ties \eegnet{} on \bcib{} ($p\!=\!0.79$); a subject-specific
+LaBraM rescue effect replicates on both datasets ($\sim\!+16$pp). \textbf{The calibrated OPE methodology generalises cross-subject
+predictably}: across three datasets ($N\!=\!9/9/8$), per-subject
+mean OPE Pearson $r$ rises monotonically with channel count
+($\bar r \in \{0.17, 0.46, 0.59\}$ for $\{3, 22, 62\}$ channels). On
+\bcib{}/\bcia{}, OPE quality is itself predicted by held-out
+decodability ($r\!=\!+0.83$/$+0.61$, $p\!=\!0.006$/$0.08$); on
+Lee2019 the decodability range is too narrow for that
+meta-correlation ($r\!=\!+0.16$ NS). The decodability-gated rule
+is bootstrap-certain no-regret on the $N\!=\!18$ \bcib{}+\bcia{}
+subjects.
+Extending the methodology, we run the first $N\!=\!9$ LOSO
+multi-method OPE benchmark for BCI (FQE, PDIS, WIS, DR): WIS
+strictly beats FQE on RMSE ($9/9$, paired Wilcoxon $p\!=\!0.002$,
+$3\times$ lower bias) but not on rank correlation --- a
+calibration-rank decoupling. WIS-naive collapses on
+deterministic-target panels but is bootstrap-significant on the
+stochastic-only subset ($\Pr\!=\!0.99$), recovering $28\%$ of the
+gap-to-oracle.} Code, configurations, and per-subject artifacts
+released under MIT.
+\end{abstract}
+
+\begin{IEEEkeywords}
+brain--computer interface, motor imagery, offline reinforcement learning,
+off-policy evaluation, fitted Q-evaluation, Conservative Q-Learning,
+EEG decoding, sequential decision making.
+\end{IEEEkeywords}
+
+% =========================================================================
+\section{Introduction}\label{sec:intro}
+% =========================================================================
+\input{sections/introduction.tex}
+
+% =========================================================================
+\section{Related Work}\label{sec:related}
+% =========================================================================
+\input{sections/related.tex}
+
+% =========================================================================
+\section{Methods}\label{sec:methods}
+% =========================================================================
+\input{sections/methods.tex}
+
+% =========================================================================
+\section{Experiments and Results}\label{sec:results}
+% =========================================================================
+\input{sections/results.tex}
+
+% =========================================================================
+\section{Discussion}\label{sec:discussion}
+% =========================================================================
+\input{sections/discussion.tex}
+
+% =========================================================================
+\section{Conclusion}\label{sec:conclusion}
+% =========================================================================
+We presented \nettype{}, an offline-RL framework for motor-imagery
+BCI with a $\{\textsc{Commit}_k, \textsc{Defer}, \textsc{Recal},
+\textsc{Abstain}\}$ action space, the first calibrated OPE pipeline
+for BCI (\fqe{} $r\!=\!0.86$ within-subject; cross-subject
+deployment rule $r\!=\!+0.83/+0.61$ across two datasets, no-regret
+on $N\!=\!18$), and the first $N\!=\!9$ LOSO multi-method OPE
+benchmark in which WIS strictly beats \fqe{} on RMSE ($9/9$,
+$p\!=\!0.002$). Within-subject 5-seed mean reaches $95.8\%\!\pm\!1.5\%$ accuracy at
+$16.4\!\pm\!1.3$~bits/min. LOSO yields $\Delta\!+\!0.21/+0.51$
+on \bcib{}/\bcia{} (not significant) but
+$\Delta_{\text{ret}}\!=\!+0.668$ ($10/10$ wins, $p\!=\!0.001$) on
+the first published Lee2019 (62-channel) LOSO classification
+benchmark --- completing a monotonic channel-count to
+LOSO-significance trend.
+
+% =========================================================================
+% Acknowledgments
+% =========================================================================
+\section*{Acknowledgments}
+This work used the publicly available BCI Competition IV-2a/2b datasets
+(MOABB) and built on the EEGNet \cite{Lawhern2018} and Conservative
+Q-Learning \cite{Kumar2020CQL} reference implementations.
+
+% =========================================================================
+% References
+% =========================================================================
+\bibliographystyle{IEEEtranS}
+\bibliography{refs}
+
+\end{document}

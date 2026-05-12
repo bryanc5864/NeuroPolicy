@@ -1,0 +1,301 @@
+{
+  "rows": [
+    {
+      "name": "EEG-Conformer + window-avg (ours, canonical, 3 subj \u00d7 5 seeds) [M39 (3 subj)]",
+      "protocol": "canonical (T\u2192E)",
+      "task_acc": 0.8791666666666668,
+      "task_acc_std": 0.010508851354459458,
+      "commit_rate": 1.0,
+      "itr_bpm": null,
+      "n_subj": 3,
+      "n_seeds": 5,
+      "selective": false,
+      "source": "M39 (3 subj)"
+    },
+    {
+      "name": "Transformer (Nat. Sci. Reports 2025)",
+      "protocol": "canonical (T\u2192E)",
+      "task_acc": 0.8646,
+      "task_acc_std": null,
+      "commit_rate": 1.0,
+      "itr_bpm": null,
+      "n_subj": 9,
+      "n_seeds": 1,
+      "selective": false,
+      "source": "literature"
+    },
+    {
+      "name": "CTNet (Zhao 2024)",
+      "protocol": "canonical (T\u2192E)",
+      "task_acc": 0.8252,
+      "task_acc_std": null,
+      "commit_rate": 1.0,
+      "itr_bpm": null,
+      "n_subj": 9,
+      "n_seeds": 1,
+      "selective": false,
+      "source": "literature"
+    },
+    {
+      "name": "EEGNet-mandatory (ours, canonical, 3 subj \u00d7 5 seeds)",
+      "protocol": "canonical (T\u2192E)",
+      "task_acc": 0.8210648148148149,
+      "task_acc_std": 0.06508664887778379,
+      "commit_rate": 1.0,
+      "itr_bpm": null,
+      "n_subj": 3,
+      "n_seeds": 5,
+      "selective": false,
+      "source": "M35"
+    },
+    {
+      "name": "EEG-Conformer (Song 2023)",
+      "protocol": "canonical (T\u2192E)",
+      "task_acc": 0.7866,
+      "task_acc_std": null,
+      "commit_rate": 1.0,
+      "itr_bpm": null,
+      "n_subj": 9,
+      "n_seeds": 1,
+      "selective": false,
+      "source": "literature"
+    },
+    {
+      "name": "EEG-Conformer full-trial (ours, canonical, 3 subj \u00d7 5 seeds) [M39 (3 subj)]",
+      "protocol": "canonical (T\u2192E)",
+      "task_acc": 0.7724537134170532,
+      "task_acc_std": 0.06334435674694859,
+      "commit_rate": 1.0,
+      "itr_bpm": null,
+      "n_subj": 3,
+      "n_seeds": 5,
+      "selective": false,
+      "source": "M39 (3 subj)"
+    },
+    {
+      "name": "FBCNet (Mane 2021)",
+      "protocol": "canonical (T\u2192E)",
+      "task_acc": 0.762,
+      "task_acc_std": null,
+      "commit_rate": 1.0,
+      "itr_bpm": null,
+      "n_subj": 9,
+      "n_seeds": 1,
+      "selective": false,
+      "source": "literature"
+    },
+    {
+      "name": "LMDA-Net (Miao 2023)",
+      "protocol": "canonical (T\u2192E)",
+      "task_acc": 0.752,
+      "task_acc_std": null,
+      "commit_rate": 1.0,
+      "itr_bpm": null,
+      "n_subj": 9,
+      "n_seeds": 1,
+      "selective": false,
+      "source": "literature"
+    },
+    {
+      "name": "EEG-Conformer + window-avg (ours, canonical, 9 subj \u00d7 5 seeds) [M39b (9 subj)]",
+      "protocol": "canonical (T\u2192E)",
+      "task_acc": 0.7449845679012346,
+      "task_acc_std": 0.13414771268169193,
+      "commit_rate": 1.0,
+      "itr_bpm": null,
+      "n_subj": 9,
+      "n_seeds": 5,
+      "selective": false,
+      "source": "M39b (9 subj)"
+    },
+    {
+      "name": "EEGNet (Lawhern 2018, reproduced)",
+      "protocol": "canonical (T\u2192E)",
+      "task_acc": 0.74,
+      "task_acc_std": null,
+      "commit_rate": 1.0,
+      "itr_bpm": null,
+      "n_subj": 9,
+      "n_seeds": 1,
+      "selective": false,
+      "source": "literature"
+    },
+    {
+      "name": "ShallowConvNet (Schirrmeister 2017)",
+      "protocol": "canonical (T\u2192E)",
+      "task_acc": 0.737,
+      "task_acc_std": null,
+      "commit_rate": 1.0,
+      "itr_bpm": null,
+      "n_subj": 9,
+      "n_seeds": 1,
+      "selective": false,
+      "source": "literature"
+    },
+    {
+      "name": "DeepConvNet (Schirrmeister 2017)",
+      "protocol": "canonical (T\u2192E)",
+      "task_acc": 0.709,
+      "task_acc_std": null,
+      "commit_rate": 1.0,
+      "itr_bpm": null,
+      "n_subj": 9,
+      "n_seeds": 1,
+      "selective": false,
+      "source": "literature"
+    },
+    {
+      "name": "FBCSP+LDA (ours, canonical, 3 subj)",
+      "protocol": "canonical (T\u2192E)",
+      "task_acc": 0.6944444444444443,
+      "task_acc_std": 0.03086178617123468,
+      "commit_rate": 1.0,
+      "itr_bpm": null,
+      "n_subj": 3,
+      "n_seeds": 1,
+      "selective": false,
+      "source": "M35"
+    },
+    {
+      "name": "FBCSP (Ang et al. 2012)",
+      "protocol": "canonical (T\u2192E)",
+      "task_acc": 0.6775,
+      "task_acc_std": null,
+      "commit_rate": 1.0,
+      "itr_bpm": null,
+      "n_subj": 9,
+      "n_seeds": 1,
+      "selective": false,
+      "source": "literature"
+    },
+    {
+      "name": "EEG-Conformer full-trial (ours, canonical, 9 subj \u00d7 5 seeds) [M39b (9 subj)]",
+      "protocol": "canonical (T\u2192E)",
+      "task_acc": 0.6674382825692494,
+      "task_acc_std": 0.11802565465237974,
+      "commit_rate": 1.0,
+      "itr_bpm": null,
+      "n_subj": 9,
+      "n_seeds": 5,
+      "selective": false,
+      "source": "M39b (9 subj)"
+    },
+    {
+      "name": "CSP+LDA (ours, canonical, 3 subj)",
+      "protocol": "canonical (T\u2192E)",
+      "task_acc": 0.6516203703703703,
+      "task_acc_std": 0.04815426866369149,
+      "commit_rate": 1.0,
+      "itr_bpm": null,
+      "n_subj": 3,
+      "n_seeds": 1,
+      "selective": false,
+      "source": "M35"
+    },
+    {
+      "name": "NeuroPolicy scalar_a1 (M38, canonical, 3 subj \u00d7 5 seeds)",
+      "protocol": "canonical (T\u2192E)",
+      "task_acc": 0.450462962962963,
+      "task_acc_std": 0.03483387758887792,
+      "commit_acc": 0.8557084992994123,
+      "commit_rate": 0.5270833333333333,
+      "itr_bpm": 31.661139362038472,
+      "n_subj": 3,
+      "n_seeds": 5,
+      "selective": true,
+      "source": "M38"
+    },
+    {
+      "name": "NeuroPolicy cvar_a0.25 (M10, RANDOM 70/15/15, sub 3, seed 0)",
+      "protocol": "non-canonical random",
+      "task_acc": 0.42528735632183906,
+      "task_acc_std": null,
+      "commit_acc": 0.9736842105263158,
+      "commit_rate": 0.4367816091954023,
+      "itr_bpm": 57.450374431211344,
+      "n_subj": 1,
+      "n_seeds": 1,
+      "selective": true,
+      "source": "M10"
+    },
+    {
+      "name": "NeuroPolicy cvar_a0.25_cmdp_eps0.10 (M38, canonical, 3 subj \u00d7 5 seeds)",
+      "protocol": "canonical (T\u2192E)",
+      "task_acc": 0.331712962962963,
+      "task_acc_std": 0.06093930839912024,
+      "commit_acc": 0.8624021466625075,
+      "commit_rate": 0.3872685185185185,
+      "itr_bpm": 34.24821737232694,
+      "n_subj": 3,
+      "n_seeds": 5,
+      "selective": true,
+      "source": "M38"
+    }
+  ],
+  "literature_sources": [
+    {
+      "name": "FBCSP (Ang et al. 2012)",
+      "acc": 0.6775,
+      "kappa": 0.569,
+      "n_subj": 9,
+      "year": 2012
+    },
+    {
+      "name": "DeepConvNet (Schirrmeister 2017)",
+      "acc": 0.709,
+      "kappa": null,
+      "n_subj": 9,
+      "year": 2017
+    },
+    {
+      "name": "ShallowConvNet (Schirrmeister 2017)",
+      "acc": 0.737,
+      "kappa": null,
+      "n_subj": 9,
+      "year": 2017
+    },
+    {
+      "name": "EEGNet (Lawhern 2018, reproduced)",
+      "acc": 0.74,
+      "kappa": null,
+      "n_subj": 9,
+      "year": 2018
+    },
+    {
+      "name": "LMDA-Net (Miao 2023)",
+      "acc": 0.752,
+      "kappa": 0.67,
+      "n_subj": 9,
+      "year": 2023
+    },
+    {
+      "name": "FBCNet (Mane 2021)",
+      "acc": 0.762,
+      "kappa": null,
+      "n_subj": 9,
+      "year": 2021
+    },
+    {
+      "name": "EEG-Conformer (Song 2023)",
+      "acc": 0.7866,
+      "kappa": 0.72,
+      "n_subj": 9,
+      "year": 2023
+    },
+    {
+      "name": "CTNet (Zhao 2024)",
+      "acc": 0.8252,
+      "kappa": null,
+      "n_subj": 9,
+      "year": 2024
+    },
+    {
+      "name": "Transformer (Nat. Sci. Reports 2025)",
+      "acc": 0.8646,
+      "kappa": null,
+      "n_subj": 9,
+      "year": 2025
+    }
+  ],
+  "notes": "Canonical protocol = session 0 (T, 288 trials) train+val, session 1 (E, 288 trials) test. The 9 subjects in literature numbers may not match the 3 subjects used in our M35/M38 \u2014 comparison is indicative of regime, not strictly head-to-head."
+}

@@ -1,0 +1,69 @@
+% Section: Discussion
+
+\subsection{What worked}\label{sec:disc:worked}
+
+\paragraph*{OPE calibration}
+The principal contribution: \fqe{} achieves Pearson $r=0.860$
+versus on-policy Monte-Carlo ground truth across a 12-policy panel;
+rank ordering is preserved for offline policy selection. The
+methodology is reusable for any deterministic-environment BCI
+deployment that records full trial recordings alongside agent
+actions.
+
+\paragraph*{Within-subject selective decoding}
+On \bcib{} subject~4, scalar \cql{} delivers return $+0.09$,
+commit accuracy $96.0\%$, $19.1$~bits/min~\itr{}, and $\Delta\!+\!1.78$
+episode-return over the random baseline. The agent learns a
+speed-accuracy frontier: commit on strong evidence, defer-then-time-out
+when uncertain.
+
+\subsection{What did not work}\label{sec:disc:notworked}
+
+\paragraph*{Cross-subject encoder-agnostic plateau}
+\nettype{} significantly beats CSP+LDA fixed-window LOSO
+($\Delta\!=\!+0.435$, $p\!=\!0.037$) but ties EEGNet-based
+baselines using the same encoder, and ties \labram{} when
+fine-tuned on pooled training trials (paired Wilcoxon
+$p\!=\!0.79$). The CVaR-\cql{} variant achieves $100\%$ accuracy
+within-subject on \bcib{} subject~4 but does not differentiate
+across $\alpha_{\cvar} \in \{0.10, 0.25, 0.50, 1.0\}$ on that
+subject (all $\alpha$ produce identical action sequences) --- the
+within-subject panel is too easy to expose risk sensitivity.
+Together: the offline-RL machinery is delivering near the ceiling
+of what either encoder can extract from $\sim\!6$k LOSO trials on
+the small-channel datasets.
+
+\paragraph*{Action-space utilisation}
+Across $N\!=\!88$ trained agent$\times$split combinations, action
+shares are \textsc{Defer} $92.0\%$, commit $6.3\%$,
+abstain-by-timeout $1.7\%$; \emph{zero} agents ever use
+\textsc{Recal} or voluntary \textsc{Abstain}. The operational space
+is $\{\textsc{Commit}_k, \textsc{Defer}\}$ with timeout-\textsc{Abstain}
+as a sink. \textsc{Recal} is well-defined but presently latent --- it
+would become live in closed-loop deployment with mid-trial
+micro-calibration.
+
+\paragraph*{Naive cross-subject FQE deployment}
+On the original within-LOSO panel, naive \fqe{}-based policy
+selection underperforms a fixed default policy on
+$\Pr\!=\!0.69$ of bootstrap resamples. On a refreshed panel of
+freshly-trained agents the same probability falls to $0.38$ ---
+the harmful effect is fragile near the tie boundary. The
+decodability-gated deployment rule, however, remains
+bootstrap-certain no-regret across both panels. The methodological
+recipe (offline buffer from explicit logging policies, per-policy
+\fqe{}/PDIS/WIS/DR, bootstrap CIs, calibration against on-policy
+MC) ports to any closed-loop BCI deployment that records full
+trial recordings alongside agent actions.
+
+\subsection{Limitations and future work}\label{sec:disc:limitations}
+
+Lee2019 LOSO ran on a 10-subject subset; a full $N\!=\!54$ sweep
+would extend statistical power. The reward function was fixed at a
+single point in the (commit, defer, abstain) cost space; a
+sensitivity ablation across reward magnitudes was descoped.
+The \fqe{}-to-oracle gap of $\sim\!0.2$ in episode return
+awaits pessimistic or doubly-robust corrections. A closed-loop
+deployment with a real \textsc{Recal} action triggering
+micro-calibration and on-the-fly OPE scoring of the deployed
+policy is the natural next step.

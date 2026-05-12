@@ -1,0 +1,58 @@
+[
+  {
+    "dataset": "bci2b (2-cls, N=9)",
+    "encoder": "EEGNet (M8)",
+    "ret_mean": -1.3775619165992623,
+    "ret_std": 0.580069432525001,
+    "acc_mean": 0.6502606602580387,
+    "acc_std": 0.09871653380471788,
+    "itr_mean": 1.8864800420554504,
+    "itr_std": 1.7866096316734763,
+    "delta_ret_mean": 0.2019078773045488,
+    "n_wins": 5,
+    "n_total": 9,
+    "wilcoxon_p_one_sided": 0.125
+  },
+  {
+    "dataset": "bci2b (2-cls, N=9)",
+    "encoder": "LaBraM (M14)",
+    "ret_mean": -1.3534861661196804,
+    "ret_std": 0.6385458915722622,
+    "acc_mean": 0.6577537867455454,
+    "acc_std": 0.10642588123411584,
+    "itr_mean": 2.0988447228365446,
+    "itr_std": 1.698173971749288,
+    "delta_ret_mean": 0.22598362778413053,
+    "n_wins": 6,
+    "n_total": 9,
+    "wilcoxon_p_one_sided": 0.150390625
+  },
+  {
+    "dataset": "bci2a (4-cls, N=9)",
+    "encoder": "EEGNet (M15)",
+    "ret_mean": -2.3400414737654325,
+    "ret_std": 1.0056471625111272,
+    "acc_mean": 0.47018139061113395,
+    "acc_std": 0.1797462581862815,
+    "itr_mean": 4.987861927493042,
+    "itr_std": 6.219789116313158,
+    "delta_ret_mean": 0.5093508873456787,
+    "n_wins": 5,
+    "n_total": 9,
+    "wilcoxon_p_one_sided": 0.150390625
+  },
+  {
+    "dataset": "bci2a (4-cls, N=9)",
+    "encoder": "LaBraM (M16)",
+    "ret_mean": -2.5004436728395065,
+    "ret_std": 0.9225814563386471,
+    "acc_mean": 0.4459921651313038,
+    "acc_std": 0.16788492271859334,
+    "itr_mean": 4.097229596038792,
+    "itr_std": 4.846562272391928,
+    "delta_ret_mean": 0.3489486882716045,
+    "n_wins": 5,
+    "n_total": 9,
+    "wilcoxon_p_one_sided": 0.212890625
+  }
+]

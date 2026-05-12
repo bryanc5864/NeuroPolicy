@@ -1,0 +1,216 @@
+% Section: Methods
+
+\subsection{Problem Formulation}\label{sec:methods:problem}
+
+A motor-imagery (MI) trial is a multivariate EEG segment $X \in
+\mathbb{R}^{C \times N}$ with $C$ channels, $N$ samples, and class label
+$y \in \{1,\ldots,K\}$. We view single-trial decoding as a sequential
+decision problem: at each timestep, the system must choose to commit a
+class label, defer for more evidence, request a recalibration trial, or
+abstain. The augmented action set is
+$\mathcal{A} = \{1,\ldots,K\} \cup \{\textsc{Defer}, \textsc{Recal},
+\textsc{Abstain}\}$.
+
+We discretise the trial into windows of length $L = 1.0$~s with stride
+$\Delta = 0.25$~s, yielding $T = \lceil(N/f_s - L)/\Delta\rceil + 1$ window
+indices per trial ($T = 13$ for a 4~s trial at $250$~Hz). The per-trial
+Markov decision process (MDP) is defined as follows.
+
+\paragraph*{State}
+$s_t$ is the concatenation of (i) a window encoding $\phi(X_t) \in
+\mathbb{R}^{D}$ from a pretrained encoder $\phi$; (ii) the running mean
+and variance of $\phi(X_{1{:}t})$; (iii) elapsed time $t/(T-1)$;
+(iv) a recalibration flag $r_t \in \{0,1\}$; and (v) a $D_s$-dim subject
+embedding $e_{\text{subj}}$. Total $\dim(s_t) = 3D + 2 + D_s$.
+
+\paragraph*{Transitions}
+Deterministic given the trial recording. \textsc{Defer} advances
+$t \mapsto t+1$. \textsc{Commit} and \textsc{Abstain} terminate.
+\textsc{Recal} pays a fixed time cost $\tau_r$ (advancing $t$ by
+$\lceil \tau_r / \Delta \rceil$ steps) in exchange for replacing
+$e_{\text{subj}}$ with a per-subject embedding refit from a held-out
+calibration buffer; $r_t \mapsto 1$ and \textsc{Recal} becomes
+unavailable.
+
+\paragraph*{Reward}
+Per-second time cost $\lambda\!=\!0.05$/s; correct commit
+$+R^+\!-\!\lambda t\Delta$ ($R^+\!=\!1$); wrong commit
+$-R^-\!-\!\lambda t\Delta$ ($R^-\!=\!5$); \textsc{Defer}
+$-\lambda\Delta$; \textsc{Recal} $-R_{\text{recal}}\!=\!-0.3$;
+\textsc{Abstain} $-R_a\!-\!\lambda t\Delta$ ($R_a\!=\!0.5$).
+Constraint $R^->R_a>0$ enforces ``abstain better than wrong commit''.
+
+\subsection{Encoder and Subject Embedding}\label{sec:methods:encoder}
+
+We use the \eegnet{} backbone~\cite{Lawhern2018} ($F_1=8$, $D=2$, kernel
+lengths 64 and 16, dropout~$0.25$; $\sim$1.5K parameters), supervised-
+pretrained for 20 epochs on training-subjects' window-label pairs with a
+trial-disjoint held-out validation split (10\%) for early stopping. The
+encoder is frozen for the agent.
+
+\textbf{LaBraM foundation-model integration.} We additionally integrate
+the pretrained \labram{}-base checkpoint~\cite{LaBraM2024} (5.8M
+parameters, pretrained on $\sim$2{,}500 hours of EEG) via braindecode
+0.9. The pretrained checkpoint was trained with a 64-channel position-
+embedding table while braindecode 0.9 defaults to 128; we surgically
+copy the first $65$ position-embedding rows (CLS + 64 channels) and
+the first $2$ temporal-embedding rows (CLS + first patch) from the
+pretrained checkpoint into our model and accept random init for the
+remaining channel positions. Input windows ($1$~s @ 250 Hz) are
+resampled on-the-fly to 200 Hz to match the patch-size of the
+pretrained model. We test \labram{} in three modes: (i) frozen body +
+linear head ($\textsc{LaBraM-frozen}$);
+(ii) end-to-end supervised fine-tune of the full $\sim 5.8$M-parameter
+model on training-trial windows for 15 epochs of AdamW at
+$\text{lr}=10^{-4}$ ($\textsc{LaBraM-finetuned}$); after which the
+encoder is frozen and used by the RL agent.
+
+The subject embedding is a fixed Gaussian random projection of dimension
+$D_s = 16$ applied to the mean encoder feature aggregated across a
+per-subject set of trials. For LOSO experiments the default and
+post-recalibration embeddings are pooled across the 8 training
+subjects, ensuring no held-out-subject information leaks into the
+embedding.
+
+\subsection{Offline RL Training}\label{sec:methods:rl}
+
+We train Conservative Q-Learning~\cite{Kumar2020CQL}. The loss has three
+terms:
+\begin{enumerate}
+\item Bellman residual (Huber):
+$\mathcal{L}_{\text{TD}} = \mathbb{E}_{(s,a,r,s') \sim \mathcal{D}}\big[\rho_\delta(Q_\theta(s,a) - y_{\text{tgt}})\big]$
+with $y_{\text{tgt}} = r + \gamma (1-d) \max_{a'} Q_{\bar\theta}(s', a')$
+and Polyak-averaged target network $\bar\theta$.
+\item Conservative penalty:
+$\mathcal{L}_{\text{CQL}} = \alpha_{\text{CQL}}\big(\operatorname{logsumexp}_a Q_\theta(s,a) - Q_\theta(s,a_{\text{data}})\big)$.
+\item Optional CMDP safety penalty (not exercised in the live results
+reported here): with Lagrange multiplier $\beta = e^{\log\beta}$ and
+tolerance $\epsilon$,
+$\mathcal{L}_{\text{CMDP}} = \beta \cdot \mathbb{E}_{(s,a)\sim \mathcal{D}}\big[\mathbb{1}\{a~\text{wrong commit}\}\, Q_\theta(s, a)\big]$
+pulls down the value of state-action pairs whose data outcome was a
+wrong commit.
+\end{enumerate}
+
+The risk-sensitive variant (CVaR-\cql{}) replaces the Q-network with a
+quantile-Huber regression à la QR-DQN~\cite{Dabney2018QR-DQN} and uses
+$\cvar_\alpha$ in policy evaluation while keeping the mean for the
+Bellman target. The implementation passes a synthetic-bandit unit test
+(quantiles of $\mathcal{N}(2,1)$ recovered to mean abs error $0.17$). We
+ship the code path but the live experiments here use scalar \cql{}; a
+full risk-sensitive sweep is left to future work pending stronger
+encoder features.
+
+\textbf{Optimiser.} AdamW, $\text{lr}_{\text{critic}} = 3 \times 10^{-4}$,
+weight decay $10^{-4}$, gradient clip $1.0$, batch $256$, Polyak
+$\tau = 5\times 10^{-3}$, $\gamma = 0.99$. We run $20$K gradient steps
+within-subject and $10$K for LOSO.
+
+\subsection{Behavior Policies and Offline Buffer}\label{sec:methods:behavior}
+
+The offline dataset $\mathcal{D}_\mu$ pools rollouts from two logging
+policies:
+\begin{itemize}
+\item $\mu_1$, deterministic fixed-window: \textsc{Defer} until step
+$T_{\text{fix}}$, then commit using a logistic-regression classifier on
+the running-mean encoder feature. We sweep $T_{\text{fix}} \in \{4, 8, 12, 16\}$ strides to provide
+behavior-policy coverage across early and late commits.
+\item $\mu_2$, SPRT-stochastic: at each step \textsc{Defer} unless the
+classifier's max-class probability exceeds $\tau_{\text{evid}} = 0.55$
+or $t = T-1$. Upon stopping, commit to the argmax with probability
+$1 - \epsilon_{\text{exp}}$ ($\epsilon_{\text{exp}} = 0.10$) or
+uniformly otherwise. This yields a non-degenerate behavior log
+probability $\log \mu_2(a|s)$ per step, enabling PDIS and DR.
+\end{itemize}
+
+\subsection{Off-Policy Evaluation}\label{sec:methods:ope}
+
+For a candidate policy $\pi$ we estimate
+$V(\pi) = \mathbb{E}_\pi[\sum_t \gamma^t r_t]$ from $\mathcal{D}_\mu$ alone:
+\begin{itemize}
+\item \textbf{Per-Decision Importance Sampling (PDIS)}, weighted variant.
+Weights are $\tilde w_{n,t} = \prod_{t' \le t} \pi(a_{t'}|s_{t'})/\mu(a_{t'}|s_{t'})$
+normalised per timestep across trajectories.
+\item \textbf{Fitted-Q Evaluation (\fqe{})}. A separate Q-network
+$\hat Q_{\fqe}$ trained per target policy via the Bellman bootstrap
+under $\pi$; the value estimate is
+$\hat V_{\fqe}(\pi) = \mathbb{E}_{s_0}\big[\sum_a \pi(a|s_0)\, \hat Q_{\fqe}(s_0, a)\big]$.
+\fqe{} does not require behavior propensity and is robust to
+deterministic $\mu_1$ data.
+\item \textbf{Doubly-Robust (DR)}. Combines PDIS with \fqe{} as a control
+variate.
+\end{itemize}
+
+We report nonparametric trial-level bootstrap $95\%$ confidence intervals
+($B=1000$). We \emph{validate OPE estimates against
+on-policy Monte-Carlo ground truth} computed by simulating $\pi$ on the
+deterministic per-trial MDP and recording per-policy mean episode
+return. Across a panel of 12 candidate policies (random, six
+temperature-perturbed \cql{} agents at the base conservatism, three
+random-mixture policies, and two policies from a stronger
+$\alpha_{\cql} = 3$ agent), we plot OPE estimate versus $V_{\text{GT}}$
+and report Pearson correlation, Spearman rank correlation, and RMSE.
+
+\subsection{Datasets and Preprocessing}\label{sec:methods:data}
+
+We use BCI Competition IV-2b (\bcib{}: 9 subjects, 2-class MI, 3 EEG
+channels, $\sim$720 trials/subject), accessed via
+MOABB~\cite{MOABB2018}. Preprocessing: resample to $250$~Hz, band-pass
+$4$--$40$~Hz (zero-phase Butterworth, order 4), common-average reference,
+conversion to microvolts, per-channel z-scoring across the recording.
+
+\textbf{Splitting.} For within-subject experiments
+(\S\ref{sec:results:within}), we use a trial-level $70/15/15$
+train/val/test split; subject embeddings are derived once from
+training trials and reused for val/test states to prevent leakage.
+For cross-subject leave-one-subject-out (LOSO) experiments
+(\S\ref{sec:results:loso}), the encoder is supervised-pretrained on the
+8 training subjects and the 9th is held out for evaluation. The 12-policy
+panel for the OPE calibration (\S\ref{sec:results:ope}) uses
+\bcib{} subject 4 only.
+
+\subsection{Baselines}\label{sec:methods:baselines}
+
+We compare against six baselines that share the
+$\{\textsc{commit}, \textsc{Defer}\}$ action subspace (so all metrics
+--- return, accuracy, \itr{}, decision latency, wrong-commit rate ---
+are apples-to-apples through the same \texttt{BCIEnv}). Methods with
+incompatible action spaces (\textsc{MarkovType}'s RSVP P300 letter
+space~\cite{Sunger2024MarkovType},
+\textsc{EEG\_RL-Net}'s online Dueling DQN
+classification~\cite{Aung2024EEG_RL_Net}) are noted but not
+benchmarked here, as direct comparison would require porting their
+paradigm-specific reward structures. For the \textsc{Defer}-capable
+class:
+\begin{itemize}
+\item \textbf{random}: uniform over \texttt{Discrete}($K + 3$).
+\item \textbf{CSP+LDA fixed}: Common Spatial Patterns~\cite{Ang2008FBCSP}
+(2 components, $\log$-variance features) + LDA, fitted on
+training subjects' raw trials, predicting at trial level; emits
+\textsc{Defer} until $t = T - 1$ then commits the prediction.
+\item \textbf{\eegnet{} fixed}: the same supervised-pretrained \eegnet{}
+encoder \nettype{} uses, with a logistic-regression classifier on the
+running-mean encoder feature; commits argmax at $t = T - 1$.
+\item \textbf{\eegnet{} threshold} $\tau \in \{0.55, 0.65, 0.75\}$: same
+classifier; commits argmax as soon as $\max_k p(k|s_t) \ge \tau$,
+otherwise forces commit at $t = T - 1$. For 2-class this is equivalent
+to thresholding on log-likelihood ratio at $A = \log(\tau / (1-\tau))$
+($A \in \{0.20, 0.62, 1.10\}$ respectively) --- i.e., a Wald-style
+SPRT~\cite{Liu2017MotorImageryBTSPRT} / classifier-confidence-threshold
+early-stopping rule~\cite{BianchiLiti2019P300,Verschore2012}. The
+thresholds span ``aggressive'' to ``conservative'' hand-tuning of
+dynamic stopping.
+\end{itemize}
+
+\subsection{Evaluation Metrics}\label{sec:methods:metrics}
+
+\textbf{Information Transfer Rate (\itr{}; bits/min)} via the Wolpaw
+formula:
+$B = \log_2 K + a \log_2 a + (1-a) \log_2 \frac{1-a}{K-1}$,
+$\itr{} = B \cdot 60 / \bar t_{\text{decision}}$,
+where $a$ is commit accuracy and $\bar t_{\text{decision}}$ is the mean
+wall time per decision. \textbf{Episode return} is the per-trial
+expected reward as defined in \S\ref{sec:methods:problem}; this is the
+quantity our agent is trained to maximise. \textbf{Commit accuracy}
+(over commit episodes only). \textbf{Mean and median decision latency.}
+\textbf{Wrong-commit rate}: fraction of episodes that terminate in a
+wrong commit (used by the CMDP constraint).
