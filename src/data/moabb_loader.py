@@ -1,8 +1,8 @@
-# MIT License - Bryan Cheng, 2026
+# MIT License, 2026
 # Part of NeuroPolicy / ieeeICIST
 """Wrappers around MOABB datasets that expose raw MNE recordings.
 
-Per RESEARCH_PLAN.md §5.1, we work with three datasets accessed via MOABB:
+1, we work with three datasets accessed via MOABB:
 - BNCI2014_001 (BCI Competition IV-2a, 4-class MI)
 - BNCI2014_004 (BCI Competition IV-2b, 2-class MI)
 - Lee2019_MI    (54-subject 2-class MI)

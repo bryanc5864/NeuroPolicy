@@ -1,8 +1,8 @@
-# MIT License - Bryan Cheng, 2026
+# MIT License, 2026
 # Part of NeuroPolicy / ieeeICIST
-"""CSP + LDA: classical baseline used for M1 data-pipeline validation.
+"""CSP + LDA: classical baseline used for  data-pipeline validation.
 
-Per RESEARCH_PLAN.md Milestone 1, we verify that our preprocessing yields
+Per RESEARCH_PLAN.md , we verify that our preprocessing yields
 decodable signal by reproducing within-subject CSP+LDA accuracy in line with
 literature ranges:
     BCI-IV-2a (4-class) : 60-72% within-subject
@@ -10,7 +10,7 @@ literature ranges:
     Lee2019  (2-class)  : 65-75% within-subject
 
 Note: this is plain CSP, not the filter-bank (FBCSP) variant. FBCSP is built
-in src/evaluation/baselines/fbcsp.py for the M4 baselines.
+in src/evaluation/baselines/fbcsp.py for the  baselines.
 """
 from __future__ import annotations
 

@@ -1,8 +1,8 @@
-# MIT License - Bryan Cheng, 2026
+# MIT License, 2026
 # Part of NeuroPolicy / ieeeICIST
 """Behavior policies that generate the offline RL dataset.
 
-Per RESEARCH_PLAN.md §3.2.4 we build TWO logging policies:
+2.4 we build TWO logging policies:
   μ₁ (deterministic-fixed-window): DEFER until t = T_fix, then commit using
       a per-subject EEGNet-on-mean classifier on the running-mean features.
       T_fix sweeps across {1.0, 2.0, 3.0, 4.0} s.

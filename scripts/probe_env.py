@@ -1,4 +1,4 @@
-# MIT License - Bryan Cheng, 2026
+# MIT License, 2026
 # Part of NeuroPolicy / ieeeICIST
 """Probe Python environment for required packages."""
 import importlib

@@ -1,4 +1,4 @@
-# MIT License - Bryan Cheng, 2026
+# MIT License, 2026
 """Generate the 2x2 LOSO summary: {bci2a, bci2b} × {EEGNet, LaBraM}.
 
 Outputs a markdown table that serves as the headline cross-subject
@@ -45,13 +45,13 @@ def load_loso(name, dataset, encoder, agg_key, cfg_key):
 
 def main():
     rows = [
-        load_loso("m8_loso_bci2b", "bci2b (2-cls, N=9)", "EEGNet (M8)",
+        load_loso("loso_bci2b", "bci2b (2-cls, N=9)", "EEGNet ()",
                    "agg", "cmdp_eps0.1"),
-        load_loso("m14_labram_loso_bci2b", "bci2b (2-cls, N=9)", "LaBraM (M14)",
+        load_loso("labram_loso_bci2b", "bci2b (2-cls, N=9)", "LaBraM ()",
                    "agg", "labram_cmdp"),
-        load_loso("m15_loso_bci2a", "bci2a (4-cls, N=9)", "EEGNet (M15)",
+        load_loso("loso_bci2a", "bci2a (4-cls, N=9)", "EEGNet ()",
                    "agg", "cmdp_eps0.1"),
-        load_loso("m16_labram_loso_bci2a", "bci2a (4-cls, N=9)", "LaBraM (M16)",
+        load_loso("labram_loso_bci2a", "bci2a (4-cls, N=9)", "LaBraM ()",
                    "agg", "labram_cmdp"),
     ]
 

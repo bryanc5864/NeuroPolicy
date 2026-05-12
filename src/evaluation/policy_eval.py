@@ -1,11 +1,11 @@
-# MIT License - Bryan Cheng, 2026
+# MIT License, 2026
 # Part of NeuroPolicy / ieeeICIST
 """On-policy Monte-Carlo evaluation of any policy on a list of TrialEpisodes.
 
 Because the env is deterministic given an episode and our policies are
 deterministic at eval time (argmax-Q or fixed thresholds), this gives the
 ground-truth value of a policy. We use this as the reference for the OPE
-calibration in M6 and as the headline evaluation metric.
+calibration in  and as the headline evaluation metric.
 """
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-# MIT License - Bryan Cheng, 2026
+# MIT License, 2026
 # Part of NeuroPolicy / ieeeICIST
 """Off-Policy Evaluation estimators for the BCI MDP.
 
@@ -9,7 +9,7 @@ Provides:
   * dr_estimate         : Doubly-Robust estimator combining FQE + PDIS.
   * bootstrap_ci        : trial-level non-parametric bootstrap CIs.
 
-Per RESEARCH_PLAN.md §3.2.5 the gating metric is FQE Pearson r ≥ 0.85 vs.
+2.5 the gating metric is FQE Pearson r ≥ 0.85 vs.
 on-policy ground-truth value on a panel of ≥30 policies for BCI-IV-2b.
 """
 from __future__ import annotations

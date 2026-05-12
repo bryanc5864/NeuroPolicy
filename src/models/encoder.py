@@ -1,4 +1,4 @@
-# MIT License - Bryan Cheng, 2026
+# MIT License, 2026
 # Part of NeuroPolicy / ieeeICIST
 """Encoder abstraction for windowed EEG -> embedding.
 
@@ -7,7 +7,7 @@ Provides:
     EEGNetEncoder      : From-scratch EEGNet-style backbone (Lawhern 2018).
     LaBraMEncoderStub  : Placeholder that loads LaBraM checkpoint *if* the
                          official repo is available on PYTHONPATH; otherwise
-                         raises a clear error. Full integration is M2-stretch.
+                         raises a clear error. Full integration is -stretch.
 
 The MDP (src/training/bci_env.py) and the RL agent (src/training/neuropolicy_agent.py)
 talk to BaseEncoder, so swapping encoders is a one-line change.

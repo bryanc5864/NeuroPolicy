@@ -1,4 +1,4 @@
-# MIT License - Bryan Cheng, 2026
+# MIT License, 2026
 # Part of NeuroPolicy / ieeeICIST
 """Policy interface + panel of candidate policies for OPE calibration.
 
@@ -6,14 +6,14 @@ A policy must provide:
     - action_probs(states: np.ndarray of shape (B, S)) -> np.ndarray (B, A)
     - select_action(state: np.ndarray of shape (S,))    -> int
 
-Policy panel for M6 calibration:
+Policy panel for  calibration:
     * RandomPolicy
     * AgentPolicy(agent, temperature, mix_random_frac)
     * (Optional, plug-in) Mu1Policy / Mu2Policy with state-based reconstruction.
 
 We deliberately keep μ₁/μ₂ logic out of the OPE panel for now: those policies
 read running-mean from the state and require parsing the state vector layout
-(doable but bug-prone). For the M6 gate we use a panel of trained-agent
+(doable but bug-prone). For the  gate we use a panel of trained-agent
 variants which already give a wide spread of values via temperature/mixing.
 """
 from __future__ import annotations

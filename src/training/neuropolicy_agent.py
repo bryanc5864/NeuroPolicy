@@ -1,4 +1,4 @@
-# MIT License - Bryan Cheng, 2026
+# MIT License, 2026
 # Part of NeuroPolicy / ieeeICIST
 """NeuroPolicy agent: discrete CQL with optional CVaR-distributional critic
 and CMDP safety constraint via Lagrangian dual ascent.

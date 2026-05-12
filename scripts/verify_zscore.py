@@ -1,4 +1,4 @@
-# MIT License - Bryan Cheng, 2026
+# MIT License, 2026
 """Verify per-channel mean/std after preprocessing equals (0, 1)."""
 import sys
 from pathlib import Path

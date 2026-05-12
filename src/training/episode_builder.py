@@ -1,8 +1,8 @@
-# MIT License - Bryan Cheng, 2026
+# MIT License, 2026
 # Part of NeuroPolicy / ieeeICIST
 """Convert preprocessed TrialBatch -> rolling windows -> encoded TrialEpisodes.
 
-Per RESEARCH_PLAN.md §3.2.1 we discretize each trial into windows of length
+2.1 we discretize each trial into windows of length
 L = 1.0 s with stride Δ = 0.25 s. For a 4 s trial @ 250 Hz this yields T = 13
 windows. We encode all windows up front so the MDP env can be cheap.
 

@@ -1,5 +1,5 @@
-# NeuroPolicy / ieeeICIST — Python dependencies
-# MIT License — Bryan Cheng, 2026
+# NeuroPolicy — Python dependencies
+# MIT License, 2026
 
 # Already-installed (frozen for reference):
 torch>=2.6.0,<3.0

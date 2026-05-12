@@ -27,11 +27,11 @@ but this machinery has not been ported to BCI.
 
 This paper fills that methodological gap. We frame within-trial MI
 EEG decoding as an offline RL problem with a clinically meaningful
-action space $\{\text{commit-class}_1, \ldots, \textsc{Defer},
-\textsc{Request\_Recal}, \textsc{Abstain}\}$, train a Conservative
-Q-Learning (\cql{}) agent on logged trajectories from two behavior
-policies, and validate the resulting policies with a calibrated
-fitted-Q evaluator against on-policy Monte-Carlo ground truth.
+action space $\{\textsc{Commit}_k, \textsc{Defer}, \textsc{Recal},
+\textsc{Abstain}\}$, train a Conservative Q-Learning (\cql{}) agent
+on logged trajectories from two behavior policies, and validate the
+resulting policies with a calibrated fitted-Q evaluator against
+on-policy Monte-Carlo ground truth.
 
 \paragraph*{Contributions}
 (i)~\textbf{Calibrated OPE for BCI:} per-target-policy \fqe{}

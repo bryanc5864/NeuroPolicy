@@ -1,4 +1,4 @@
-# MIT License - Bryan Cheng, 2026
+# MIT License, 2026
 """Smoke test EEGNetEncoder forward shapes + linear-probe accuracy."""
 import logging
 import sys

@@ -1,6 +1,6 @@
-# MIT License - Bryan Cheng, 2026
+# MIT License, 2026
 # Part of NeuroPolicy / ieeeICIST
-"""EEG preprocessing pipeline (RESEARCH_PLAN.md §5.2).
+"""EEG preprocessing pipeline.
 
 Steps applied to each Raw recording before epoching:
   1. Resample to PRE_CFG.target_fs (250 Hz) if needed.

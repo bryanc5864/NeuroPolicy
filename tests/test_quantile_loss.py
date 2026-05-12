@@ -1,4 +1,4 @@
-# MIT License - Bryan Cheng, 2026
+# MIT License, 2026
 """Unit test: synthetic-bandit QR-DQN should recover analytical quantiles.
 
 Catches the kind of broadcasting bug we hit in pre-training review C2.

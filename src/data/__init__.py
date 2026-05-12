@@ -1,1 +1,1 @@
-# MIT License — Bryan Cheng, 2026
+# MIT License, 2026

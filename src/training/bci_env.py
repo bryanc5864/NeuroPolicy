@@ -1,6 +1,6 @@
-# MIT License - Bryan Cheng, 2026
+# MIT License, 2026
 # Part of NeuroPolicy / ieeeICIST
-"""BCI-as-MDP simulator (RESEARCH_PLAN.md §3.2.1).
+"""BCI-as-MDP simulator.
 
 Single-trial deterministic environment. The agent observes a rolling window
 embedding plus running stats, time index, recal flag, and subject embedding.
@@ -71,7 +71,7 @@ def state_dim(embed_dim: int, subj_dim: int) -> int:
 
 
 class BCIEnv(gym.Env):
-    """Per-trial offline BCI MDP. See RESEARCH_PLAN.md §3.2.1.
+    """Per-trial offline BCI MDP. .2.1.
 
     Action layout (Discrete):
         0..K-1     : commit class i

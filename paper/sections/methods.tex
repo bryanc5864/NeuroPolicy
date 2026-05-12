@@ -8,8 +8,8 @@ $y \in \{1,\ldots,K\}$. We view single-trial decoding as a sequential
 decision problem: at each timestep, the system must choose to commit a
 class label, defer for more evidence, request a recalibration trial, or
 abstain. The augmented action set is
-$\mathcal{A} = \{1,\ldots,K\} \cup \{\textsc{Defer}, \textsc{Recal},
-\textsc{Abstain}\}$.
+$\mathcal{A} = \{\textsc{Commit}_1, \ldots, \textsc{Commit}_K\} \cup
+\{\textsc{Defer}, \textsc{Recal}, \textsc{Abstain}\}$.
 
 We discretise the trial into windows of length $L = 1.0$~s with stride
 $\Delta = 0.25$~s, yielding $T = \lceil(N/f_s - L)/\Delta\rceil + 1$ window
@@ -83,22 +83,22 @@ with $y_{\text{tgt}} = r + \gamma (1-d) \max_{a'} Q_{\bar\theta}(s', a')$
 and Polyak-averaged target network $\bar\theta$.
 \item Conservative penalty:
 $\mathcal{L}_{\text{CQL}} = \alpha_{\text{CQL}}\big(\operatorname{logsumexp}_a Q_\theta(s,a) - Q_\theta(s,a_{\text{data}})\big)$.
-\item Optional CMDP safety penalty (not exercised in the live results
-reported here): with Lagrange multiplier $\beta = e^{\log\beta}$ and
-tolerance $\epsilon$,
+\item Optional CMDP safety penalty: with Lagrange multiplier
+$\beta = e^{\log\beta}$ and tolerance $\epsilon$,
 $\mathcal{L}_{\text{CMDP}} = \beta \cdot \mathbb{E}_{(s,a)\sim \mathcal{D}}\big[\mathbb{1}\{a~\text{wrong commit}\}\, Q_\theta(s, a)\big]$
 pulls down the value of state-action pairs whose data outcome was a
-wrong commit.
+wrong commit. We use $\epsilon = 0.10$ throughout.
 \end{enumerate}
 
 The risk-sensitive variant (CVaR-\cql{}) replaces the Q-network with a
 quantile-Huber regression à la QR-DQN~\cite{Dabney2018QR-DQN} and uses
 $\cvar_\alpha$ in policy evaluation while keeping the mean for the
 Bellman target. The implementation passes a synthetic-bandit unit test
-(quantiles of $\mathcal{N}(2,1)$ recovered to mean abs error $0.17$). We
-ship the code path but the live experiments here use scalar \cql{}; a
-full risk-sensitive sweep is left to future work pending stronger
-encoder features.
+(quantiles of $\mathcal{N}(2,1)$ recovered to mean abs error $0.17$).
+Both scalar and CVaR variants, with and without the CMDP constraint,
+are exercised in the within-subject ablation
+(\S\ref{sec:results:cvar}) and on the canonical \bcia{} 4-class panel
+(\S\ref{sec:results:sota}).
 
 \textbf{Optimiser.} AdamW, $\text{lr}_{\text{critic}} = 3 \times 10^{-4}$,
 weight decay $10^{-4}$, gradient clip $1.0$, batch $256$, Polyak
@@ -174,7 +174,7 @@ panel for the OPE calibration (\S\ref{sec:results:ope}) uses
 \subsection{Baselines}\label{sec:methods:baselines}
 
 We compare against six baselines that share the
-$\{\textsc{commit}, \textsc{Defer}\}$ action subspace (so all metrics
+$\{\textsc{Commit}_k, \textsc{Defer}\}$ action subspace (so all metrics
 --- return, accuracy, \itr{}, decision latency, wrong-commit rate ---
 are apples-to-apples through the same \texttt{BCIEnv}). Methods with
 incompatible action spaces (\textsc{MarkovType}'s RSVP P300 letter

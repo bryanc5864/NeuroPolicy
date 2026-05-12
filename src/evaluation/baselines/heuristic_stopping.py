@@ -1,4 +1,4 @@
-# MIT License - Bryan Cheng, 2026
+# MIT License, 2026
 # Part of NeuroPolicy / ieeeICIST
 """Heuristic / non-RL stopping baselines (RESEARCH_PLAN §4.2 entries iv-vi, x).
 
