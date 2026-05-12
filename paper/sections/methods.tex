@@ -152,11 +152,14 @@ and report Pearson correlation, Spearman rank correlation, and RMSE.
 
 \subsection{Datasets and Preprocessing}\label{sec:methods:data}
 
-We use BCI Competition IV-2b (\bcib{}: 9 subjects, 2-class MI, 3 EEG
-channels, $\sim$720 trials/subject), accessed via
-MOABB~\cite{MOABB2018}. Preprocessing: resample to $250$~Hz, band-pass
-$4$--$40$~Hz (zero-phase Butterworth, order 4), common-average reference,
-conversion to microvolts, per-channel z-scoring across the recording.
+We use three public MI datasets accessed via MOABB~\cite{MOABB2018}:
+\bcib{} ($9$ subjects, 2-class, $3$ channels, $\sim\!720$ trials/subj),
+\bcia{} ($9$ subjects, 4-class, $22$ channels, $576$ trials/subj), and
+Lee2019~\cite{Lee2019MI} ($54$ subjects, 2-class, $62$ channels;
+we use a $10$-subject LOSO subset).
+Preprocessing: resample to $250$~Hz, band-pass $4$--$40$~Hz
+(zero-phase Butterworth, order 4), common-average reference,
+$\mu$V scaling, per-channel z-scoring across the recording.
 
 \textbf{Splitting.} For within-subject experiments
 (\S\ref{sec:results:within}), we use a trial-level $70/15/15$
@@ -203,8 +206,8 @@ dynamic stopping.
 
 \subsection{Evaluation Metrics}\label{sec:methods:metrics}
 
-\textbf{Information Transfer Rate (\itr{}; bits/min)} via the Wolpaw
-formula:
+\textbf{Information Transfer Rate (\itr{}; bits/min)} via the
+Wolpaw formula~\cite{Wolpaw2002ITR}:
 $B = \log_2 K + a \log_2 a + (1-a) \log_2 \frac{1-a}{K-1}$,
 $\itr{} = B \cdot 60 / \bar t_{\text{decision}}$,
 where $a$ is commit accuracy and $\bar t_{\text{decision}}$ is the mean
