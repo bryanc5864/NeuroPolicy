@@ -74,17 +74,15 @@ def figure_paired_diffs(np_ret, bases):
         color = "C2" if mean > 0 else "C3"
         ax.errorbar(mean, y, xerr=ci, fmt="D", color=color, ecolor=color,
                     capsize=4, markersize=10, zorder=3)
-        sig = "*" if p_one < 0.05 else ""
-        ax.text(0.95, y, f"{wins}/9 wins, p={p_one:.3f}{sig}",
-                transform=ax.get_yaxis_transform(), va="center",
-                fontsize=9, family="monospace")
+        sig = " *" if p_one < 0.05 else ""
+        pretty[order[i]] = pretty[order[i]] + f"  ({wins}/9{sig})"
     ax.axvline(0, color="k", lw=0.8, alpha=0.5, zorder=1)
     ax.set_yticks(y_positions)
     ax.set_yticklabels([pretty[n] for n in order])
     ax.set_xlabel("Δ Episode Return (NeuroPolicy − baseline)")
-    ax.set_title("LOSO BCI-IV-2b — paired difference, NeuroPolicy vs. baseline\n"
-                 "(95% CI; one-sided Wilcoxon p; * = p < 0.05)")
-    ax.set_xlim(-1.4, 1.4)
+    ax.set_title("LOSO BCI-IV-2b — paired difference vs. baselines\n"
+                 "(diamond = mean, error bar = 95% CI; * = Wilcoxon $p<0.05$)")
+    ax.set_xlim(-1.2, 1.2)
     ax.grid(axis="x", alpha=0.3)
     fig.tight_layout()
     fig.savefig(FIG / "m4_baselines_vs_neuropolicy.png", dpi=150,

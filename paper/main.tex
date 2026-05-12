@@ -12,6 +12,7 @@
 \usepackage{xcolor}
 \usepackage[hidelinks]{hyperref}
 \usepackage{cite}
+\usepackage{placeins}
 
 % --- Convenience macros ---
 \newcommand{\nettype}{NeuroPolicy}
@@ -135,6 +136,7 @@ LOSO-significance trend.
 
 % =========================================================================
 \section{Per-Subject LOSO Tables}\label{app:loso_tables}
+\FloatBarrier
 % =========================================================================
 
 \begin{table}[h]
@@ -217,6 +219,7 @@ Mean & $-0.99$ & $+0.67$ & $0.70$ & $3.2$ & $0.21$ \\
 \end{table}
 
 % =========================================================================
+\FloatBarrier
 \section{Multi-Method OPE Benchmark Detail}\label{app:multi_ope}
 % =========================================================================
 
@@ -249,6 +252,7 @@ $\Pr(\text{WIS}\!\ge\!\text{default})\!=\!0.99$, recovering $28\%$
 of the gap-to-oracle. \emph{Recipe: exclude deterministic-argmax
 policies from any WIS deployment set.}
 
+\FloatBarrier
 % =========================================================================
 \section{\fqe{} Bias and Slope-Corrected Impossibility}\label{app:fqe_bias}
 % =========================================================================
@@ -272,6 +276,7 @@ argmax over policies, so the LOSO-corrected $\Delta$ versus naive
 \fqe{} on policy selection is identically zero ($+0.000$) on all 9
 subjects. Subject-conditioning is therefore \emph{necessary} for any
 OPE-bias correction to alter cross-subject policy selection.
+\FloatBarrier
 
 % =========================================================================
 \section{Hyperparameters}\label{app:hp}
@@ -303,6 +308,7 @@ Batch size                              & $256$ \\
 FQE Bellman iters / Bootstrap $B$       & $500$ / $10{,}000$ \\
 \bottomrule
 \end{tabular}
+\FloatBarrier
 \end{table}
 
 % =========================================================================
