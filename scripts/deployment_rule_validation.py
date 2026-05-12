@@ -76,24 +76,24 @@ def main():
     dataset = sys.argv[1] if len(sys.argv) > 1 else "bci2b"
 
     if dataset == "bci2b":
-        m17 = json.loads((ROOT / "experiments" / "ope_loso_bci2b" / "summary.json").read_text())
-        m8 = json.loads((ROOT / "experiments" / "loso_bci2b" / "summary.json").read_text())
-        m8_acc = {r["held_out"]: r["results"]["cmdp_eps0.1"]["metrics"]["accuracy_on_commits"]
-                  for r in m8["per_subject"]}
+        ope = json.loads((ROOT / "experiments" / "ope_loso_bci2b" / "summary.json").read_text())
+        loso = json.loads((ROOT / "experiments" / "loso_bci2b" / "summary.json").read_text())
+        dec_acc = {r["held_out"]: r["results"]["cmdp_eps0.1"]["metrics"]["accuracy_on_commits"]
+                   for r in loso["per_subject"]}
     else:
-        m17 = json.loads((ROOT / "experiments" / "ope_loso_bci2a" / "summary.json").read_text())
-        m8 = json.loads((ROOT / "experiments" / "loso_bci2a" / "summary.json").read_text())
-        m8_acc = {r["held_out"]: r["results"]["cmdp_eps0.1"]["metrics"]["accuracy_on_commits"]
-                  for r in m8["per_subject"]}
+        ope = json.loads((ROOT / "experiments" / "ope_loso_bci2a" / "summary.json").read_text())
+        loso = json.loads((ROOT / "experiments" / "loso_bci2a" / "summary.json").read_text())
+        dec_acc = {r["held_out"]: r["results"]["cmdp_eps0.1"]["metrics"]["accuracy_on_commits"]
+                   for r in loso["per_subject"]}
 
-    log.info("\n===  %s deployment-rule validation ===", dataset)
+    log.info("\n=== %s deployment-rule validation ===", dataset)
     log.info("Sweeping decodability thresholds...\n")
 
     thresholds = [0.50, 0.55, 0.60, 0.65, 0.70, 0.74]
     summaries = []
 
     # Compute strategy values without gating first (oracle, naive, default)
-    rows_default = evaluate_strategy(m17["per_subject"], m8_acc, threshold=-1.0)
+    rows_default = evaluate_strategy(ope["per_subject"], dec_acc, threshold=-1.0)
     v_oracle = np.mean([r["v_oracle"] for r in rows_default])
     v_naive = np.mean([r["v_naive"] for r in rows_default])
     v_default = np.mean([r["v_default"] for r in rows_default])
@@ -108,7 +108,7 @@ def main():
     log.info("Gated strategies — pick by V_FQE if decodability >= threshold; else fall back to agent_T0:")
 
     for thr in thresholds:
-        rows = evaluate_strategy(m17["per_subject"], m8_acc, threshold=thr)
+        rows = evaluate_strategy(ope["per_subject"], dec_acc, threshold=thr)
         v_gated = np.mean([r["v_gated"] for r in rows])
         n_used_fqe = sum(1 for r in rows if r["gated_pick"] == r["naive_pick"])
         log.info("  threshold=%.2f: V_gated=%+.3f, used FQE on %d/%d subjects",

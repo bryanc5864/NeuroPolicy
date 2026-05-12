@@ -70,10 +70,10 @@ def main():
     ax.grid(alpha=0.3)
     fig.tight_layout()
     FIG.mkdir(parents=True, exist_ok=True)
-    fig.savefig(FIG / "m17_m19_meta_correlation.png", dpi=150, bbox_inches="tight")
-    fig.savefig(FIG / "m17_m19_meta_correlation.pdf", bbox_inches="tight")
+    fig.savefig(FIG / "ope_meta_correlation_2datasets.png", dpi=150, bbox_inches="tight")
+    fig.savefig(FIG / "ope_meta_correlation_2datasets.pdf", bbox_inches="tight")
     plt.close(fig)
-    print("Wrote", FIG / "m17_m19_meta_correlation.png")
+    print("Wrote", FIG / "ope_meta_correlation_2datasets.png")
 
 
 if __name__ == "__main__":

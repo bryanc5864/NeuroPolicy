@@ -109,7 +109,7 @@ def make_csp_lda_fixed_policy(env: BCIEnv, pred_by_episode_id: dict):
 
 
 # ---------------------------------------------------------------------------
-# Helpers borrowed from m8
+# Helpers shared with LOSO baseline runner
 # ---------------------------------------------------------------------------
 def _windowize_for_pretrain(tb_list, mdp_cfg):
     Xs, ys = [], []

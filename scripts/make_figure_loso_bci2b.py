@@ -55,10 +55,10 @@ def main():
     ax.set_title(f"BCI-IV-2b LOSO ({len(subjects)} subjects) — accuracy vs ITR")
     ax.grid(alpha=0.3)
     ax.legend(loc="best", framealpha=0.9, ncol=2)
-    fig.savefig(FIG_DIR / "m8_loso_acc_vs_itr.png", bbox_inches="tight")
-    fig.savefig(FIG_DIR / "m8_loso_acc_vs_itr.pdf", bbox_inches="tight")
+    fig.savefig(FIG_DIR / "loso_bci2b_acc_vs_itr.png", bbox_inches="tight")
+    fig.savefig(FIG_DIR / "loso_bci2b_acc_vs_itr.pdf", bbox_inches="tight")
     plt.close(fig)
-    print(f"Wrote {FIG_DIR / 'm8_loso_acc_vs_itr.png'}")
+    print(f"Wrote {FIG_DIR / 'loso_bci2b_acc_vs_itr.png'}")
 
     # --- Per-subject return (bars) ---
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -78,10 +78,10 @@ def main():
     ax.set_title("BCI-IV-2b LOSO — per-subject episode return")
     ax.legend(loc="best")
     ax.grid(alpha=0.3, axis="y")
-    fig.savefig(FIG_DIR / "m8_loso_return_per_subject.png", bbox_inches="tight")
-    fig.savefig(FIG_DIR / "m8_loso_return_per_subject.pdf", bbox_inches="tight")
+    fig.savefig(FIG_DIR / "loso_bci2b_return_per_subject.png", bbox_inches="tight")
+    fig.savefig(FIG_DIR / "loso_bci2b_return_per_subject.pdf", bbox_inches="tight")
     plt.close(fig)
-    print(f"Wrote {FIG_DIR / 'm8_loso_return_per_subject.png'}")
+    print(f"Wrote {FIG_DIR / 'loso_bci2b_return_per_subject.png'}")
 
     # --- Aggregate table (text) ---
     print("\n=== AGGREGATE LOSO BCI-IV-2b ===")

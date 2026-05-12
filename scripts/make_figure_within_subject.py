@@ -56,7 +56,7 @@ for ax, (title, name) in zip(axes, datasets):
 fig.suptitle("Within-subject speed-accuracy frontier across three MOABB datasets",
              fontsize=11)
 fig.tight_layout()
-fig.savefig(FIG / "m9_m10_m11_acc_vs_itr.png", dpi=150, bbox_inches="tight")
-fig.savefig(FIG / "m9_m10_m11_acc_vs_itr.pdf", bbox_inches="tight")
+fig.savefig(FIG / "within_subject_acc_vs_itr.png", dpi=150, bbox_inches="tight")
+fig.savefig(FIG / "within_subject_acc_vs_itr.pdf", bbox_inches="tight")
 plt.close(fig)
-print("Wrote", FIG / "m9_m10_m11_acc_vs_itr.png")
+print("Wrote", FIG / "within_subject_acc_vs_itr.png")

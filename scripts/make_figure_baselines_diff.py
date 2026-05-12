@@ -2,8 +2,8 @@
 """ figures: paired-difference forest plot + Pareto (acc, ITR) scatter.
 
 Reads experiments/{baselines_loso_bci2b,loso_bci2b}/summary.json and writes:
-  figures/m4_baselines_vs_neuropolicy.png/pdf
-  figures/m4_pareto_acc_itr.png/pdf
+  figures/baselines_vs_neuropolicy.png/pdf
+  figures/pareto_acc_itr.png/pdf
 """
 from __future__ import annotations
 import json
@@ -85,9 +85,9 @@ def figure_paired_diffs(np_ret, bases):
     ax.set_xlim(-1.2, 1.2)
     ax.grid(axis="x", alpha=0.3)
     fig.tight_layout()
-    fig.savefig(FIG / "m4_baselines_vs_neuropolicy.png", dpi=150,
+    fig.savefig(FIG / "baselines_vs_neuropolicy.png", dpi=150,
                 bbox_inches="tight")
-    fig.savefig(FIG / "m4_baselines_vs_neuropolicy.pdf",
+    fig.savefig(FIG / "baselines_vs_neuropolicy.pdf",
                 bbox_inches="tight")
     plt.close(fig)
 
@@ -154,8 +154,8 @@ def figure_pareto(np_ret, bases, aggs):
     ax.grid(alpha=0.3)
     ax.legend(loc="upper left", fontsize=8, ncol=2)
     fig.tight_layout()
-    fig.savefig(FIG / "m4_pareto_acc_itr.png", dpi=150, bbox_inches="tight")
-    fig.savefig(FIG / "m4_pareto_acc_itr.pdf", bbox_inches="tight")
+    fig.savefig(FIG / "pareto_acc_itr.png", dpi=150, bbox_inches="tight")
+    fig.savefig(FIG / "pareto_acc_itr.pdf", bbox_inches="tight")
     plt.close(fig)
 
 
@@ -164,8 +164,8 @@ def main():
     figure_paired_diffs(np_ret, bases)
     figure_pareto(np_ret, bases, aggs)
     print("Wrote figures:")
-    print(" ", FIG / "m4_baselines_vs_neuropolicy.png")
-    print(" ", FIG / "m4_pareto_acc_itr.png")
+    print(" ", FIG / "baselines_vs_neuropolicy.png")
+    print(" ", FIG / "pareto_acc_itr.png")
 
 
 if __name__ == "__main__":

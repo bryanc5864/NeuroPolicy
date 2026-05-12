@@ -19,7 +19,7 @@ Three configurations per held-out subject:
               windows (mapped to common 3-channel sensor subset:
               C3, Cz, C4), then evaluated per-dataset.
 
-Output: experiments/m41_multidataset_pretrain/summary.json
+Output: experiments/multidataset_pretrain/summary.json
 """
 from __future__ import annotations
 import json
@@ -51,7 +51,7 @@ from src.utils.config import EXPERIMENTS_DIR, MDP_CFG, TRAIN_CFG
 
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s %(levelname)s %(name)s :: %(message)s")
-log = logging.getLogger("m41_multidataset")
+log = logging.getLogger("multidataset_pretrain")
 
 # Common 3-channel motor cortex subset across all 3 datasets
 COMMON_CHANNELS_PRIORITY = {
@@ -178,7 +178,7 @@ def loso_classification(dataset_key, held_out, train_subj_tbs, held_out_tb,
 def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     log.info("device=%s", device)
-    out_dir = EXPERIMENTS_DIR / "m41_multidataset_pretrain"
+    out_dir = EXPERIMENTS_DIR / "multidataset_pretrain"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     # === Phase 1: preprocess all subjects to common 3-channel subset ===

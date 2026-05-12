@@ -1,12 +1,12 @@
 # MIT License, 2026
-"""Generate the  meta-correlation figure: subject decodability vs
+"""Generate the meta-correlation figure: subject decodability vs
 cross-subject OPE Pearson r.
 
-Visualises the headline meta-finding: corr( EEGNet acc,  OPE r) = +0.827
-(p=0.006). Cross-subject OPE calibration quality is highly predicted by
+Visualises the headline meta-finding: corr(EEGNet acc, OPE r) ~ +0.83
+(p~0.006). Cross-subject OPE calibration quality is highly predicted by
 held-out decodability.
 
-Output: figures/m17_meta_correlation.{png,pdf}
+Output: figures/ope_meta_correlation_bci2b.{png,pdf}
 """
 from __future__ import annotations
 import json
@@ -21,21 +21,21 @@ FIG = ROOT / "figures"
 
 
 def main():
-    m8 = json.loads((ROOT / "experiments" / "loso_bci2b" / "summary.json").read_text())
-    m17 = json.loads((ROOT / "experiments" / "ope_loso_bci2b" / "summary.json").read_text())
+    loso = json.loads((ROOT / "experiments" / "loso_bci2b" / "summary.json").read_text())
+    ope = json.loads((ROOT / "experiments" / "ope_loso_bci2b" / "summary.json").read_text())
 
-    m8_acc = {r["held_out"]: r["results"]["cmdp_eps0.1"]["metrics"]["accuracy_on_commits"]
-              for r in m8["per_subject"]}
+    dec_acc = {r["held_out"]: r["results"]["cmdp_eps0.1"]["metrics"]["accuracy_on_commits"]
+               for r in loso["per_subject"]}
     rows = []
-    for r in m17["per_subject"]:
+    for r in ope["per_subject"]:
         sid = r["held_out"]
-        if sid in m8_acc:
-            rows.append({"sid": sid, "m8_acc": m8_acc[sid],
+        if sid in dec_acc:
+            rows.append({"sid": sid, "dec_acc": dec_acc[sid],
                          "ope_r": r["pearson_r"], "ope_p": r["pearson_p"]})
 
     if len(rows) < 3:
         print("Not enough data."); return
-    accs = np.array([r["m8_acc"] for r in rows])
+    accs = np.array([r["dec_acc"] for r in rows])
     rs = np.array([r["ope_r"] for r in rows])
     pearson, p_pearson = stats.pearsonr(accs, rs)
     spearman, p_spearman = stats.spearmanr(accs, rs)
@@ -51,7 +51,7 @@ def main():
                 zorder=4)
     # Annotate subject IDs
     for r in rows:
-        ax.annotate(f"sub{r['sid']}", (r["m8_acc"], r["ope_r"]),
+        ax.annotate(f"sub{r['sid']}", (r["dec_acc"], r["ope_r"]),
                      xytext=(6, 6), textcoords="offset points",
                      fontsize=8, alpha=0.85)
     # Regression line
@@ -68,7 +68,7 @@ def main():
     ax.fill_betweenx([-1, 1], 0.50, 0.60, color="red", alpha=0.05,
                       label="weak cluster (acc≤0.60)")
 
-    ax.set_xlabel("Held-out subject decodability ( EEGNet commit accuracy)")
+    ax.set_xlabel("Held-out subject decodability (EEGNet commit accuracy)")
     ax.set_ylabel("Cross-subject OPE calibration\nPearson r (V_FQE vs V_GT)")
     ax.set_xlim(0.45, 0.80)
     ax.set_ylim(-1.05, 1.05)
@@ -80,10 +80,10 @@ def main():
     ax.grid(alpha=0.3)
     fig.tight_layout()
     FIG.mkdir(parents=True, exist_ok=True)
-    fig.savefig(FIG / "m17_meta_correlation.png", dpi=150, bbox_inches="tight")
-    fig.savefig(FIG / "m17_meta_correlation.pdf", bbox_inches="tight")
+    fig.savefig(FIG / "ope_meta_correlation_bci2b.png", dpi=150, bbox_inches="tight")
+    fig.savefig(FIG / "ope_meta_correlation_bci2b.pdf", bbox_inches="tight")
     plt.close(fig)
-    print("Wrote", FIG / "m17_meta_correlation.png")
+    print("Wrote", FIG / "ope_meta_correlation_bci2b.png")
 
 
 if __name__ == "__main__":
