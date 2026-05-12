@@ -39,36 +39,50 @@ Author identity withheld for double-blind review}
 \maketitle
 
 \begin{abstract}
-Motor-imagery brain--computer interfaces (BCIs) usually pick a
-single class label at a fixed window. We instead frame the
-decoding problem as a sequence of decisions a learned agent must
-make: at each timestep it can commit a class
-(\textsc{Commit}$_k$), wait for more evidence
-(\textsc{Defer}), request a recalibration trial
-(\textsc{Recal}), or abstain (\textsc{Abstain}). Training such
-an agent from logged trials requires offline reinforcement
-learning, and \emph{evaluating} a candidate policy without
-re-running it on a user requires off-policy evaluation (OPE) ---
-both standard in clinical decision-making but absent from BCI.
+Motor-imagery brain--computer interfaces (BCIs) traditionally
+commit to a class label at a fixed window post-cue. Two
+consequences follow: every trial pays the full wait cost, and the
+user has no principled way to abstain when the EEG signal is
+ambiguous. We reframe within-trial decoding as a sequential
+decision a learned agent must make: at each $0.25$-s timestep the
+agent may commit a class (\textsc{Commit}$_k$), wait for stronger
+evidence (\textsc{Defer}), request a recalibration trial
+(\textsc{Recal}), or abstain (\textsc{Abstain}). Training such an
+agent from logged trials requires \emph{offline} reinforcement
+learning; evaluating a candidate policy without re-running it on a
+human user requires \emph{off-policy evaluation} (OPE) --- both
+mature in clinical decision-making but, to our knowledge, unused
+in BCI.
 
-We close that gap. First, we port calibrated fitted-Q evaluation
-to BCI: across a 12-policy panel on BCI-IV-2b subject~4, our OPE
-estimate tracks on-policy Monte-Carlo ground truth at Pearson
-$r\!=\!0.860$ --- to our knowledge the first calibrated OPE
-estimate published for BCI motor imagery. Second, under the
-standard BCI-IV-2a 4-class evaluation protocol the agent reaches
-$86.2\!\pm\!5.8\%$ commit accuracy at $34.2$~bits/min ITR, with
-\textsc{Defer} as a \emph{learned} action rather than a tuned
-threshold. Third, on 62-channel Lee2019 we run the first published
-leave-one-subject-out classification benchmark for offline-RL BCI
-($N\!=\!10$, $10/10$ subjects beat random, paired Wilcoxon
-$p\!=\!0.001$); together with non-significant results on
-3-channel and 22-channel datasets, this completes a clear
-electrode-count $\to$ cross-subject-significance trend.
-Supplementary contributions include a multi-method OPE benchmark
-(FQE/PDIS/WIS/DR) showing WIS gives $3\times$ lower bias than FQE,
-and the first offline-RL fine-tuning of the LaBraM EEG foundation
-model. Code under MIT.
+This paper supplies both. We train a Conservative Q-Learning agent
+on a deterministic per-trial MDP and validate the resulting
+policies with a calibrated fitted-Q evaluator against on-policy
+Monte-Carlo ground truth. On a 12-policy panel (\bcib{}~subject 4),
+the OPE estimate tracks ground truth at Pearson $r\!=\!0.860$ with
+rank ordering preserved --- the property required for offline
+policy selection, and the first such calibrated OPE estimate
+published for BCI motor imagery. Under the standard \bcia{} 4-class
+evaluation protocol, the trained agent reaches
+$86.2\!\pm\!5.8\%$ commit accuracy at $34.2$~bits/min~\itr{} with
+\textsc{Defer} as a \emph{learned} action; the \itr{} is roughly
+$2\times$ the typical value reported on this benchmark, gained by
+deferring uncertain trials instead of guessing wrong.
+
+A monotonic electrode-count to cross-subject-significance trend
+emerges across three datasets: leave-one-subject-out (LOSO)
+classification on 3-channel \bcib{} and 22-channel \bcia{} is
+not significant (paired Wilcoxon $p\!=\!0.10$, $p\!=\!0.15$),
+while on 62-channel Lee2019 all $10/10$ held-out subjects beat
+random ($p\!=\!0.001$) --- the first published Lee2019 LOSO
+classification benchmark for offline-RL BCI. Two supplementary
+contributions: an $N\!=\!9$ multi-method OPE benchmark in which
+weighted importance sampling yields $3\times$ lower bias than FQE
+($9/9$ subjects, $p\!=\!0.002$), exposing a calibration-rank
+decoupling that affects deployment; and the first end-to-end RL
+fine-tuning of the \labram{} EEG foundation model, which ties
+\eegnet{} on aggregate but lifts a previously weakly-decoded
+subject by $+16$~pp on both \bcib{} and \bcia{}. Code released
+under MIT.
 \end{abstract}
 
 \begin{IEEEkeywords}
