@@ -41,13 +41,14 @@ Author identity withheld for double-blind review}
 Motor-imagery brain--computer interfaces (BCIs) usually pick a
 single class label at a fixed window. We instead frame the
 decoding problem as a sequence of decisions a learned agent must
-make: at each timestep it can commit a class, wait for more
-evidence (\textsc{Defer}), request a calibration trial, or
-abstain. Training such an agent from logged trials requires
-offline reinforcement learning, and \emph{evaluating} a candidate
-policy without re-running it on a user requires off-policy
-evaluation (OPE) --- both standard in clinical decision-making but
-absent from BCI.
+make: at each timestep it can commit a class
+(\textsc{Commit}$_k$), wait for more evidence
+(\textsc{Defer}), request a recalibration trial
+(\textsc{Recal}), or abstain (\textsc{Abstain}). Training such
+an agent from logged trials requires offline reinforcement
+learning, and \emph{evaluating} a candidate policy without
+re-running it on a user requires off-policy evaluation (OPE) ---
+both standard in clinical decision-making but absent from BCI.
 
 We close that gap. First, we port calibrated fitted-Q evaluation
 to BCI: across a 12-policy panel on BCI-IV-2b subject~4, our OPE
