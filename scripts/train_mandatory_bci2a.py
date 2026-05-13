@@ -166,8 +166,7 @@ def train_one(tb, encoder_name: str, seed: int, device, n_epochs: int = 250,
 def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--encoder", required=True,
-                    choices=["conformer", "banded_conformer", "ms_bandmamba",
-                              "eegnet", "ctnet"])
+                    choices=["conformer", "eegnet", "ctnet"])
     p.add_argument("--subjects", type=int, nargs="+", default=None)
     p.add_argument("--seeds", type=int, nargs="+", default=None)
     p.add_argument("--epochs", type=int, default=None)
