@@ -413,6 +413,48 @@ class CTNetEncoder(BaseEncoder):
         return self._forward_features(x)
 
 
+# ---------------------------------------------------------------------------
+# BandedConformer: IFNet-style mu/beta band-split front-end + EEG-Conformer.
+# Minimum-perturbation experiment for the band-split insight.  The CNN+
+# transformer backbone is *exactly* the published Conformer; the only change
+# is the input is (mu_filtered || beta_filtered) instead of raw EEG, so the
+# spatial depthwise conv learns ERD/ERS in both bands separately.
+# ---------------------------------------------------------------------------
+class BandedConformerEncoder(BaseEncoder):
+    def __init__(self, n_channels: int, n_samples: int, sfreq: float,
+                  mu_band: tuple[float, float] = (4.0, 16.0),
+                  beta_band: tuple[float, float] = (16.0, 40.0),
+                  n_taps: int = 65, **conformer_kwargs):
+        super().__init__()
+        from .ms_bandmamba import BandSplit       # reuse the FIR module
+        self.n_channels = n_channels
+        self.n_samples = n_samples
+        self.sfreq = sfreq
+        self.band_split = BandSplit(n_channels, sfreq, n_taps=n_taps,
+                                      mu_band=mu_band, beta_band=beta_band)
+        # Conformer over (B, 2*C, T): treats stacked bands as 2*n_channels.
+        self.conformer = EEGConformerEncoder(n_channels=2 * n_channels,
+                                              n_samples=n_samples,
+                                              sfreq=sfreq,
+                                              **conformer_kwargs)
+        self._spec = EncoderSpec(
+            embed_dim=self.conformer.spec.embed_dim,
+            n_channels=n_channels, n_samples=n_samples, sfreq=sfreq,
+            name=f"BandedConformer({self.conformer.spec.name})",
+        )
+
+    @property
+    def spec(self) -> EncoderSpec:
+        return self._spec
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # x: (B, C, T) -> (B, 2, C, T) -> (B, 2*C, T)
+        bands = self.band_split(x)
+        B, _, C, T = bands.shape
+        x2 = bands.reshape(B, 2 * C, T)
+        return self.conformer(x2)
+
+
 def build_encoder(name: str, n_channels: int, n_samples: int, sfreq: float,
                   ch_names: list[str] | None = None,
                   load_pretrained: bool = True) -> BaseEncoder:
@@ -427,6 +469,8 @@ def build_encoder(name: str, n_channels: int, n_samples: int, sfreq: float,
     if name in {"ms_bandmamba", "msbandmamba", "ms-bandmamba"}:
         from .ms_bandmamba import MSBandMambaEncoder
         return MSBandMambaEncoder(n_channels=n_channels, n_samples=n_samples, sfreq=sfreq)
+    if name in {"banded_conformer", "bandedconformer", "band_conformer"}:
+        return BandedConformerEncoder(n_channels=n_channels, n_samples=n_samples, sfreq=sfreq)
     if name in {"labram", "labram-base"}:
         if ch_names is None:
             raise ValueError("LaBraM requires ch_names")
