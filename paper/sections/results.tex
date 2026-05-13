@@ -458,6 +458,48 @@ encoder is good, and the 9-subject mean reflects the
 itself is intrinsically hard. We retain both as the honest pair
 of summary numbers.
 
+\paragraph*{CVaR $\alpha$ sensitivity (cross-subject)}
+The CVaR risk knob $\alpha$ collapses the learned $Z$-value
+distribution to a scalar $Q$ by averaging over the left-tail
+fraction $\alpha$, and is set at eval time without retraining
+(distributional critic exposes all $\alpha$ from a single trained
+agent). We sweep $\alpha \in \{0.10, 0.25, 0.50, 1.00\}$ on the
+canonical 3-subject panel $\times$ 5 seeds with the same
+distributional-CQL + CMDP $\epsilon\!=\!0.10$ training recipe
+(Fig.~\ref{fig:cvar_alpha}). Mean commit accuracy is approximately
+flat in $\alpha$ ($0.858$ at $\alpha\!=\!0.10$, peaks $0.882$ at
+$\alpha\!=\!0.50$, $0.862$ at $\alpha\!=\!1.0$ --- range $2.4$pp),
+but the safety-throughput trade-off moves monotonically: commit
+rate rises $0.16\!\to\!0.29$ as $\alpha$ rises, and wrong-commit
+rate doubles ($0.022\!\to\!0.040$). $\alpha\!=\!0.10$ is therefore
+the safest setting (commits half as often, makes half the wrong
+commits) while $\alpha\!=\!1.0$ trades safety for throughput at
+$\sim\!4$pp higher \itr{} ($35.2$ vs $31.3$~b/m). The CMDP
+constraint $\epsilon\!=\!0.10$ is satisfied for all $\alpha$
+(cross-subject wrong-commit rates $0.022$--$0.040$ all well below
+$0.10$). This is the first cross-subject ablation in our setup
+showing that $\alpha$ functions as a designer-tunable knob rather
+than being a vestigial parameter --- complementing the
+within-subject \bcib{}~sub~4 result where all $\alpha$ produced
+identical action sequences because the problem itself was too
+easy.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\columnwidth]{../figures/cvar_alpha_sensitivity.png}
+\caption{CVaR $\alpha$ sensitivity on the canonical 3-subject
+\bcia{} panel (3 subj $\times$ 5 seeds, eval-time sweep over a
+single distributional-CQL+CMDP $\epsilon\!=\!0.10$ training).
+(A) Commit accuracy (blue) and ITR (red) are approximately flat in
+$\alpha$. (B) Wrong-commit rate (dark red, $0.022\!\to\!0.040$)
+and commit rate (green, $0.16\!\to\!0.29$) both double from
+$\alpha\!=\!0.10$ to $\alpha\!=\!1.00$. The CMDP constraint
+($\epsilon\!=\!0.10$, dashed) is comfortably satisfied at every
+$\alpha$. $\alpha$ is therefore an operating-point knob, not a
+no-op.}
+\label{fig:cvar_alpha}
+\end{figure}
+
 \paragraph*{Encoder-recipe ablation: published Song 2023 schedule}
 A natural follow-up question is whether more compute on the
 \emph{encoder pretraining} side closes the gap to the published
