@@ -333,6 +333,7 @@ FBCSP \cite{Ang2012FBCSPFrontiers}                    & $0.678$ & $0.678$ & $1.0
 EEGNet \cite{Lawhern2018}                              & $0.740$ & $0.740$ & $1.00$ & --- \\
 EEG-Conformer \cite{Song2023Conformer}                & $0.787$ & $0.787$ & $1.00$ & --- \\
 CTNet \cite{Zhao2024CTNet}                            & $0.825$ & $0.825$ & $1.00$ & --- \\
+EEGEncoder \cite{Liao2025EEGEncoder}                  & $0.865$ & $0.865$ & $1.00$ & --- \\
 \midrule
 \multicolumn{5}{l}{\textit{Mandatory classifiers (ours, all 9 subj $\times$ 5 seeds)}} \\
 CSP+LDA broadband                                      & $0.571$ & $0.571$ & $1.00$ & --- \\
@@ -362,7 +363,8 @@ gives $+7.8$pp over single-shot ($66.7\!\to\!74.5\%$ on 9
 subjects) and $+7.0$pp over EEGNet with the same recipe --- a
 reproducibility measurement, not a novel recipe. The 9-subject
 mean $74.5\%$ sits below published Conformer ($78.7\%$), CTNet
-($82.5\%$), and Transformer-2025 ($86.5\%$) due to our truncated
+($82.5\%$~\cite{Zhao2024CTNet}), and EEGEncoder
+($86.5\%$~\cite{Liao2025EEGEncoder}) due to our truncated
 training budget ($80$ vs.~$2$k epochs).
 
 The selective-decoder block in Table~\ref{tab:sota} reports the

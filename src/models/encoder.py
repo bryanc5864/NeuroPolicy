@@ -354,6 +354,65 @@ class EEGConformerEncoder(BaseEncoder):
         return tokens.flatten(start_dim=1)
 
 
+# ---------------------------------------------------------------------------
+# CTNet encoder (Zhao et al., Scientific Reports 2024, DOI 10.1038/s41598-024-71118-7).
+# Reference implementation: braindecode.models.CTNet (1.4.0+).
+# Published 4-class subject-specific bci2a accuracy: 82.52%.
+# ---------------------------------------------------------------------------
+class CTNetEncoder(BaseEncoder):
+    """CTNet (Zhao 2024) feature extractor — drops the final classifier head.
+
+    Architecture follows the paper's defaults: CNN (kernel 64, F1=20 temporal
+    filters, depth multiplier 2, two avg-pool stages of size 8) + 6-layer
+    transformer (embed_dim 40, 4 heads). The forward returns the flattened
+    feature vector that the paper's final classifier consumes, i.e.
+    (cnn + transformer) residual then flatten.
+
+    Embedding dim depends on n_times: at 1 s @ 250 Hz this is 120 (3 tokens
+    of dim 40); at 4 s @ 250 Hz it would be 480.
+    """
+
+    def __init__(self, n_channels: int, n_samples: int, sfreq: float):
+        super().__init__()
+        from braindecode.models import CTNet
+        self.n_channels = n_channels
+        self.n_samples = n_samples
+        self.sfreq = sfreq
+        self.ctnet = CTNet(n_outputs=2, n_chans=n_channels,
+                          n_times=n_samples, sfreq=sfreq)
+        # Compute embed_dim with a dry-run.
+        with torch.no_grad():
+            dummy = torch.zeros(1, n_channels, n_samples)
+            emb = self._forward_features(dummy)
+            self._embed_dim = int(emb.shape[-1])
+            self._n_tokens = self.ctnet.embed_dim and (self._embed_dim // self.ctnet.embed_dim)
+
+    def _forward_features(self, x: torch.Tensor) -> torch.Tensor:
+        import math
+        # CTNet's ensuredim() prepends a feature dim; safe to call.
+        x = self.ctnet.ensuredim(x)
+        cnn = self.ctnet.cnn(x)
+        cnn = cnn * math.sqrt(self.ctnet.embed_dim)
+        cnn_p = self.ctnet.position(cnn)
+        trans = self.ctnet.trans(cnn_p)
+        features = cnn_p + trans
+        return self.ctnet.flatten(features)
+
+    @property
+    def spec(self) -> EncoderSpec:
+        return EncoderSpec(
+            embed_dim=self._embed_dim,
+            n_channels=self.n_channels,
+            n_samples=self.n_samples,
+            sfreq=self.sfreq,
+            name=f"CTNet(tokens={self._n_tokens},emb={self.ctnet.embed_dim})",
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # x: (B, C, T)
+        return self._forward_features(x)
+
+
 def build_encoder(name: str, n_channels: int, n_samples: int, sfreq: float,
                   ch_names: list[str] | None = None,
                   load_pretrained: bool = True) -> BaseEncoder:
@@ -363,6 +422,8 @@ def build_encoder(name: str, n_channels: int, n_samples: int, sfreq: float,
         return EEGNetEncoder(n_channels=n_channels, n_samples=n_samples, sfreq=sfreq)
     if name in {"conformer", "eeg-conformer", "eegconformer"}:
         return EEGConformerEncoder(n_channels=n_channels, n_samples=n_samples, sfreq=sfreq)
+    if name in {"ctnet"}:
+        return CTNetEncoder(n_channels=n_channels, n_samples=n_samples, sfreq=sfreq)
     if name in {"labram", "labram-base"}:
         if ch_names is None:
             raise ValueError("LaBraM requires ch_names")
