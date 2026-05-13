@@ -7,7 +7,7 @@ cd "$(dirname "$0")/.." || exit 1
 wait_gpu() {
   while true; do
     used=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits | head -1)
-    if [ "$used" -lt 5000 ]; then
+    if [ "$used" -lt 2500 ]; then
       echo "[$(date '+%F %T')] GPU free (used=${used}MB)"
       return 0
     fi
