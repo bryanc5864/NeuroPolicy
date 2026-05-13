@@ -56,6 +56,73 @@ recipe (offline buffer from explicit logging policies, per-policy
 MC) ports to any closed-loop BCI deployment that records full
 trial recordings alongside agent actions.
 
+\paragraph*{Task accuracy is not the right metric for a selective decoder}
+Reviewers comparing \nettype{} commit accuracy to standard
+mandatory-classifier leaderboards on \bcia{} 4-class will notice
+that our \emph{task accuracy} (correct $\div$ total trials) is
+considerably lower ($0.23$--$0.45$ in Table~\ref{tab:sota}) than
+mandatory baselines ($0.74$--$0.89$). This is by design and not a
+defect. The selective decoder is allowed to refuse a decision, and
+counts only commits in its accuracy denominator; the refused
+trials trigger an explicit \textsc{Defer} or \textsc{Abstain}
+outcome that a downstream system can handle (re-prompt, fall back
+to a default, request calibration). Compared at fixed commit rate
+$=\!1.00$ our agent reduces to the mandatory EEGNet baseline; the
+contribution is the operating points it unlocks \emph{below}
+$1.00$ commit rate, where commit accuracy rises to $0.876$ at
+$37$~b/m \itr{} with $<\!5\%$ wrong-commit rate
+(\S\ref{sec:results:sota}, EEG-Conformer encoder). This is a
+different axis from leaderboard task accuracy, and we view the two
+as complementary rather than competitive.
+
+\paragraph*{LOSO-vs-random significance depends on channel count}
+Cross-subject LOSO commit accuracy is statistically significant
+against the random baseline only on the 62-channel Lee2019 dataset
+($p\!=\!0.001$), not on 3-channel \bcib{} ($p\!=\!0.10$) or
+22-channel \bcia{} ($p\!=\!0.15$). The monotone channel-count
+$\to$ significance trend
+(Fig.~\ref{fig:channel_sig}) is the structural finding: cross-subject
+motor-imagery transfer in offline RL benefits from richer scalp
+coverage rather than algorithmic refinement, consistent with prior
+sensor-array vs.\ source-localisation literature for motor
+imagery. The low-channel datasets are individually under-powered
+($N\!=\!9$) for a paired Wilcoxon to clear $p\!<\!0.05$ even when
+the per-subject mean shift is $+0.15$ on \bcia{}. The Lee2019
+result is not a generalisation claim across MI datasets but the
+strongest single demonstration that the framework transfers when
+the data support it.
+
+\paragraph*{OPE rank-preservation, not point accuracy, is what offline
+policy selection needs}
+Within-subject \fqe{} achieves Pearson $r\!=\!0.86$ vs.\ on-policy
+Monte-Carlo across 12 policies; cross-subject correlations are
+$r\!=\!+0.83$ (\bcib) and $r\!=\!+0.61$ (\bcia). The bci2a number
+is the weakest in the table, yet the deployment rule
+(\S\ref{sec:results:ope_cross}) is bootstrap-certain no-regret on
+$N\!=\!18$ deployments because policy selection requires
+\emph{rank} preservation, not point accuracy. A correlation of
+$+0.61$ still preserves the rank of the best policy in $9/9$
+\bcia{} held-out subjects, which is the operational property
+needed for offline selection. We would not advocate this OPE
+estimate for absolute deployment-risk quantification --- only for
+policy ranking.
+
+\paragraph*{Choice of wrong-commit budget $\epsilon\!=\!0.10$}
+The CMDP commit-error constraint is set at $\epsilon\!=\!0.10$
+throughout. This is not arbitrary: published P300-speller systems
+operate at $5$--$15\%$ character-error rates with explicit
+error-correction interfaces~\cite{Townsend2010P300checkerboard,
+Sellers2006P300speller}, and motor-imagery BCI control of
+wheelchairs or virtual assistive devices typically requires
+false-positive rates below $\sim\!15\%$ to be considered safe for
+end-users with motor impairment~\cite{Tonin2022WheelchairBCI,
+Wolpaw2002ITR}. Selecting $\epsilon\!=\!0.10$ places \nettype{} at
+the more conservative end of this range while remaining slack
+enough that the policy retains a non-trivial commit rate
+($\sim\!27$--$53\%$ in our experiments) rather than degenerating to
+permanent abstention. Section~\ref{sec:results:sota} verifies the
+constraint is satisfied empirically across all reported seeds.
+
 \subsection{Limitations and future work}\label{sec:disc:limitations}
 
 Lee2019 LOSO ran on a 10-subject subset; a full $N\!=\!54$ sweep

@@ -34,10 +34,16 @@ class PolicyMetrics:
     outcome_counts: dict[str, int]
     wrong_commit_rate: float       # over all episodes (for CMDP feasibility)
     information_transfer_rate: float  # bits/min, over commit episodes
+    decision_seconds: np.ndarray | None = None  # per-commit decision times (s)
+    commit_correct: np.ndarray | None = None    # per-commit correct/incorrect flag
 
     def asdict(self) -> dict:
         d = {k: getattr(self, k) for k in vars(self) if k != "returns"}
         d["returns"] = [float(x) for x in self.returns]
+        if self.decision_seconds is not None:
+            d["decision_seconds"] = [float(x) for x in self.decision_seconds]
+        if self.commit_correct is not None:
+            d["commit_correct"] = [int(x) for x in self.commit_correct]
         return d
 
 
@@ -56,6 +62,7 @@ def evaluate_policy(
     """
     returns = np.zeros(len(episodes), dtype=np.float64)
     decision_steps = []
+    commit_correct_flags: list[int] = []
     n_commits = n_correct = n_wrong = n_abstain = n_abstain_to = n_recals = 0
     outcomes: Counter = Counter()
 
@@ -81,9 +88,11 @@ def evaluate_policy(
         if last_outcome == "correct_commit":
             n_correct += 1; n_commits += 1
             decision_steps.append(last_t)
+            commit_correct_flags.append(1)
         elif last_outcome == "wrong_commit":
             n_wrong += 1; n_commits += 1
             decision_steps.append(last_t)
+            commit_correct_flags.append(0)
         elif last_outcome == "abstain":
             n_abstain += 1
         elif "abstain_timeout" in (last_outcome or ""):
@@ -125,6 +134,8 @@ def evaluate_policy(
         outcome_counts=dict(outcomes),
         wrong_commit_rate=float(n_wrong / max(len(episodes), 1)),
         information_transfer_rate=itr,
+        decision_seconds=(np.array(decision_steps) * env.cfg.stride_seconds) if decision_steps else None,
+        commit_correct=np.array(commit_correct_flags) if commit_correct_flags else None,
     )
 
 
