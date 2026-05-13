@@ -352,6 +352,8 @@ EEGNet+threshold $\tau=0.90$                            & --- & $0.703 \!\pm\! 0
 \textsc{NeuroPolicy} CVaR+CMDP                  & $0.332 \!\pm\! 0.06$ & $0.862 \!\pm\! 0.06$ & $0.39$ & $34.2$ \\
 \textsc{NeuroPolicy}+Conformer scalar-\cql{}    & $0.389 \!\pm\! 0.05$ & $0.807 \!\pm\! 0.06$ & $0.48$ & $34.5$ \\
 \textbf{\textsc{NeuroPolicy}+Conformer CVaR+CMDP} & $0.234 \!\pm\! 0.05$ & $\mathbf{0.876 \!\pm\! 0.03}$ & $0.27$ & $\mathbf{37.0}$ \\
+\textsc{NeuroPolicy}+CTNet scalar-\cql{}        & $0.359 \!\pm\! 0.12$ & $0.731 \!\pm\! 0.12$ & $0.49$ & $19.0$ \\
+\textsc{NeuroPolicy}+CTNet CVaR+CMDP            & $0.351 \!\pm\! 0.13$ & $0.734 \!\pm\! 0.13$ & $0.49$ & $20.0$ \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -384,23 +386,33 @@ distinct from post-hoc
 thresholding~\cite{Ganeshkumar2017RejectMI}, evaluated at
 canonical-protocol conditions.
 
-\paragraph*{Encoder-agnostic test: EEG-Conformer plug-in}
+\paragraph*{Encoder-agnostic test: Conformer and CTNet plug-ins}
 To probe whether commit accuracy is encoder-bottlenecked, we
-swap the EEGNet encoder for EEG-Conformer~\cite{Song2023Conformer}
+swap the EEGNet encoder for two published transformer
+architectures \emph{with no other changes} to MDP, agent, or
+training recipe: EEG-Conformer~\cite{Song2023Conformer}
 ($6$-layer transformer, $11$ temporal tokens at $1$-s windows)
-\emph{with no other changes} to MDP, agent, or training recipe.
-Cross-subject CVaR+CMDP lifts from $0.862$ to
-$\mathbf{0.876\!\pm\!0.029}$ commit accuracy at
-$\mathbf{37.0}$~b/m \itr{} (Table~\ref{tab:sota}, last row) ---
-the new best Pareto point on this panel.
-The lift is concentrated on the
-weakest-decoding subject: sub~$7$ jumps from $0.798$ to $0.897$
-($+9.9$pp) while sub~$1$ and sub~$3$ tie within noise
-($-3.9$~/~$-1.9$pp). This subject-specific encoder-rescue effect
-reproduces the LaBraM result on \bcib{} sub~$8$
-(\S\ref{sec:results:labram_loso}). The selective-decoder framework
-is therefore encoder-agnostic; raw encoder strength on the
-hardest subjects, not the policy, sets the ceiling.
+and CTNet~\cite{Zhao2024CTNet} ($6$-layer transformer,
+$3$ tokens at $1$-s windows after its larger CNN pooling).
+Cross-subject CVaR+CMDP commit accuracy: EEGNet $0.862$,
+Conformer $\mathbf{0.876\!\pm\!0.029}$ at $\mathbf{37.0}$~b/m
+(the new best Pareto point), CTNet $0.734\!\pm\!0.13$ at
+$20.0$~b/m. The Conformer lift is concentrated on the
+weakest-decoding subject (sub~$7$: $0.798 \to 0.897$, $+9.9$pp,
+with sub~$1$ and sub~$3$ tied within noise), reproducing the
+LaBraM result on \bcib{} sub~$8$
+(\S\ref{sec:results:labram_loso}). The CTNet plug-in performs
+the opposite manoeuvre on the same subject ($0.798 \to 0.597$,
+$-20.1$pp), even though CTNet's published mandatory accuracy
+($82.5\%$~\cite{Zhao2024CTNet}) is higher than Conformer's
+($78.7\%$~\cite{Song2023Conformer}). The mechanism is the
+$1$-s window: CTNet's CNN compresses the input to only $3$
+transformer tokens, starving a $6$-layer attention stack, while
+Conformer's $11$ tokens are sufficient. The selective-decoder
+framework is therefore encoder-agnostic in the sense that the
+agent works with any encoder, but encoder choice interacts with
+window length --- token count $\times$ transformer depth is the
+binding constraint at $1$-s granularity, not the agent.
 
 \subsection{Multi-class and cross-dataset transfer}\label{sec:results:bci2a}
 
