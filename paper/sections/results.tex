@@ -612,15 +612,16 @@ baseline on each dataset.}
 \includegraphics[width=\columnwidth]{../figures/time_to_commit.png}
 \caption{When the selective decoder commits within a trial, pooled
 across 9 \bcia{} subjects $\times$ 5 seeds $\times$ 2 configs
-($N\!=\!3721$ commit decisions). (A) Commit-time distribution: the
-agent rarely commits in the first second (insufficient evidence)
-or the last 0.75~s (timeout-\textsc{Abstain} dominates); median
-decision time $2.25$~s, mean $2.01$~s --- $\sim\!50\%$ of full
-$4$-s trial length. (B) Commit accuracy by decision-time bin: late
-commits ($\ge 2$~s) cluster at $0.78$--$0.82$ accuracy while early
-commits ($\le 1$~s) fall to $0.60$--$0.70$. The frontier is the
-expected speed--accuracy trade-off; the agent learns to wait until
-the evidence is strong enough to clear the implicit CVaR threshold.}
+($N\!=\!3721$ commit decisions); median decision time $2.25$~s
+($\sim\!56\%$ of full trial length). (A) Commit-time distribution
+is bimodal: $\sim\!6\%$ of decisions fire immediately at the first
+step (impulsive-commit mode), the bulk ($\sim\!85\%$) cluster
+between $1.25$--$3.0$~s as the value head accumulates evidence,
+and very few fire in the $0.5$--$1.0$~s window. (B) Commit
+accuracy by decision-time bin: early-impulse commits ($\le 0.5$~s)
+drop to $0.48$, while every later bin ($\ge\!1$~s) is above
+$0.73$, the expected speed-accuracy trade-off. Overall pooled
+commit accuracy $0.751$.}
 \label{fig:time_to_commit}
 \end{figure}
 
