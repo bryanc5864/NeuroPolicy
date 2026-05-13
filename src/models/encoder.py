@@ -424,6 +424,9 @@ def build_encoder(name: str, n_channels: int, n_samples: int, sfreq: float,
         return EEGConformerEncoder(n_channels=n_channels, n_samples=n_samples, sfreq=sfreq)
     if name in {"ctnet"}:
         return CTNetEncoder(n_channels=n_channels, n_samples=n_samples, sfreq=sfreq)
+    if name in {"ms_bandmamba", "msbandmamba", "ms-bandmamba"}:
+        from .ms_bandmamba import MSBandMambaEncoder
+        return MSBandMambaEncoder(n_channels=n_channels, n_samples=n_samples, sfreq=sfreq)
     if name in {"labram", "labram-base"}:
         if ch_names is None:
             raise ValueError("LaBraM requires ch_names")
