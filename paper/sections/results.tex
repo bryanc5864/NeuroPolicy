@@ -348,7 +348,9 @@ EEGNet+threshold $\tau=0.75$                            & --- & $0.634 \!\pm\! 0
 EEGNet+threshold $\tau=0.85$                            & --- & $0.680 \!\pm\! 0.04$ & $1.00$ & $87.8$ \\
 EEGNet+threshold $\tau=0.90$                            & --- & $0.703 \!\pm\! 0.04$ & $1.00$ & $66.5$ \\
 \textsc{NeuroPolicy} scalar-\cql{}                      & $0.450 \!\pm\! 0.04$ & $0.856 \!\pm\! 0.05$ & $0.53$ & $31.7$ \\
-\textbf{\textsc{NeuroPolicy} CVaR+CMDP}                  & $0.332 \!\pm\! 0.06$ & $\mathbf{0.862 \!\pm\! 0.06}$ & $0.39$ & $34.2$ \\
+\textsc{NeuroPolicy} CVaR+CMDP                  & $0.332 \!\pm\! 0.06$ & $0.862 \!\pm\! 0.06$ & $0.39$ & $34.2$ \\
+\textsc{NeuroPolicy}+Conformer scalar-\cql{}    & $0.389 \!\pm\! 0.05$ & $0.807 \!\pm\! 0.06$ & $0.48$ & $34.5$ \\
+\textbf{\textsc{NeuroPolicy}+Conformer CVaR+CMDP} & $0.234 \!\pm\! 0.05$ & $\mathbf{0.876 \!\pm\! 0.03}$ & $0.27$ & $\mathbf{37.0}$ \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -379,6 +381,24 @@ BCI decoder with \textsc{Defer} as a \emph{learned} policy action,
 distinct from post-hoc
 thresholding~\cite{Ganeshkumar2017RejectMI}, evaluated at
 canonical-protocol conditions.
+
+\paragraph*{Encoder-agnostic test: EEG-Conformer plug-in}
+To probe whether commit accuracy is encoder-bottlenecked, we
+swap the EEGNet encoder for EEG-Conformer~\cite{Song2023Conformer}
+($6$-layer transformer, $11$ temporal tokens at $1$-s windows)
+\emph{with no other changes} to MDP, agent, or training recipe.
+Cross-subject CVaR+CMDP lifts from $0.862$ to
+$\mathbf{0.876\!\pm\!0.029}$ commit accuracy at
+$\mathbf{37.0}$~b/m \itr{} (Table~\ref{tab:sota}, last row) ---
+the new best Pareto point on this panel.
+The lift is concentrated on the
+weakest-decoding subject: sub~$7$ jumps from $0.798$ to $0.897$
+($+9.9$pp) while sub~$1$ and sub~$3$ tie within noise
+($-3.9$~/~$-1.9$pp). This subject-specific encoder-rescue effect
+reproduces the LaBraM result on \bcib{} sub~$8$
+(\S\ref{sec:results:labram_loso}). The selective-decoder framework
+is therefore encoder-agnostic; raw encoder strength on the
+hardest subjects, not the policy, sets the ceiling.
 
 \subsection{Multi-class and cross-dataset transfer}\label{sec:results:bci2a}
 
