@@ -152,13 +152,23 @@ def main():
               len(SUBJECTS), len(SEEDS), len(CONFIGS),
               len(SUBJECTS) * len(SEEDS) * len(CONFIGS))
 
-    results = {"protocol": "canonical_session_T_to_session_E",
-                "encoder": ENCODER,
-                "subjects": SUBJECTS, "seeds": SEEDS,
-                "configs": [c["name"] for c in CONFIGS],
-                "per_subject": {}}
+    summary_path = out_dir / "summary.json"
+    if summary_path.exists():
+        results = json.loads(summary_path.read_text())
+        log.info("Resuming from existing summary.json (subjects done: %s)",
+                 [s for s, sd in results["per_subject"].items() if "aggregate" in sd])
+    else:
+        results = {"protocol": "canonical_session_T_to_session_E",
+                    "encoder": ENCODER,
+                    "subjects": SUBJECTS, "seeds": SEEDS,
+                    "configs": [c["name"] for c in CONFIGS],
+                    "per_subject": {}}
 
     for sid in SUBJECTS:
+        sid_key = str(sid)
+        if sid_key in results["per_subject"] and "aggregate" in results["per_subject"][sid_key]:
+            log.info("Subject %d already complete — skipping", sid)
+            continue
         log.info("\n\n========== SUBJECT %d ==========", sid)
         tb = preprocess_subject("bci2a", subject_id=sid)
         ctx = build_buffer_for_subject(tb, device, split_seed=0)
@@ -173,19 +183,25 @@ def main():
                   rand_test.return_mean, rand_test.accuracy_on_commits,
                   rand_test.information_transfer_rate, rand_test.n_commits)
 
+        existing_sub = results["per_subject"].get(sid_key, {})
+        existing_seeds = existing_sub.get("per_seed", {})
         sub_results = {
             "encoder_name": ctx["encoder_name"],
             "encoder_val_acc": ctx["encoder_val_acc"],
             "n_test_episodes": n_te,
             "random_test": rand_test.asdict(),
-            "per_seed": {},
+            "per_seed": {str(k): v for k, v in existing_seeds.items()},
         }
 
         for seed in SEEDS:
+            seed_key = str(seed)
             log.info("\n--- subject %d seed %d ---", sid, seed)
             torch.manual_seed(seed); np.random.seed(seed)
-            sub_results["per_seed"][seed] = {}
+            sub_results["per_seed"].setdefault(seed_key, {})
             for cfg in CONFIGS:
+                if cfg["name"] in sub_results["per_seed"][seed_key]:
+                    log.info("  [%-25s] s=%d already complete — skipping", cfg["name"], seed)
+                    continue
                 cfg_obj = TRAIN_CFG.__class__(**{**vars(TRAIN_CFG),
                                                   "cql_alpha": cfg["cql_alpha"],
                                                   "seed": seed})
@@ -208,23 +224,23 @@ def main():
                           test.return_mean, test.accuracy_on_commits,
                           test.information_transfer_rate, test.wrong_commit_rate,
                           test.n_commits, n_te, elapsed)
-                sub_results["per_seed"][seed][cfg["name"]] = {
+                sub_results["per_seed"][seed_key][cfg["name"]] = {
                     "config": cfg, "val": val.asdict(), "test": test.asdict(),
                     "elapsed_s": float(elapsed),
                 }
-                results["per_subject"][sid] = sub_results
+                results["per_subject"][sid_key] = sub_results
                 (out_dir / "summary.json").write_text(json.dumps(results, indent=2))
 
         # Per-subject aggregate
         agg = {}
         for cfg in CONFIGS:
             name = cfg["name"]
-            rets = [sub_results["per_seed"][s][name]["test"]["return_mean"] for s in SEEDS]
-            accs = [sub_results["per_seed"][s][name]["test"]["accuracy_on_commits"] for s in SEEDS]
-            itrs = [sub_results["per_seed"][s][name]["test"]["information_transfer_rate"] for s in SEEDS]
-            wrong = [sub_results["per_seed"][s][name]["test"]["wrong_commit_rate"] for s in SEEDS]
-            n_commits = [sub_results["per_seed"][s][name]["test"]["n_commits"] for s in SEEDS]
-            n_correct = [sub_results["per_seed"][s][name]["test"]["n_correct_commits"] for s in SEEDS]
+            rets = [sub_results["per_seed"][str(s)][name]["test"]["return_mean"] for s in SEEDS]
+            accs = [sub_results["per_seed"][str(s)][name]["test"]["accuracy_on_commits"] for s in SEEDS]
+            itrs = [sub_results["per_seed"][str(s)][name]["test"]["information_transfer_rate"] for s in SEEDS]
+            wrong = [sub_results["per_seed"][str(s)][name]["test"]["wrong_commit_rate"] for s in SEEDS]
+            n_commits = [sub_results["per_seed"][str(s)][name]["test"]["n_commits"] for s in SEEDS]
+            n_correct = [sub_results["per_seed"][str(s)][name]["test"]["n_correct_commits"] for s in SEEDS]
             task_accs = [c / n_te for c in n_correct]
             agg[name] = {
                 "return_mean": float(np.mean(rets)), "return_std": float(np.std(rets, ddof=1)),
@@ -242,7 +258,7 @@ def main():
                       agg[name]["itr_mean"], agg[name]["itr_std"],
                       agg[name]["commit_rate_mean"])
         sub_results["aggregate"] = agg
-        results["per_subject"][sid] = sub_results
+        results["per_subject"][sid_key] = sub_results
         (out_dir / "summary.json").write_text(json.dumps(results, indent=2))
 
     # Cross-subject aggregate
@@ -250,10 +266,10 @@ def main():
     cs = {}
     for cfg in CONFIGS:
         name = cfg["name"]
-        accs = [results["per_subject"][s]["aggregate"][name]["accuracy_on_commits_mean"] for s in SUBJECTS]
-        itrs = [results["per_subject"][s]["aggregate"][name]["itr_mean"] for s in SUBJECTS]
-        crates = [results["per_subject"][s]["aggregate"][name]["commit_rate_mean"] for s in SUBJECTS]
-        task = [results["per_subject"][s]["aggregate"][name]["task_accuracy_mean"] for s in SUBJECTS]
+        accs = [results["per_subject"][str(s)]["aggregate"][name]["accuracy_on_commits_mean"] for s in SUBJECTS]
+        itrs = [results["per_subject"][str(s)]["aggregate"][name]["itr_mean"] for s in SUBJECTS]
+        crates = [results["per_subject"][str(s)]["aggregate"][name]["commit_rate_mean"] for s in SUBJECTS]
+        task = [results["per_subject"][str(s)]["aggregate"][name]["task_accuracy_mean"] for s in SUBJECTS]
         cs[name] = {
             "accuracy_on_commits_mean_of_means": float(np.mean(accs)),
             "itr_mean_of_means": float(np.mean(itrs)),

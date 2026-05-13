@@ -60,13 +60,21 @@ against on-policy Monte-Carlo ground truth. On a 12-policy panel
 Pearson $r\!=\!0.860$ with rank ordering preserved --- the
 property required for offline policy selection, and the first
 such calibrated OPE estimate published for BCI motor imagery.
-Under the standard \bcia{} 4-class evaluation protocol, the
-trained agent reaches $86.2\!\pm\!5.8\%$ commit accuracy at
+Under the standard \bcia{} 4-class evaluation protocol on the
+canonical 3-subject panel ($\{1, 3, 7\}$), the trained agent
+reaches $86.2\!\pm\!5.8\%$ commit accuracy at
 $34.2$~bits/min~\itr{} with wrong-commit rate $\le 5\%$ using
 an EEGNet encoder; a drop-in EEG-Conformer encoder lifts this to
 $\mathbf{87.6\!\pm\!2.9\%}$ at $\mathbf{37.0}$~b/m, with a
 $+9.9$pp encoder-rescue effect concentrated on the
-weakest-decoding subject (S07). The agent occupies the
+weakest-decoding subject (S07). Extended to all 9 \bcia{}
+subjects $\times$ 5 seeds (Table~\ref{tab:sota}), commit accuracy
+drops to $0.746\!\pm\!0.12$ at $24.9$~b/m: the 3-subject panel
+matches \emph{good-decoding} subjects ($1$, $3$, $7$, $8$ all
+$\ge\!0.84$), while subjects whose encoder val-accuracy is
+$\le\!0.70$ ($2$, $5$, $6$, $9$) cap at $\le\!0.69$ regardless of
+the agent. This stratification cleanly localises the bottleneck
+to encoder quality, not to the selective-decoder mechanism. The agent occupies the
 high-accuracy point of the accuracy--throughput Pareto frontier
 we benchmark: head-to-head against confidence-threshold EEGNet
 baselines on the same data, threshold-tuned variants reach higher

@@ -194,17 +194,31 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     log.info("device=%s", device)
 
-    results = {"protocol": "canonical_T_to_E", "encoder": args.encoder,
-                "subjects": args.subjects, "seeds": args.seeds, "epochs": args.epochs,
-                "per_subject": {}}
+    summary_path = out_dir / "summary.json"
+    if summary_path.exists():
+        results = json.loads(summary_path.read_text())
+        log.info("Resuming from existing summary.json (subjects done: %s)",
+                 [s for s, sd in results["per_subject"].items() if "aggregate" in sd])
+    else:
+        results = {"protocol": "canonical_T_to_E", "encoder": args.encoder,
+                    "subjects": args.subjects, "seeds": args.seeds, "epochs": args.epochs,
+                    "per_subject": {}}
 
     for sid in args.subjects:
+        sid_key = str(sid)
+        if sid_key in results["per_subject"] and "aggregate" in results["per_subject"][sid_key]:
+            log.info("Subject %d already complete — skipping", sid)
+            continue
         log.info("\n========== SUBJECT %d ==========", sid)
         tb = preprocess_subject("bci2a", subject_id=sid)
         log.info("  trials=%d  channels=%d  samples=%d",
                   tb.n_trials, tb.n_channels, tb.X.shape[-1])
-        sub_runs = []
+        sub_runs = list(results["per_subject"].get(sid_key, {}).get("per_seed", []))
+        done_seeds = {r["seed"] for r in sub_runs}
         for seed in args.seeds:
+            if seed in done_seeds:
+                log.info("  --- subject %d seed %d already done — skipping", sid, seed)
+                continue
             log.info("  --- subject %d seed %d ---", sid, seed)
             res = train_one(tb, encoder_name=args.encoder, seed=seed, device=device,
                               n_epochs=args.epochs, lr=args.lr,

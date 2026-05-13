@@ -357,6 +357,10 @@ EEGNet+threshold $\tau=0.90$                            & --- & $0.703 \!\pm\! 0
 \textsc{NeuroPolicy}+CTNet CVaR+CMDP            & $0.351 \!\pm\! 0.13$ & $0.734 \!\pm\! 0.13$ & $0.49$ & $20.0$ \\
 \textsc{NeuroPolicy}+Conformer (Song 2023 recipe) scalar-\cql{} & $0.409 \!\pm\! 0.06$ & $0.795 \!\pm\! 0.04$ & $0.52$ & $30.7$ \\
 \textsc{NeuroPolicy}+Conformer (Song 2023 recipe) CVaR+CMDP   & $0.311 \!\pm\! 0.05$ & $0.856 \!\pm\! 0.03$ & $0.37$ & $32.7$ \\
+\midrule
+\multicolumn{5}{l}{\textit{Selective decoders (ours, all 9 subj $\times$ 5 seeds, same protocol)}} \\
+\textsc{NeuroPolicy}+Conformer scalar-\cql{}    & $0.336 \!\pm\! 0.07$ & $0.705 \!\pm\! 0.13$ & $0.48$ & $23.9 \!\pm\! 12.5$ \\
+\textsc{NeuroPolicy}+Conformer CVaR+CMDP        & $0.216 \!\pm\! 0.06$ & $0.746 \!\pm\! 0.12$ & $0.29$ & $24.9 \!\pm\! 11.3$ \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -430,6 +434,29 @@ framework is therefore encoder-agnostic in the sense that the
 agent works with any encoder, but encoder choice interacts with
 window length --- token count $\times$ transformer depth is the
 binding constraint at $1$-s granularity, not the agent.
+
+\paragraph*{Full 9-subject panel: encoder-quality stratification}
+The headline 3-subject panel was selected by the original
+within-subject protocol on $\{1, 3, 7\}$ and turns out to coincide
+with the easy-decoding end of \bcia{}. Extending the same canonical
+protocol to all 9 subjects (Table~\ref{tab:sota}, ``all 9 subj''
+block) gives commit accuracy $0.746\!\pm\!0.12$ at $24.9\!\pm\!11.3$~b/m
+(CVaR+CMDP, 9 subj $\times$ 5 seeds). The per-subject results
+stratify clearly into two groups: subjects with encoder val-acc
+$\ge\!0.80$ ($1$, $3$, $7$, $8$) reach commit accuracy $0.84$--$0.89$
+at $32$--$42$~b/m, matching the 3-subject headline; subjects with
+encoder val-acc $\le\!0.70$ ($2$, $5$, $6$, $9$) cap at commit
+accuracy $0.60$--$0.69$ at $11$--$18$~b/m regardless of agent
+configuration. The CMDP commit-error constraint
+$\epsilon\!=\!0.10$ is satisfied on all subjects (per-seed
+wrong-commit rates $0.038$--$0.135$, $\sim\!95\%$ of seeds $\le 0.10$).
+This stratification is the cleanest evidence in the paper that the
+selective decoder is encoder-quality-bounded: the 3-subject
+headline reflects the ceiling the framework can reach when the
+encoder is good, and the 9-subject mean reflects the
+\emph{population} reality including subjects where MI decoding
+itself is intrinsically hard. We retain both as the honest pair
+of summary numbers.
 
 \paragraph*{Encoder-recipe ablation: published Song 2023 schedule}
 A natural follow-up question is whether more compute on the
@@ -536,6 +563,23 @@ $p\!=\!0.05$ threshold, while the 3-channel \bcib{} and 22-channel
 commit-accuracy improvement of \nettype{} over the random
 baseline on each dataset.}
 \label{fig:channel_sig}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\columnwidth]{../figures/time_to_commit.png}
+\caption{When the selective decoder commits within a trial, pooled
+across 9 \bcia{} subjects $\times$ 5 seeds $\times$ 2 configs
+($N\!=\!3721$ commit decisions). (A) Commit-time distribution: the
+agent rarely commits in the first second (insufficient evidence)
+or the last 0.75~s (timeout-\textsc{Abstain} dominates); median
+decision time $2.25$~s, mean $2.01$~s --- $\sim\!50\%$ of full
+$4$-s trial length. (B) Commit accuracy by decision-time bin: late
+commits ($\ge 2$~s) cluster at $0.78$--$0.82$ accuracy while early
+commits ($\le 1$~s) fall to $0.60$--$0.70$. The frontier is the
+expected speed--accuracy trade-off; the agent learns to wait until
+the evidence is strong enough to clear the implicit CVaR threshold.}
+\label{fig:time_to_commit}
 \end{figure}
 
 \subsection{Foundation-model encoder cross-subject LOSO}\label{sec:results:labram_loso}

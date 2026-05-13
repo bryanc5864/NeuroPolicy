@@ -33,6 +33,10 @@ from src.data.moabb_loader import TrialBatch
 from src.data.preprocess import preprocess_subject
 from src.evaluation.policy_eval import evaluate_policy
 from src.models.encoder import build_encoder, pretrain_encoder_supervised
+from src.training.behavior_policies import (
+    FixedWindowPolicy, SPRTStochasticPolicy, fit_running_mean_classifier,
+    rollout_episode,
+)
 from src.training.bci_env import BCIEnv
 from src.training.episode_builder import (
     SubjectEmbeddingFactory, build_episodes_for_trial_batch, windows_from_trial,
@@ -111,7 +115,21 @@ def build_buffer_for_subject(tb, device, split_seed=0, encoder_name=ENCODER):
 
     env = BCIEnv(n_classes=n_classes, embed_dim=train_eps[0].embed_dim,
                   subj_dim=train_eps[0].subj_dim, max_T=train_eps[0].T + 4)
-    buffer = build_buffer_from_rollouts(train_eps, env=env, n_classes=n_classes, seed=0)
+    ctx = fit_running_mean_classifier(train_eps, n_classes=n_classes)
+    rollouts = []
+    for T_fix in [4, 8, 12]:
+        mu1 = FixedWindowPolicy(ctx=ctx, T_fix=T_fix, env=env)
+        for i, ep in enumerate(train_eps):
+            rollouts.append(rollout_episode(env, ep, mu1, seed=i))
+    rng_mu = np.random.default_rng(0)
+    mu2 = SPRTStochasticPolicy(ctx=ctx, env=env, evidence_threshold=0.55,
+                                eps_explore=0.10, rng=rng_mu)
+    for i, ep in enumerate(train_eps):
+        rollouts.append(rollout_episode(env, ep, mu2, seed=10_000 + i))
+    buffer = build_buffer_from_rollouts(
+        rollouts, a_defer=env.A_DEFER, a_recal=env.A_RECAL,
+        a_abstain=env.A_ABSTAIN, n_classes=n_classes,
+    )
     return env, buffer, train_eps, val_eps, test_eps, n_classes
 
 
@@ -123,16 +141,32 @@ def main():
     log.info("%d subjects x %d seeds x %d alphas (eval-time) = %d (sub,seed) trainings",
               len(SUBJECTS), len(SEEDS), len(ALPHAS),
               len(SUBJECTS) * len(SEEDS))
-    results = {"protocol": "canonical_T_to_E", "encoder": ENCODER,
-                "subjects": SUBJECTS, "seeds": SEEDS, "alphas": ALPHAS,
-                "per_subject": {}}
+    summary_path = out_dir / "summary.json"
+    if summary_path.exists():
+        results = json.loads(summary_path.read_text())
+        log.info("Resuming from existing summary.json (subjects done: %s)",
+                 [s for s, sd in results["per_subject"].items() if "aggregate" in sd])
+    else:
+        results = {"protocol": "canonical_T_to_E", "encoder": ENCODER,
+                    "subjects": SUBJECTS, "seeds": SEEDS, "alphas": ALPHAS,
+                    "per_subject": {}}
 
     for sid in SUBJECTS:
+        sid_key = str(sid)
+        if sid_key in results["per_subject"] and "aggregate" in results["per_subject"][sid_key]:
+            log.info("Subject %d already complete — skipping", sid)
+            continue
         log.info("\n========== SUBJECT %d ==========", sid)
         tb = preprocess_subject("bci2a", subject_id=sid)
         env, buffer, train_eps, val_eps, test_eps, n_classes = build_buffer_for_subject(tb, device)
-        sub_results = {"per_seed": {}}
+        existing_sub = results["per_subject"].get(sid_key, {})
+        sub_results = {"per_seed": {str(k): v for k, v in existing_sub.get("per_seed", {}).items()}}
         for seed in SEEDS:
+            seed_key = str(seed)
+            if seed_key in sub_results["per_seed"] and "alphas" in sub_results["per_seed"][seed_key] \
+               and all(f"{a:.2f}" in sub_results["per_seed"][seed_key]["alphas"] for a in ALPHAS):
+                log.info("  subject %d seed %d already complete — skipping", sid, seed)
+                continue
             log.info("\n--- subject %d seed %d ---", sid, seed)
             torch.manual_seed(seed); np.random.seed(seed)
             cfg_obj = TRAIN_CFG.__class__(**{**vars(TRAIN_CFG),
@@ -149,7 +183,7 @@ def main():
             agent.train(buffer, n_steps=20_000, batch_size=256, log_every=100_000)
             elapsed = time.time() - t0
             log.info("  training done in %.1fs", elapsed)
-            sub_results["per_seed"][seed] = {"elapsed_s": elapsed, "alphas": {}}
+            sub_results["per_seed"][seed_key] = {"elapsed_s": elapsed, "alphas": {}}
             for alpha in ALPHAS:
                 test = evaluate_policy(env, test_eps,
                                           lambda s, a=alpha: agent.select_action(s, cvar_alpha=a),
@@ -158,19 +192,19 @@ def main():
                           alpha, test.return_mean, test.accuracy_on_commits,
                           test.information_transfer_rate, test.wrong_commit_rate,
                           test.n_commits, len(test_eps))
-                sub_results["per_seed"][seed]["alphas"][f"{alpha:.2f}"] = test.asdict()
-            results["per_subject"][sid] = sub_results
+                sub_results["per_seed"][seed_key]["alphas"][f"{alpha:.2f}"] = test.asdict()
+            results["per_subject"][sid_key] = sub_results
             (out_dir / "summary.json").write_text(json.dumps(results, indent=2))
 
         # Per-subject aggregate.
         agg = {}
         for alpha in ALPHAS:
             key = f"{alpha:.2f}"
-            accs = [sub_results["per_seed"][s]["alphas"][key]["accuracy_on_commits"] for s in SEEDS]
-            itrs = [sub_results["per_seed"][s]["alphas"][key]["information_transfer_rate"] for s in SEEDS]
-            wrongs = [sub_results["per_seed"][s]["alphas"][key]["wrong_commit_rate"] for s in SEEDS]
+            accs = [sub_results["per_seed"][str(s)]["alphas"][key]["accuracy_on_commits"] for s in SEEDS]
+            itrs = [sub_results["per_seed"][str(s)]["alphas"][key]["information_transfer_rate"] for s in SEEDS]
+            wrongs = [sub_results["per_seed"][str(s)]["alphas"][key]["wrong_commit_rate"] for s in SEEDS]
             n_te = len(test_eps)
-            ncm = [sub_results["per_seed"][s]["alphas"][key]["n_commits"] / n_te for s in SEEDS]
+            ncm = [sub_results["per_seed"][str(s)]["alphas"][key]["n_commits"] / n_te for s in SEEDS]
             agg[key] = {
                 "acc_mean": float(np.mean(accs)), "acc_std": float(np.std(accs, ddof=1) if len(accs) > 1 else 0),
                 "itr_mean": float(np.mean(itrs)), "itr_std": float(np.std(itrs, ddof=1) if len(itrs) > 1 else 0),
@@ -178,7 +212,7 @@ def main():
                 "commit_rate_mean": float(np.mean(ncm)),
             }
         sub_results["aggregate"] = agg
-        results["per_subject"][sid] = sub_results
+        results["per_subject"][sid_key] = sub_results
         (out_dir / "summary.json").write_text(json.dumps(results, indent=2))
 
     # Cross-subject aggregate.
@@ -186,10 +220,10 @@ def main():
     cross = {}
     for alpha in ALPHAS:
         key = f"{alpha:.2f}"
-        accs = [results["per_subject"][s]["aggregate"][key]["acc_mean"] for s in SUBJECTS]
-        itrs = [results["per_subject"][s]["aggregate"][key]["itr_mean"] for s in SUBJECTS]
-        wrongs = [results["per_subject"][s]["aggregate"][key]["wrong_mean"] for s in SUBJECTS]
-        crates = [results["per_subject"][s]["aggregate"][key]["commit_rate_mean"] for s in SUBJECTS]
+        accs = [results["per_subject"][str(s)]["aggregate"][key]["acc_mean"] for s in SUBJECTS]
+        itrs = [results["per_subject"][str(s)]["aggregate"][key]["itr_mean"] for s in SUBJECTS]
+        wrongs = [results["per_subject"][str(s)]["aggregate"][key]["wrong_mean"] for s in SUBJECTS]
+        crates = [results["per_subject"][str(s)]["aggregate"][key]["commit_rate_mean"] for s in SUBJECTS]
         cross[key] = {
             "acc_mean_of_means": float(np.mean(accs)),
             "acc_std_of_means": float(np.std(accs, ddof=1) if len(accs) > 1 else 0),
