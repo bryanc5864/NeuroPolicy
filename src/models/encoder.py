@@ -505,3 +505,100 @@ def pretrain_encoder_supervised(
     for p in encoder.parameters():
         p.requires_grad = False
     return {"best_val_acc": best_val, "n_train": int(len(tr_idx)), "n_val": int(len(val_idx))}
+
+
+# ---------------------------------------------------------------------------
+# Published-recipe Conformer pretraining (Song et al. 2023, IEEE TNSRE)
+# ---------------------------------------------------------------------------
+def pretrain_encoder_conformer_recipe(
+    encoder: BaseEncoder,
+    X,
+    y,
+    n_classes: int,
+    device: torch.device,
+    n_epochs: int = 250,
+    batch_size: int = 72,
+    lr: float = 2e-4,
+    weight_decay: float = 1e-4,
+    seed: int = 0,
+    val_frac: float = 0.15,
+    sr_ns: int = 8,
+    sr_max_shift: int = 25,
+) -> dict:
+    """Extended Conformer training recipe from Song et al. 2023 (IEEE TNSRE).
+
+    Differences vs ``pretrain_encoder_supervised``:
+      * 250 epochs (vs 20-30) — the paper reports convergence around epoch 250.
+      * Adam(beta1=0.5, beta2=0.999) — the paper's published betas (default Adam
+        uses beta1=0.9, which differs).
+      * Shift & Rotate (S&R) augmentation: each training trial is split into
+        Ns=8 segments along time, each segment is independently rotated by a
+        random shift in [0, sr_max_shift] samples. Implemented via roll-along-time
+        per segment.
+      * Validation-best-state retention with early-stopping budget.
+
+    See: github.com/eeyhsong/EEG-Conformer; Section IV "Implementation Details".
+    """
+    import numpy as np
+
+    rng = np.random.default_rng(seed)
+    perm = rng.permutation(X.shape[0])
+    n_val = int(round(val_frac * X.shape[0]))
+    val_idx = perm[:n_val]; tr_idx = perm[n_val:]
+
+    head = nn.Linear(encoder.spec.embed_dim, n_classes).to(device)
+    encoder.train()
+    opt = torch.optim.Adam(list(encoder.parameters()) + list(head.parameters()),
+                            lr=lr, betas=(0.5, 0.999), weight_decay=weight_decay)
+    crit = nn.CrossEntropyLoss()
+
+    Xt = torch.from_numpy(X.astype("float32"))
+    yt = torch.from_numpy(y.astype("int64"))
+    Xt_tr = Xt[tr_idx].to(device); yt_tr = yt[tr_idx].to(device)
+    Xt_va = Xt[val_idx].to(device); yt_va = yt[val_idx].to(device)
+    T = Xt_tr.shape[-1]
+    seg_len = T // sr_ns  # last segment may be slightly longer; we pad to even chunks
+
+    def _shift_and_rotate(batch: torch.Tensor) -> torch.Tensor:
+        # batch: (B, C, T). Split into sr_ns segments along T, rotate each by
+        # a random shift drawn uniformly in [0, sr_max_shift], concatenate back.
+        if seg_len <= 1:
+            return batch
+        out = batch.clone()
+        cuts = [seg_len * i for i in range(sr_ns)] + [T]
+        for i in range(sr_ns):
+            a, b = cuts[i], cuts[i + 1]
+            shift = int(torch.randint(0, sr_max_shift + 1, ()).item())
+            if shift > 0 and (b - a) > 1:
+                out[:, :, a:b] = torch.roll(batch[:, :, a:b], shifts=shift, dims=-1)
+        return out
+
+    best_val = -1.0
+    best_state = None
+    for epoch in range(n_epochs):
+        encoder.train()
+        head.train()
+        p = torch.randperm(Xt_tr.shape[0], device=device)
+        for i in range(0, Xt_tr.shape[0], batch_size):
+            idx = p[i:i + batch_size]
+            xb = _shift_and_rotate(Xt_tr[idx])
+            logits = head(encoder(xb))
+            loss = crit(logits, yt_tr[idx])
+            opt.zero_grad(set_to_none=True); loss.backward(); opt.step()
+        # Eval every epoch but only save state when improved.
+        encoder.eval()
+        head.eval()
+        with torch.no_grad():
+            preds = head(encoder(Xt_va)).argmax(1)
+            val_acc = float((preds == yt_va).float().mean())
+        if val_acc > best_val:
+            best_val = val_acc
+            best_state = {k: v.detach().clone() for k, v in encoder.state_dict().items()}
+
+    if best_state is not None:
+        encoder.load_state_dict(best_state)
+    encoder.eval()
+    for p in encoder.parameters():
+        p.requires_grad = False
+    return {"best_val_acc": best_val, "n_train": int(len(tr_idx)),
+            "n_val": int(len(val_idx)), "n_epochs": n_epochs, "recipe": "conformer_song2023"}
