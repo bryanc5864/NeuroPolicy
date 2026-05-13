@@ -334,6 +334,7 @@ EEGNet \cite{Lawhern2018}                              & $0.740$ & $0.740$ & $1.
 EEG-Conformer \cite{Song2023Conformer}                & $0.787$ & $0.787$ & $1.00$ & --- \\
 CTNet \cite{Zhao2024CTNet}                            & $0.825$ & $0.825$ & $1.00$ & --- \\
 EEGEncoder \cite{Liao2025EEGEncoder}                  & $0.865$ & $0.865$ & $1.00$ & --- \\
+Two-stage Transformer \cite{Chaudhary2024TwoStageMI}  & $0.885$ & $0.885$ & $1.00$ & --- \\
 \midrule
 \multicolumn{5}{l}{\textit{Mandatory classifiers (ours, all 9 subj $\times$ 5 seeds)}} \\
 CSP+LDA broadband                                      & $0.571$ & $0.571$ & $1.00$ & --- \\
@@ -368,6 +369,20 @@ mean $74.5\%$ sits below published Conformer ($78.7\%$), CTNet
 ($82.5\%$~\cite{Zhao2024CTNet}), and EEGEncoder
 ($86.5\%$~\cite{Liao2025EEGEncoder}) due to our truncated
 training budget ($80$ vs.~$2$k epochs).
+We benchmark our selective decoder only against
+\emph{reproducible} open-source baselines (EEGNet, EEG-Conformer,
+CTNet --- all with public reference implementations). The higher
+published numbers from EEGEncoder~\cite{Liao2025EEGEncoder}
+($86.5\%$) and the two-stage Transformer
+of Chaudhary~et~al.~\cite{Chaudhary2024TwoStageMI} ($88.5\%$) are
+not directly comparable: neither paper releases code, EEGEncoder's
+TCN dilation pattern and transformer embedding dimension are
+undocumented, Chaudhary's training schedule and exact protocol
+are paywalled, and both architectures are hardcoded to full
+$4$-s trials (incompatible with our $1$-s growing-window selective
+pipeline without surgical changes). We therefore cite their
+mandatory-classifier numbers in Table~\ref{tab:sota} but do not
+attempt to reimplement them as selective-decoder baselines.
 
 The selective-decoder block in Table~\ref{tab:sota} reports the
 accuracy--throughput Pareto frontier on the \emph{same} canonical
