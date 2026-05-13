@@ -355,6 +355,8 @@ EEGNet+threshold $\tau=0.90$                            & --- & $0.703 \!\pm\! 0
 \textbf{\textsc{NeuroPolicy}+Conformer CVaR+CMDP} & $0.234 \!\pm\! 0.05$ & $\mathbf{0.876 \!\pm\! 0.03}$ & $0.27$ & $\mathbf{37.0}$ \\
 \textsc{NeuroPolicy}+CTNet scalar-\cql{}        & $0.359 \!\pm\! 0.12$ & $0.731 \!\pm\! 0.12$ & $0.49$ & $19.0$ \\
 \textsc{NeuroPolicy}+CTNet CVaR+CMDP            & $0.351 \!\pm\! 0.13$ & $0.734 \!\pm\! 0.13$ & $0.49$ & $20.0$ \\
+\textsc{NeuroPolicy}+Conformer (Song 2023 recipe) scalar-\cql{} & $0.409 \!\pm\! 0.06$ & $0.795 \!\pm\! 0.04$ & $0.52$ & $30.7$ \\
+\textsc{NeuroPolicy}+Conformer (Song 2023 recipe) CVaR+CMDP   & $0.311 \!\pm\! 0.05$ & $0.856 \!\pm\! 0.03$ & $0.37$ & $32.7$ \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -428,6 +430,30 @@ framework is therefore encoder-agnostic in the sense that the
 agent works with any encoder, but encoder choice interacts with
 window length --- token count $\times$ transformer depth is the
 binding constraint at $1$-s granularity, not the agent.
+
+\paragraph*{Encoder-recipe ablation: published Song 2023 schedule}
+A natural follow-up question is whether more compute on the
+\emph{encoder pretraining} side closes the gap to the published
+Conformer mandatory baseline. We rerun the Conformer encoder
+pretraining under the recipe published in Song et al.\
+2023~\cite{Song2023Conformer}: $250$ epochs (vs.\ our default $20$),
+Adam $\beta_1\!=\!0.5$, $\beta_2\!=\!0.999$, and Shift-and-Rotate
+augmentation with $N_s\!=\!8$ segments. The supervised encoder
+val-accuracy lifts from $\sim\!0.78$ to $\sim\!0.87$ on subject 1,
+matching the published mandatory baseline. The downstream
+NeuroPolicy selective-decoder cross-subject result, however,
+\emph{regresses} on both axes (Table~\ref{tab:sota}, ``Song 2023
+recipe'' rows): scalar-\cql{} commit accuracy
+$0.856\!\to\!0.795$ ($-6.1$pp); CVaR+CMDP
+$0.876\!\to\!0.856$ ($-2.0$pp) with \itr{} dropping from
+$37.0$~b/m to $32.7$~b/m. The likely mechanism: $250$ epochs of
+subject-specific supervised pretraining hardens the encoder's
+top-1 prediction at the cost of representational flexibility,
+which the offline-RL agent then has less freedom to repurpose
+through the value head. Stronger \emph{mandatory} encoder
+pretraining is not a free upgrade for selective decoding ---
+the two stages share an encoder and impose competing inductive
+biases.
 
 \subsection{Multi-class and cross-dataset transfer}\label{sec:results:bci2a}
 
