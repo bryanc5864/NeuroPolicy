@@ -47,9 +47,15 @@ post-hoc thresholding~\cite{Ganeshkumar2017RejectMI}).
 Lee2019 ($N\!=\!10$) yields commit accuracy
 $0.696\!\pm\!0.104$ vs random $0.481$, $10/10$ wins, paired
 Wilcoxon $p\!=\!0.001$ --- the first published Lee2019 LOSO
-classification benchmark for offline-RL BCI, completing a
-monotonic channel-count to LOSO-significance trend
+benchmark for offline-RL BCI, completing a monotonic
+channel-count to LOSO-significance trend
 ($p\!=\!0.10$/$0.15$/$0.001$ on $\{3, 22, 62\}$-channel datasets).
+Against an EEGNet-fixed mandatory-commit baseline on the same
+splits, raw commit accuracy is statistically comparable
+($p\!=\!0.43$); the agent's advantage is a $-25\%$ relative
+reduction in wrong-commit rate ($0.214$ vs $0.284$,
+$p\!=\!0.07$), positioning the contribution as a safety-oriented
+selective decoder rather than an accuracy SOTA.
 (iv)~\textbf{Foundation-model RL fine-tuning:} first end-to-end
 offline-RL fine-tuning of the \labram{}~\cite{LaBraM2024} EEG
 foundation model on a BCI task; ties \eegnet{} in aggregate

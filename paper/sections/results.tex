@@ -390,15 +390,52 @@ sizes ($K\!\in\!\{2, 4\}$) and channel counts $\{3, 22, 62\}$.
 
 \paragraph*{Lee2019 LOSO classification (first published benchmark)}
 On a 10-subject LOSO subset with EEGNet and scalar~\cql{}+CMDP
-$\epsilon\!=\!0.10$: \textbf{commit accuracy
-$0.696\!\pm\!0.104$ vs random $0.481$, $10/10$ subjects beat random,
-$\Delta_{\text{ret}}\!=\!+0.668\!\pm\!0.391$, paired Wilcoxon
-$p\!=\!0.001$ (1-sided)} (Fig.~\ref{fig:lee2019_loso}) --- the
-first statistically significant LOSO improvement obtained on any
-of the three datasets, completing the channel-count to
-LOSO-significance trend
-(Fig.~\ref{fig:channel_sig}: $p\!=\!0.10$, $0.15$, $0.001$ on the
-$\{3, 22, 62\}$-channel datasets).
+$\epsilon\!=\!0.10$: commit accuracy
+$0.696\!\pm\!0.104$ vs random $0.481$, $10/10$ subjects beat random
+on episode return, $\Delta_{\text{ret}}\!=\!+0.668\!\pm\!0.391$,
+paired Wilcoxon $p\!=\!0.001$ (1-sided)
+(Fig.~\ref{fig:lee2019_loso}). Against a non-trivial
+\emph{mandatory-commit} baseline (EEGNet trained on the same LOSO
+splits, committing argmax at trial end), accuracy is statistically
+comparable ($0.696$ vs.\ $0.716$, paired Wilcoxon two-sided
+$p\!=\!0.43$, $4/10$ wins for \nettype{}). The selective decoder's
+real advantage on Lee2019 LOSO is on the \emph{safety} axis:
+wrong-commit rate $0.214$ vs $0.284$ for EEGNet-fixed ($-25\%$
+relative, $6/10$ wins, paired Wilcoxon one-sided $p\!=\!0.07$).
+This completes the channel-count to LOSO-significance trend
+(Fig.~\ref{fig:channel_sig}: vs-random $p\!=\!0.10$, $0.15$,
+$0.001$ on the $\{3, 22, 62\}$-channel datasets). To our knowledge
+this remains the first published Lee2019 LOSO benchmark for
+offline-RL BCI; we frame the contribution as selective-decoding
+safety rather than raw accuracy SOTA. Threshold-baseline rows
+(Table~\ref{tab:lee2019_baselines}) confirm that confidence
+thresholding can reach the same commit-accuracy range
+($0.65$--$0.69$) at much higher \itr{} ($\geq 17$~b/m) but at $1.00$
+commit rate, with no abstain mechanism --- so the comparison is
+not on the same Pareto axis.
+
+\begin{table}[!htbp]
+\caption{Lee2019 (62-ch) LOSO baselines and \nettype{}: same
+encoder pretraining, same canonical LOSO splits ($N\!=\!10$),
+mean$\pm$std across subjects. \nettype{} can \textsc{Defer} and
+\textsc{Abstain}; threshold baselines and EEGNet-fixed always
+commit (commit rate $1.00$).}
+\label{tab:lee2019_baselines}
+\centering\footnotesize
+\begin{tabular}{l c c c c}
+\toprule
+Method & Commit acc & \itr{} (b/m) & Wrong rate & Commit rate \\
+\midrule
+Random            & $0.481\!\pm\!0.04$ & $0.0$              & $0.327$ & $0.63$ \\
+EEGNet-fixed      & $0.716\!\pm\!0.13$ & $3.9\!\pm\!3.6$    & $0.284$ & $1.00$ \\
+EEGNet, $\tau\!=\!0.55$ & $0.650\!\pm\!0.06$ & $770\!\pm\!852$  & $0.350$ & $1.00$ \\
+EEGNet, $\tau\!=\!0.85$ & $0.683\!\pm\!0.07$ & $26.8\!\pm\!24$  & $0.317$ & $1.00$ \\
+EEGNet, $\tau\!=\!0.90$ & $0.685\!\pm\!0.07$ & $17.7\!\pm\!17$  & $0.315$ & $1.00$ \\
+\midrule
+\nettype{} (CMDP $\epsilon\!=\!0.1$) & $0.696\!\pm\!0.10$ & $3.2\!\pm\!3.4$ & $\mathbf{0.214}$ & $0.72$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \begin{figure}[!htbp]
 \centering
