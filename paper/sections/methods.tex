@@ -103,7 +103,9 @@ are exercised in the within-subject ablation
 \textbf{Optimiser.} AdamW, $\text{lr}_{\text{critic}} = 3 \times 10^{-4}$,
 weight decay $10^{-4}$, gradient clip $1.0$, batch $256$, Polyak
 $\tau = 5\times 10^{-3}$, $\gamma = 0.99$. We run $20$K gradient steps
-within-subject and $10$K for LOSO.
+within-subject and $10$K for LOSO. Full hyperparameters in
+Appendix~\ref{app:hp}; hardware, software, and code release in
+Appendix~\ref{app:repro}.
 
 \subsection{Behavior Policies and Offline Buffer}\label{sec:methods:behavior}
 

@@ -108,7 +108,8 @@ $\Delta\!=\!+0.000$), so subject-conditioning is \emph{necessary}
 for any OPE-bias correction to alter policy selection.
 
 \paragraph*{Multi-method OPE benchmark}
-The first $N\!=\!9$ LOSO multi-method OPE benchmark for BCI. Mean
+The first $N\!=\!9$ LOSO multi-method OPE benchmark for BCI
+(full table: Appendix~\ref{app:multi_ope}). Mean
 per-method ($r$ / RMSE / bias):
 \fqe{} $0.16/1.47/{+}1.45$, PDIS $0.29/1.19/{+}1.14$,
 \textbf{WIS $\mathbf{0.27/0.82/{+}0.48}$},
@@ -127,7 +128,8 @@ recovering $28\%$ of the gap-to-oracle. Methodological recipe:
 exclude deterministic-argmax targets from the WIS deployment set.
 
 \paragraph*{Third-dataset Lee2019 and a unified predictor}
-Lee2019 LOSO ($N\!=\!8$): mean OPE
+Lee2019 LOSO ($N\!=\!8$ OPE subset; the classification benchmark
+below uses 10 subjects): mean OPE
 $r\!=\!+0.592\!\pm\!0.528$ ($5/8$ significant; bootstrap $95\%$ CI
 $[+0.21, +0.85]$). Pooling all three datasets ($N\!=\!26$
 subjects), an OLS regression gives
@@ -377,7 +379,8 @@ mean $74.5\%$ sits below published Conformer ($78.7\%$), CTNet
 ($86.5\%$~\cite{Liao2025EEGEncoder}). To test whether the gap was
 purely a compute deficit, we re-ran the EEG-Conformer mandatory
 classifier at the full Song 2023 budget: $2000$ epochs with S\&R
-augmentation ($N_s\!=\!8$), 9 subjects $\times$ 3 seeds. The mean
+augmentation ($N_s\!=\!8$), 9 subjects $\times$ 3 seeds (per-subject
+in Appendix~\ref{app:conformer_2k}). The mean
 moves to $0.735\!\pm\!0.11$ --- statistically indistinguishable
 from the $80$-epoch number ($0.745$, paired-subject $\Delta$
 $\!=\!-0.011$) and still $\sim\!5$pp below published. The
@@ -453,14 +456,15 @@ The headline 3-subject panel was selected by the original
 within-subject protocol on $\{1, 3, 7\}$ and turns out to coincide
 with the easy-decoding end of \bcia{}. Extending the same canonical
 protocol to all 9 subjects (Table~\ref{tab:sota}, ``all 9 subj''
-block) gives commit accuracy $0.746\!\pm\!0.12$ at $24.9\!\pm\!11.3$~b/m
-(CVaR+CMDP, 9 subj $\times$ 5 seeds). The per-subject results
-stratify clearly into two groups: subjects with encoder val-acc
-$\ge\!0.80$ ($1$, $3$, $7$, $8$) reach commit accuracy $0.84$--$0.89$
-at $32$--$42$~b/m, matching the 3-subject headline; subjects with
-encoder val-acc $\le\!0.70$ ($2$, $5$, $6$, $9$) cap at commit
-accuracy $0.60$--$0.69$ at $11$--$18$~b/m regardless of agent
-configuration. The CMDP commit-error constraint
+block; per-subject in Appendix~\ref{app:9subj}) gives commit
+accuracy $0.746\!\pm\!0.12$ at $24.9\!\pm\!11.3$~b/m
+(CVaR+CMDP, 9 subj $\times$ 5 seeds). Per-subject results
+cluster bimodally on commit accuracy: subjects $1, 3, 7, 8$ reach
+$0.84$--$0.89$ at $32$--$42$~b/m, matching the 3-subject headline;
+subjects $2, 5, 6, 9$ cap at $0.60$--$0.69$ at $11$--$18$~b/m
+regardless of agent configuration, and their (lower) encoder
+validation accuracy ($\le\!0.66$) tracks the floor. Subject~$4$
+sits in the middle ($0.72$ commit acc, $0.62$ encoder val). The CMDP commit-error constraint
 $\epsilon\!=\!0.10$ is satisfied on all subjects (per-seed
 wrong-commit rates $0.038$--$0.135$, $\sim\!95\%$ of seeds $\le 0.10$).
 This stratification is the cleanest evidence in the paper that the
@@ -511,7 +515,8 @@ fraction $\alpha$, and is set at eval time without retraining
 agent). We sweep $\alpha \in \{0.10, 0.25, 0.50, 1.00\}$ on the
 canonical 3-subject panel $\times$ 5 seeds with the same
 distributional-CQL + CMDP $\epsilon\!=\!0.10$ training recipe
-(Fig.~\ref{fig:cvar_alpha}). Mean commit accuracy is approximately
+(Fig.~\ref{fig:cvar_alpha}; per-subject in
+Appendix~\ref{app:cvar_alpha}). Mean commit accuracy is approximately
 flat in $\alpha$ ($0.858$ at $\alpha\!=\!0.10$, peaks $0.882$ at
 $\alpha\!=\!0.50$, $0.862$ at $\alpha\!=\!1.0$ --- range $2.4$pp),
 but the safety-throughput trade-off moves monotonically: commit

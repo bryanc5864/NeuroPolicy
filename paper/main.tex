@@ -61,11 +61,12 @@ selective decoder reaches $87.6\!\pm\!2.9\%$ commit accuracy at
 $37.0$~bits/min~\itr{} on the canonical 3-subject panel,
 exceeding the mandatory EEGNet baseline ($0.815$ / $20.7$~b/m)
 on every axis; extended to all 9 subjects it reaches
-$74.6\!\pm\!11.9\%$ at $24.9$~b/m. Per-subject results stratify
-cleanly by encoder quality: strong subjects match the headline
-($0.84$--$0.89$), while four hard subjects (encoder val accuracy
-$\le\!0.70$) cap at $0.60$--$0.69$ regardless of agent ---
-locating future gains in encoder quality, not policy machinery.
+$74.6\!\pm\!11.9\%$ at $24.9$~b/m. Per-subject results cluster
+bimodally on commit accuracy: four strong subjects match the
+headline ($0.84$--$0.89$), four hard subjects cap at
+$0.60$--$0.69$ regardless of agent, and their lower encoder
+validation accuracy ($\le\!0.66$) tracks the floor --- locating
+future gains in encoder quality, not policy machinery.
 The CMDP commit-error budget ($\epsilon\!=\!0.10$) is satisfied
 on every reported configuration, and a cross-subject CVaR~$\alpha$
 sweep exposes the risk knob as a designer-tunable
@@ -78,9 +79,9 @@ delivers the \emph{first} published LOSO benchmark for offline-RL
 BCI ($10/10$ subjects beat random, paired Wilcoxon
 $p\!=\!0.001$). Against an EEGNet-fixed mandatory baseline on the
 same splits, commit accuracy is statistically comparable
-($0.696$ vs $0.716$, $p\!=\!0.43$) while wrong-commit rate drops
-$25\%$ ($0.214$ vs $0.284$, $p\!=\!0.07$) --- a safety
-advantage rather than an accuracy SOTA. To our knowledge this is
+($0.696$ vs $0.716$, $p\!=\!0.43$) while wrong-commit rate
+trends $25\%$ lower ($0.214$ vs $0.284$, $p\!=\!0.07$, marginal)
+--- a safety advantage rather than an accuracy SOTA. To our knowledge this is
 the first offline-RL BCI decoder with \textsc{Defer} as a
 \emph{learned} action; together with the calibrated OPE
 methodology, it provides the missing infrastructure for
