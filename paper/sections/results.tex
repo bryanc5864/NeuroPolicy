@@ -471,6 +471,38 @@ encoder is good, and the 9-subject mean reflects the
 itself is intrinsically hard. We retain both as the honest pair
 of summary numbers.
 
+\paragraph*{When the agent commits within a trial}
+Pooling decision-time stamps over all $9$ subjects, $5$ seeds and
+$2$ training configs yields $N\!=\!3721$ commit decisions
+(Fig.~\ref{fig:time_to_commit}). The agent uses approximately
+$56\%$ of the available $4$-s trial before committing (median
+$2.25$~s), confirming the operational claim that \textsc{Defer}
+is being learned rather than collapsing to either end of the
+trial. Commit accuracy rises monotonically with decision time
+($0.48$ at $\le\!0.5$~s vs $\ge\!0.73$ beyond $1$~s), the expected
+speed-accuracy trade-off; the small impulsive-commit mode
+($\sim\!6\%$ of decisions firing at the first step) is the residual
+EEGNet-confidence overrule the value head has not yet learned to
+suppress.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\columnwidth]{../figures/time_to_commit.png}
+\caption{When the selective decoder commits within a trial, pooled
+across 9 \bcia{} subjects $\times$ 5 seeds $\times$ 2 configs
+($N\!=\!3721$ commit decisions); median decision time $2.25$~s
+($\sim\!56\%$ of full trial length). (A) Commit-time distribution
+is bimodal: $\sim\!6\%$ of decisions fire immediately at the first
+step (impulsive-commit mode), the bulk ($\sim\!85\%$) cluster
+between $1.25$--$3.0$~s as the value head accumulates evidence,
+and very few fire in the $0.5$--$1.0$~s window. (B) Commit
+accuracy by decision-time bin: early-impulse commits ($\le 0.5$~s)
+drop to $0.48$, while every later bin ($\ge\!1$~s) is above
+$0.73$, the expected speed-accuracy trade-off. Overall pooled
+commit accuracy $0.751$.}
+\label{fig:time_to_commit}
+\end{figure}
+
 \paragraph*{CVaR $\alpha$ sensitivity (cross-subject)}
 The CVaR risk knob $\alpha$ collapses the learned $Z$-value
 distribution to a scalar $Q$ by averaging over the left-tail
@@ -579,17 +611,18 @@ mean$\pm$std across subjects. \nettype{} can \textsc{Defer} and
 commit (commit rate $1.00$).}
 \label{tab:lee2019_baselines}
 \centering\footnotesize
-\begin{tabular}{l c c c c}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}l r r r r@{}}
 \toprule
-Method & Commit acc & \itr{} (b/m) & Wrong rate & Commit rate \\
+Method & Comm.~acc & \itr{} (b/m) & Wrong & C-rate \\
 \midrule
-Random            & $0.481\!\pm\!0.04$ & $0.0$              & $0.327$ & $0.63$ \\
-EEGNet-fixed      & $0.716\!\pm\!0.13$ & $3.9\!\pm\!3.6$    & $0.284$ & $1.00$ \\
-EEGNet, $\tau\!=\!0.55$ & $0.650\!\pm\!0.06$ & $770\!\pm\!852$  & $0.350$ & $1.00$ \\
-EEGNet, $\tau\!=\!0.85$ & $0.683\!\pm\!0.07$ & $26.8\!\pm\!24$  & $0.317$ & $1.00$ \\
-EEGNet, $\tau\!=\!0.90$ & $0.685\!\pm\!0.07$ & $17.7\!\pm\!17$  & $0.315$ & $1.00$ \\
+Random                 & $0.481 \!\pm\! 0.04$ & $0.0$              & $0.327$ & $0.63$ \\
+EEGNet-fixed           & $0.716 \!\pm\! 0.13$ & $3.9 \!\pm\! 3.6$  & $0.284$ & $1.00$ \\
+EEGNet $\tau\!=\!0.55$ & $0.650 \!\pm\! 0.06$ & $770 \!\pm\! 852$  & $0.350$ & $1.00$ \\
+EEGNet $\tau\!=\!0.85$ & $0.683 \!\pm\! 0.07$ & $26.8 \!\pm\! 24$  & $0.317$ & $1.00$ \\
+EEGNet $\tau\!=\!0.90$ & $0.685 \!\pm\! 0.07$ & $17.7 \!\pm\! 17$  & $0.315$ & $1.00$ \\
 \midrule
-\nettype{} (CMDP $\epsilon\!=\!0.1$) & $0.696\!\pm\!0.10$ & $3.2\!\pm\!3.4$ & $\mathbf{0.214}$ & $0.72$ \\
+\nettype{} (CMDP $\epsilon\!=\!0.1$) & $0.696 \!\pm\! 0.10$ & $3.2 \!\pm\! 3.4$ & $\mathbf{0.214}$ & $0.72$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -618,24 +651,6 @@ $p\!=\!0.05$ threshold, while the 3-channel \bcib{} and 22-channel
 commit-accuracy improvement of \nettype{} over the random
 baseline on each dataset.}
 \label{fig:channel_sig}
-\end{figure}
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=\columnwidth]{../figures/time_to_commit.png}
-\caption{When the selective decoder commits within a trial, pooled
-across 9 \bcia{} subjects $\times$ 5 seeds $\times$ 2 configs
-($N\!=\!3721$ commit decisions); median decision time $2.25$~s
-($\sim\!56\%$ of full trial length). (A) Commit-time distribution
-is bimodal: $\sim\!6\%$ of decisions fire immediately at the first
-step (impulsive-commit mode), the bulk ($\sim\!85\%$) cluster
-between $1.25$--$3.0$~s as the value head accumulates evidence,
-and very few fire in the $0.5$--$1.0$~s window. (B) Commit
-accuracy by decision-time bin: early-impulse commits ($\le 0.5$~s)
-drop to $0.48$, while every later bin ($\ge\!1$~s) is above
-$0.73$, the expected speed-accuracy trade-off. Overall pooled
-commit accuracy $0.751$.}
-\label{fig:time_to_commit}
 \end{figure}
 
 \subsection{Foundation-model encoder cross-subject LOSO}\label{sec:results:labram_loso}

@@ -13,6 +13,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{cite}
 \usepackage{placeins}
+\usepackage{float}
 
 % --- Convenience macros ---
 \newcommand{\nettype}{NeuroPolicy}
@@ -42,55 +43,50 @@ Author identity withheld for double-blind review}
 Motor-imagery brain--computer interfaces commit to a class label
 at a fixed window after the cue, paying the full wait cost on
 every trial and offering no principled way to abstain when the
-signal is ambiguous --- a poor fit for assistive deployments where
-a wrong command costs more than a delayed one. We reframe
-within-trial decoding as a sequential decision a learned agent
-makes at each $0.25$-s timestep: commit a class, defer for more
-evidence, request recalibration, or abstain. The agent is a
-Conservative Q-Learning controller trained offline on logged
-trials under a CVaR risk-sensitive critic and a CMDP commit-error
-constraint that directly bounds the rate of unsafe decisions. We
-validate it with a calibrated fitted-Q off-policy evaluator that
-selects between candidate policies without redeployment on
-humans. On a 12-policy panel, the estimator tracks on-policy
-Monte-Carlo ground truth at Pearson $r\!=\!0.860$ with rank ordering
-preserved, sufficient to pick the best of a candidate set without
-an online trial --- the \emph{first} calibrated OPE result
-published for motor-imagery BCI. On \bcia{} 4-class with an
-EEG-Conformer encoder, the selective decoder reaches
-$87.6\!\pm\!2.9\%$ commit accuracy at $37.0$~bits/min~\itr{} on
-the canonical 3-subject panel, exceeding the mandatory EEGNet
-baseline ($0.815$ / $20.7$~b/m) on every axis; extended to all
-9 subjects it reaches $74.6\!\pm\!11.9\%$ at $24.9$~b/m. Per-subject
-results stratify cleanly by encoder quality: strong subjects match
-the headline ($0.84$--$0.89$), while four hard subjects (encoder
-val accuracy $\le\!0.70$) cap at $0.60$--$0.69$ regardless of
-agent. The bottleneck is
-representation, not control, locating future BCI gains in better
-encoders rather than richer policy machinery. The CMDP
-commit-error budget ($\epsilon\!=\!0.10$) is satisfied on every
-reported configuration, and a cross-subject CVaR~$\alpha$ sweep
-exposes the risk knob as a designer-tunable safety--throughput
-trade-off (commit rate $0.16\!\to\!0.29$, wrong-rate
-$0.022\!\to\!0.040$ across $\alpha\!\in\![0.10, 1.0]$) --- a
-clean operating-point dial clinicians and regulators can specify
-in advance. The framework transfers across channel counts.
+signal is ambiguous. We reframe within-trial decoding as a
+sequential decision a learned agent makes at each $0.25$-s
+timestep: commit a class, defer for more evidence, request
+recalibration, or abstain. The agent is a Conservative Q-Learning
+controller trained offline on logged trials under a CVaR
+risk-sensitive critic and a CMDP commit-error constraint that
+directly bounds the rate of unsafe decisions. We validate it with
+a calibrated fitted-Q off-policy evaluator that selects policies
+without redeployment on humans. On a 12-policy panel, the
+estimator tracks on-policy Monte-Carlo ground truth at Pearson
+$r\!=\!0.860$ with rank ordering preserved, sufficient to pick
+the best of a candidate set without an online trial --- the
+\emph{first} calibrated OPE result published for motor-imagery
+BCI. On \bcia{} 4-class with an EEG-Conformer encoder, the
+selective decoder reaches $87.6\!\pm\!2.9\%$ commit accuracy at
+$37.0$~bits/min~\itr{} on the canonical 3-subject panel,
+exceeding the mandatory EEGNet baseline ($0.815$ / $20.7$~b/m)
+on every axis; extended to all 9 subjects it reaches
+$74.6\!\pm\!11.9\%$ at $24.9$~b/m. Per-subject results stratify
+cleanly by encoder quality: strong subjects match the headline
+($0.84$--$0.89$), while four hard subjects (encoder val accuracy
+$\le\!0.70$) cap at $0.60$--$0.69$ regardless of agent ---
+locating future gains in encoder quality, not policy machinery.
+The CMDP commit-error budget ($\epsilon\!=\!0.10$) is satisfied
+on every reported configuration, and a cross-subject CVaR~$\alpha$
+sweep exposes the risk knob as a designer-tunable
+safety--throughput trade-off (commit rate $0.16\!\to\!0.29$,
+wrong-rate $0.022\!\to\!0.040$ across $\alpha\!\in\![0.10, 1.0]$)
+--- a clean operating-point dial clinicians and regulators can
+specify in advance. The framework transfers across channel counts.
 Leave-one-subject-out classification on $62$-channel Lee2019
-produces the \emph{first} published LOSO benchmark for offline-RL
+delivers the \emph{first} published LOSO benchmark for offline-RL
 BCI ($10/10$ subjects beat random, paired Wilcoxon
-$p\!=\!0.001$), supporting zero-calibration deployment to new
-users. Against an EEGNet-fixed mandatory baseline on the same
-splits, commit accuracy is statistically comparable ($0.696$ vs
-$0.716$, $p\!=\!0.43$); the selective decoder's measurable
-advantage is on wrong-commit rate ($0.214$ vs $0.284$, $-25\%$
-relative, $p\!=\!0.07$) --- a safety advantage rather than an
-accuracy SOTA. To our knowledge this is the first
-offline-RL BCI decoder with \textsc{Defer} as a \emph{learned}
-action, distinct from post-hoc thresholding; together with the
-calibrated OPE methodology, it provides the missing infrastructure
-for closed-loop clinical BCI deployments where the cost of a
-wrong decision is bounded by design and policy choice is
-auditable from offline data alone. Code released under MIT.
+$p\!=\!0.001$). Against an EEGNet-fixed mandatory baseline on the
+same splits, commit accuracy is statistically comparable
+($0.696$ vs $0.716$, $p\!=\!0.43$) while wrong-commit rate drops
+$25\%$ ($0.214$ vs $0.284$, $p\!=\!0.07$) --- a safety
+advantage rather than an accuracy SOTA. To our knowledge this is
+the first offline-RL BCI decoder with \textsc{Defer} as a
+\emph{learned} action; together with the calibrated OPE
+methodology, it provides the missing infrastructure for
+closed-loop clinical BCI deployments where wrong-decision cost is
+bounded by design and policy choice is auditable offline. Code
+released under MIT.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -156,13 +152,13 @@ monotonic channel-count to LOSO-significance trend.
 \bibliography{refs}
 
 \appendices
+\raggedbottom
 
 % =========================================================================
 \section{Per-Subject LOSO Tables}\label{app:loso_tables}
-\FloatBarrier
 % =========================================================================
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \caption{Per-subject LOSO results on \bcib{} (scalar \cql{},
 $\alpha_{\cql}\!=\!1$). Wins in \textbf{bold}.}
@@ -188,7 +184,7 @@ Mean & $-1.37$ & $+0.21$ & $0.65$ & $1.9$ & $0.34$ \\
 \end{tabular}
 \end{table}
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \caption{Per-subject LOSO on \bcia{} 4-class, scalar
 \cql{}+CMDP $\epsilon\!=\!0.10$.}
@@ -214,7 +210,7 @@ Mean & $-2.34$ & $+0.51$ & $0.47$ & $5.0$ & $0.49$ \\
 \end{tabular}
 \end{table}
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \caption{Per-subject Lee2019 (62-ch) LOSO classification ---
 first published benchmark for offline-RL BCI.}
@@ -241,12 +237,11 @@ Mean & $-0.99$ & $+0.67$ & $0.70$ & $3.2$ & $0.21$ \\
 \end{tabular}
 \end{table}
 
-\FloatBarrier
 % =========================================================================
 \section{NeuroPolicy Canonical \bcia{} --- Full 9-Subject Panel}\label{app:9subj}
 % =========================================================================
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \caption{Per-subject NeuroPolicy + EEG-Conformer CVaR+CMDP
 ($\alpha_{\cvar}\!=\!0.25$, $\epsilon\!=\!0.10$) on canonical
@@ -276,23 +271,22 @@ Mean & $0.746 \pm 0.12$ & $24.9$ & $0.29$ & $0.071$ \\
 \end{tabular}
 \end{table}
 
-\FloatBarrier
 % =========================================================================
 \section{CVaR $\alpha$ Sensitivity --- Per-Subject Detail}\label{app:cvar_alpha}
 % =========================================================================
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \caption{Per-subject CVaR $\alpha$ sweep on canonical \bcia{}
 (EEG-Conformer encoder, 5 seeds per cell, eval-time sweep from a
 single distributional-CQL+CMDP training). Cross-subject means
 match Fig.~\ref{fig:cvar_alpha} in the body.}
 \label{tab:app:cvar_alpha}
-\footnotesize
+\scriptsize
 \setlength{\tabcolsep}{3pt}
-\begin{tabular}{c c c c c c}
+\begin{tabular}{@{}c l r r r r@{}}
 \toprule
-Sub & Metric & $\alpha\!=\!0.10$ & $\alpha\!=\!0.25$ & $\alpha\!=\!0.50$ & $\alpha\!=\!1.00$ \\
+Sub & Metric & $\alpha\!=\!0.1$ & $\alpha\!=\!0.25$ & $\alpha\!=\!0.5$ & $\alpha\!=\!1.0$ \\
 \midrule
 S1 & acc & $0.829$ & $0.859$ & $0.856$ & $0.845$ \\
    & ITR & $27.1$  & $30.7$  & $31.5$  & $31.8$  \\
@@ -309,12 +303,11 @@ Mean & acc      & $0.858$ & $0.875$ & $0.882$ & $0.862$ \\
 \end{tabular}
 \end{table}
 
-\FloatBarrier
 % =========================================================================
 \section{Mandatory-Conformer Compute Ablation}\label{app:conformer_2k}
 % =========================================================================
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \caption{EEG-Conformer mandatory test accuracy under the canonical
 \bcia{} session-T\,$\to$\,session-E protocol, comparing our
@@ -346,12 +339,11 @@ Mean & $0.745$ & $0.735 \pm 0.11$ & $-0.011$ \\
 \end{tabular}
 \end{table}
 
-\FloatBarrier
 % =========================================================================
 \section{Multi-Method OPE Benchmark Detail}\label{app:multi_ope}
 % =========================================================================
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \caption{Full $N\!=\!9$ LOSO multi-method OPE benchmark on \bcib{}.
 WIS strictly beats \fqe{} on RMSE in $9/9$ subjects (paired
@@ -380,12 +372,11 @@ $\Pr(\text{WIS}\!\ge\!\text{default})\!=\!0.99$, recovering $28\%$
 of the gap-to-oracle. \emph{Recipe: exclude deterministic-argmax
 policies from any WIS deployment set.}
 
-\FloatBarrier
 % =========================================================================
 \section{\fqe{} Bias and Slope-Corrected Impossibility}\label{app:fqe_bias}
 % =========================================================================
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\columnwidth]{../figures/fqe_bias_decomposition.png}
 \caption{Fitted-Q estimator shrinks toward zero on the
@@ -404,13 +395,12 @@ argmax over policies, so the LOSO-corrected $\Delta$ versus naive
 \fqe{} on policy selection is identically zero ($+0.000$) on all 9
 subjects. Subject-conditioning is therefore \emph{necessary} for any
 OPE-bias correction to alter cross-subject policy selection.
-\FloatBarrier
 
 % =========================================================================
 \section{Hyperparameters}\label{app:hp}
 % =========================================================================
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \caption{Hyperparameters across all experiments unless noted.}
 \label{tab:app:hp}
@@ -436,29 +426,23 @@ Batch size                              & $256$ \\
 FQE Bellman iters / Bootstrap $B$       & $500$ / $10{,}000$ \\
 \bottomrule
 \end{tabular}
-\FloatBarrier
 \end{table}
 
 % =========================================================================
 \section{Reproducibility}\label{app:repro}
 % =========================================================================
 
-\textbf{Hardware}: single NVIDIA RTX 3080 (10 GB), CUDA 12.4. Total
-compute: $\sim\!24$ GPU-hours.
-\textbf{Software}: Python 3.11, PyTorch 2.6+cu124, MNE, MOABB,
+\textbf{Hardware}: NVIDIA RTX 3080 (10 GB), CUDA 12.4;
+$\sim\!24$ GPU-hours total.
+\textbf{Software}: Python 3.11, PyTorch 2.6, MNE, MOABB,
 braindecode 0.9, d3rlpy, scikit-learn.
 \textbf{Datasets} (public, via MOABB): \bcib{}
 (\texttt{BNCI2014\_004}), \bcia{} (\texttt{BNCI2014\_001}), Lee2019
-(\texttt{Lee2019\_MI}).
-\textbf{Seeds}: every $\pm$ standard deviation in the paper is over
-5 seeds; data preprocessing (splits, normalisation) is deterministic.
-\textbf{Code release (anonymised for blind review)}: full pipeline
---- data preprocessing, MDP simulator, agent, OPE estimators,
-foundation-model integration, all $40$ experiment scripts, and
-per-experiment summary JSONs --- is available at
-\url{https://anonymous.4open.science/r/NeuroPolicy-AFB8}. Every
-numerical claim in the paper traces to a specific summary JSON in
-the released \texttt{experiments/} directory. The de-anonymised
-repository will be released under MIT at the camera-ready URL.
+(\texttt{Lee2019\_MI}). All $\pm$ values are over 5 seeds; data
+preprocessing is deterministic.
+\textbf{Code} (anonymised, de-anonymised under MIT at
+camera-ready): pipeline + per-experiment summary JSONs at
+\url{https://anonymous.4open.science/r/NeuroPolicy-AFB8}; every
+claim traces to a JSON in \texttt{experiments/}.
 
 \end{document}
