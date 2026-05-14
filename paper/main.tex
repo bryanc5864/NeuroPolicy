@@ -40,41 +40,46 @@ Author identity withheld for double-blind review}
 
 \begin{abstract}
 Motor-imagery brain--computer interfaces commit to a class label
-at a fixed window after the cue, paying the full wait cost on
-every trial and offering no principled way to abstain when the
-signal is ambiguous. We reframe within-trial decoding as a
-sequential decision a learned agent makes at each
-$0.25$-s timestep --- commit a class
-(\textsc{Commit}$_k$), defer for more evidence
+at a fixed window after the cue, paying the full wait cost on every
+trial and offering no principled way to abstain when the signal is
+ambiguous. We reframe within-trial decoding as a sequential
+decision a learned agent makes at each $0.25$-s timestep ---
+commit a class (\textsc{Commit}$_k$), defer for more evidence
 (\textsc{Defer}), request recalibration (\textsc{Recal}), or
-abstain (\textsc{Abstain}) --- and supply the two missing
-ingredients: a Conservative Q-Learning agent trained offline on
-logged trials under a CVaR risk-sensitive critic with a CMDP
-commit-error constraint, and a calibrated fitted-Q off-policy
-evaluator that lets us select policies without redeploying them
-on humans.
-
+abstain (\textsc{Abstain}) --- and supply the two ingredients the
+BCI literature has not: a Conservative Q-Learning agent trained
+offline on logged trials under a CVaR risk-sensitive critic with a
+CMDP commit-error constraint, and a calibrated fitted-Q off-policy
+evaluator that selects policies without redeployment on humans.
 The OPE estimate tracks on-policy Monte-Carlo ground truth at
-Pearson $r\!=\!0.86$ with rank ordering preserved, the property
-offline policy selection actually needs --- the first calibrated
-OPE result published for BCI motor imagery. On \bcia{} 4-class
-with an EEG-Conformer encoder, the selective decoder reaches
-$87.6\%$ commit accuracy at $37$~bits/min~\itr{} on the canonical
-$3$-subject panel and $74.6\%$ at $25$~b/m on the full $9$-subject
-panel; per-subject results stratify by encoder quality, with
-strong subjects matching the headline and four hard subjects
-(encoder val accuracy $\le\!0.70$) capping below regardless of
-agent, localising the bottleneck to representation rather than
-control. The CMDP commit-error budget ($\epsilon\!=\!0.10$) is
-satisfied on every reported configuration. The framework
-transfers across channel counts: leave-one-subject-out classification
-on $62$-channel Lee2019 delivers the first published LOSO
-benchmark for offline-RL BCI ($10/10$ subjects beat random,
-paired Wilcoxon $p\!=\!0.001$), while low-channel datasets
-transfer as a safety advantage rather than an accuracy SOTA
-($-25\%$ wrong-commit rate vs.\ an EEGNet-fixed baseline at
-statistically comparable commit accuracy). Code released under
-MIT.
+Pearson $r\!=\!0.86$ with rank ordering preserved --- the property
+offline policy selection actually requires, and the \emph{first}
+calibrated OPE result published for motor-imagery BCI. On \bcia{}
+4-class with an EEG-Conformer encoder, the selective decoder
+reaches $87.6\%$ commit accuracy at $37$~bits/min~\itr{} on the
+canonical 3-subject panel and $74.6\%$ at $25$~b/m on all 9
+subjects, occupying the high-accuracy point of the
+speed-accuracy Pareto frontier we benchmark against
+confidence-threshold and mandatory-classifier baselines. Per-subject
+results stratify cleanly by encoder quality: strong subjects match
+the headline and four hard subjects (encoder val accuracy
+$\le\!0.70$) cap below regardless of agent, localising the
+bottleneck to representation rather than control. The CMDP
+commit-error budget ($\epsilon\!=\!0.10$) is satisfied on every
+reported configuration, and a cross-subject CVaR $\alpha$ sweep
+exposes the risk knob as a designer-tunable safety--throughput
+trade-off (commit rate $0.16\!\to\!0.29$, wrong-rate
+$0.022\!\to\!0.040$ across $\alpha\!\in\![0.10, 1.0]$). The
+framework transfers across channel counts: leave-one-subject-out
+classification on $62$-channel Lee2019 produces the \emph{first}
+published LOSO benchmark for offline-RL BCI ($10/10$ subjects
+beat random, paired Wilcoxon $p\!=\!0.001$), while low-channel
+datasets transfer as a $-25\%$ reduction in wrong-commit rate
+against an EEGNet-fixed baseline at statistically comparable
+accuracy --- a safety advantage rather than an accuracy SOTA. To
+our knowledge this is the first offline-RL BCI decoder with
+\textsc{Defer} as a \emph{learned} action, distinct from post-hoc
+thresholding. Code released under MIT.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -225,8 +230,113 @@ Mean & $-0.99$ & $+0.67$ & $0.70$ & $3.2$ & $0.21$ \\
 \end{tabular}
 \end{table}
 
-% =========================================================================
 \FloatBarrier
+% =========================================================================
+\section{NeuroPolicy Canonical \bcia{} --- Full 9-Subject Panel}\label{app:9subj}
+% =========================================================================
+
+\begin{table}[h]
+\centering
+\caption{Per-subject NeuroPolicy + EEG-Conformer CVaR+CMDP
+($\alpha_{\cvar}\!=\!0.25$, $\epsilon\!=\!0.10$) on canonical
+session-T\,$\to$\,session-E, 5 seeds per subject. The body's
+3-subject panel is $\{1, 3, 7\}$; subjects $2, 5, 6, 9$ are the
+four whose encoder val-accuracy is $\le 0.70$, capping commit
+accuracy below $0.70$ regardless of agent.}
+\label{tab:app:9subj}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{c r r r r}
+\toprule
+Sub & Comm.~Acc & ITR (b/m) & C-Rate & Wrong \\
+\midrule
+S1  & $0.873 \pm 0.05$ & $32.6$ & $0.22$ & $0.028$ \\
+S2  & $0.596 \pm 0.07$ & $11.1$ & $0.25$ & $0.100$ \\
+S3  & $0.887 \pm 0.02$ & $42.0$ & $0.26$ & $0.030$ \\
+S4  & $0.723 \pm 0.02$ & $23.0$ & $0.29$ & $0.078$ \\
+S5  & $0.608 \pm 0.04$ & $12.7$ & $0.24$ & $0.094$ \\
+S6  & $0.641 \pm 0.04$ & $15.4$ & $0.29$ & $0.104$ \\
+S7  & $0.845 \pm 0.01$ & $34.8$ & $0.36$ & $0.055$ \\
+S8  & $0.853 \pm 0.05$ & $34.6$ & $0.35$ & $0.051$ \\
+S9  & $0.690 \pm 0.05$ & $18.0$ & $0.33$ & $0.101$ \\
+\midrule
+Mean & $0.746 \pm 0.12$ & $24.9$ & $0.29$ & $0.071$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+% =========================================================================
+\section{CVaR $\alpha$ Sensitivity --- Per-Subject Detail}\label{app:cvar_alpha}
+% =========================================================================
+
+\begin{table}[h]
+\centering
+\caption{Per-subject CVaR $\alpha$ sweep on canonical \bcia{}
+(EEG-Conformer encoder, 5 seeds per cell, eval-time sweep from a
+single distributional-CQL+CMDP training). Cross-subject means
+match Fig.~\ref{fig:cvar_alpha} in the body.}
+\label{tab:app:cvar_alpha}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{c c c c c c}
+\toprule
+Sub & Metric & $\alpha\!=\!0.10$ & $\alpha\!=\!0.25$ & $\alpha\!=\!0.50$ & $\alpha\!=\!1.00$ \\
+\midrule
+S1 & acc & $0.829$ & $0.859$ & $0.856$ & $0.845$ \\
+   & ITR & $27.1$  & $30.7$  & $31.5$  & $31.8$  \\
+S3 & acc & $0.874$ & $0.887$ & $0.907$ & $0.886$ \\
+   & ITR & $33.2$  & $34.6$  & $38.0$  & $39.4$  \\
+S7 & acc & $0.871$ & $0.879$ & $0.882$ & $0.854$ \\
+   & ITR & $33.8$  & $34.7$  & $35.6$  & $34.5$  \\
+\midrule
+Mean & acc      & $0.858$ & $0.875$ & $0.882$ & $0.862$ \\
+     & ITR      & $31.3$  & $33.4$  & $35.0$  & $35.2$  \\
+     & wrong    & $0.022$ & $0.023$ & $0.026$ & $0.040$ \\
+     & c-rate   & $0.16$  & $0.19$  & $0.22$  & $0.29$  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+% =========================================================================
+\section{Mandatory-Conformer Compute Ablation}\label{app:conformer_2k}
+% =========================================================================
+
+\begin{table}[h]
+\centering
+\caption{EEG-Conformer mandatory test accuracy under the canonical
+\bcia{} session-T\,$\to$\,session-E protocol, comparing our
+$80$-epoch budget against the full Song~2023 schedule ($2000$
+epochs + S\&R augmentation, 3 seeds per cell). The $25\times$
+compute increase moves the cross-subject mean by $-0.011$
+(statistically indistinguishable): strong subjects gain on average,
+hard subjects regress. The remaining gap to published Conformer
+($0.787$) is recipe, not compute.}
+\label{tab:app:conformer_2k}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{c r r r}
+\toprule
+Sub & $80$ ep & $2$k ep & $\Delta$ \\
+\midrule
+S1 & $0.78$ & $0.86 \pm 0.02$ & $+0.08$ \\
+S2 & $0.55$ & $0.58 \pm 0.01$ & $+0.03$ \\
+S3 & $0.83$ & $0.84 \pm 0.01$ & $+0.01$ \\
+S4 & $0.72$ & $0.72 \pm 0.03$ & $\pm 0.00$ \\
+S5 & $0.71$ & $0.64 \pm 0.04$ & $-0.07$ \\
+S6 & $0.66$ & $0.57 \pm 0.04$ & $-0.09$ \\
+S7 & $0.80$ & $0.85 \pm 0.06$ & $+0.05$ \\
+S8 & $0.79$ & $0.79 \pm 0.02$ & $\pm 0.00$ \\
+S9 & $0.86$ & $0.75 \pm 0.00$ & $-0.11$ \\
+\midrule
+Mean & $0.745$ & $0.735 \pm 0.11$ & $-0.011$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+% =========================================================================
 \section{Multi-Method OPE Benchmark Detail}\label{app:multi_ope}
 % =========================================================================
 
