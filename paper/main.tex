@@ -52,18 +52,20 @@ trials under a CVaR risk-sensitive critic and a CMDP commit-error
 constraint that directly bounds the rate of unsafe decisions. We
 validate it with a calibrated fitted-Q off-policy evaluator that
 selects between candidate policies without redeployment on
-humans. The estimator tracks on-policy Monte-Carlo ground truth
-at Pearson $r\!=\!0.86$ with rank ordering preserved, sufficient
-to pick the best of a candidate set without an online trial ---
-the \emph{first} calibrated OPE result published for motor-imagery
-BCI. On \bcia{} 4-class with an EEG-Conformer encoder, the
-selective decoder reaches $87.6\%$ commit accuracy at
-$37$~bits/min \itr{} on the canonical 3-subject panel, exceeding
-the mandatory EEGNet baseline ($0.82$ / $21$~b/m) on every axis;
-extended to all 9 subjects it reaches $74.6\%$ at $25$~b/m. Per-subject
+humans. On a 12-policy panel, the estimator tracks on-policy
+Monte-Carlo ground truth at Pearson $r\!=\!0.860$ with rank ordering
+preserved, sufficient to pick the best of a candidate set without
+an online trial --- the \emph{first} calibrated OPE result
+published for motor-imagery BCI. On \bcia{} 4-class with an
+EEG-Conformer encoder, the selective decoder reaches
+$87.6\!\pm\!2.9\%$ commit accuracy at $37.0$~bits/min~\itr{} on
+the canonical 3-subject panel, exceeding the mandatory EEGNet
+baseline ($0.815$ / $20.7$~b/m) on every axis; extended to all
+9 subjects it reaches $74.6\!\pm\!11.9\%$ at $24.9$~b/m. Per-subject
 results stratify cleanly by encoder quality: strong subjects match
-the headline, while four hard subjects (encoder val accuracy
-$\le\!0.70$) cap below regardless of agent. The bottleneck is
+the headline ($0.84$--$0.89$), while four hard subjects (encoder
+val accuracy $\le\!0.70$) cap at $0.60$--$0.69$ regardless of
+agent. The bottleneck is
 representation, not control, locating future BCI gains in better
 encoders rather than richer policy machinery. The CMDP
 commit-error budget ($\epsilon\!=\!0.10$) is satisfied on every
@@ -77,10 +79,12 @@ Leave-one-subject-out classification on $62$-channel Lee2019
 produces the \emph{first} published LOSO benchmark for offline-RL
 BCI ($10/10$ subjects beat random, paired Wilcoxon
 $p\!=\!0.001$), supporting zero-calibration deployment to new
-users. Low-channel datasets transfer as a $-25\%$ reduction in
-wrong-commit rate against an EEGNet-fixed baseline at
-statistically comparable accuracy --- a safety advantage rather
-than an accuracy SOTA. To our knowledge this is the first
+users. Against an EEGNet-fixed mandatory baseline on the same
+splits, commit accuracy is statistically comparable ($0.696$ vs
+$0.716$, $p\!=\!0.43$); the selective decoder's measurable
+advantage is on wrong-commit rate ($0.214$ vs $0.284$, $-25\%$
+relative, $p\!=\!0.07$) --- a safety advantage rather than an
+accuracy SOTA. To our knowledge this is the first
 offline-RL BCI decoder with \textsc{Defer} as a \emph{learned}
 action, distinct from post-hoc thresholding; together with the
 calibrated OPE methodology, it provides the missing infrastructure
