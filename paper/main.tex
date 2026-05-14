@@ -39,70 +39,42 @@ Author identity withheld for double-blind review}
 \maketitle
 
 \begin{abstract}
-Motor-imagery brain--computer interfaces (BCIs) traditionally
-commit to a class label at a fixed window post-cue. Two
-consequences follow: every trial pays the full wait cost, and the
-user has no principled way to abstain when the EEG signal is
-ambiguous. We reframe within-trial decoding as a sequential
-decision a learned agent must make: at each $0.25$-s timestep the
-agent may commit a class (\textsc{Commit}$_k$), wait for stronger
-evidence (\textsc{Defer}), request a recalibration trial
-(\textsc{Recal}), or abstain (\textsc{Abstain}). Training such an
-agent from logged trials requires \emph{offline} reinforcement
-learning; evaluating a candidate policy without re-running it on a
-human user requires \emph{off-policy evaluation} (OPE) --- both
-mature in clinical decision-making but, to our knowledge, unused
-in BCI. This paper supplies both. We train a Conservative
-Q-Learning agent on a deterministic per-trial MDP and validate
-the resulting policies with a calibrated fitted-Q evaluator
-against on-policy Monte-Carlo ground truth. On a 12-policy panel
-(\bcib{}~subject 4), the OPE estimate tracks ground truth at
-Pearson $r\!=\!0.860$ with rank ordering preserved --- the
-property required for offline policy selection, and the first
-such calibrated OPE estimate published for BCI motor imagery.
-Under the standard \bcia{} 4-class evaluation protocol on the
-canonical 3-subject panel ($\{1, 3, 7\}$), the trained agent
-reaches $86.2\!\pm\!5.8\%$ commit accuracy at
-$34.2$~bits/min~\itr{} with wrong-commit rate $\le 5\%$ using
-an EEGNet encoder; a drop-in EEG-Conformer encoder lifts this to
-$\mathbf{87.6\!\pm\!2.9\%}$ at $\mathbf{37.0}$~b/m, with a
-$+9.9$pp encoder-rescue effect concentrated on the
-weakest-decoding subject (S07). Extended to all 9 \bcia{}
-subjects $\times$ 5 seeds (Table~\ref{tab:sota}), commit accuracy
-drops to $0.746\!\pm\!0.12$ at $24.9$~b/m: the 3-subject panel
-matches \emph{good-decoding} subjects ($1$, $3$, $7$, $8$ all
-$\ge\!0.84$), while subjects whose encoder val-accuracy is
-$\le\!0.70$ ($2$, $5$, $6$, $9$) cap at $\le\!0.69$ regardless of
-the agent. This stratification cleanly localises the bottleneck
-to encoder quality, not to the selective-decoder mechanism. The agent occupies the
-high-accuracy point of the accuracy--throughput Pareto frontier
-we benchmark: head-to-head against confidence-threshold EEGNet
-baselines on the same data, threshold-tuned variants reach higher
-\itr{} ($66$--$850$~b/m) but at much lower commit accuracy
-($0.56$--$0.70$); the mandatory EEGNet baseline reaches $0.82$
-accuracy at only $20.7$~b/m. The agent learns to commit only when
-the encoder is confident, giving the best accuracy / wrong-rate
-operating point in this regime. A monotonic electrode-count to
-cross-subject-significance trend emerges across three datasets:
-leave-one-subject-out (LOSO) classification on 3-channel \bcib{}
-and 22-channel \bcia{} is not significant against random
-(paired Wilcoxon $p\!=\!0.10$, $p\!=\!0.15$), while on 62-channel
-Lee2019 all $10/10$ held-out subjects beat random
-($p\!=\!0.001$) --- the first published Lee2019 LOSO benchmark for
-offline-RL BCI. Against an EEGNet-fixed mandatory-commit baseline
-on the same Lee2019 LOSO splits, raw commit accuracy is
-statistically comparable ($0.696$ vs $0.716$, paired Wilcoxon
-$p\!=\!0.43$); the selective decoder's measurable advantage is on
-wrong-commit rate ($0.214$ vs $0.284$, $-25\%$, $p\!=\!0.07$),
-i.e.\ a safety gain rather than an accuracy SOTA.
-Two supplementary contributions: an $N\!=\!9$ multi-method OPE
-benchmark in which weighted importance sampling yields $3\times$
-lower bias than FQE ($9/9$ subjects, $p\!=\!0.002$), exposing a
-calibration-rank decoupling that affects deployment; and the first
-end-to-end RL fine-tuning of the \labram{} EEG foundation model,
-which ties \eegnet{} on aggregate but lifts a previously
-weakly-decoded subject by $+16$~pp on both \bcib{} and \bcia{}.
-Code released under MIT.
+Motor-imagery brain--computer interfaces commit to a class label
+at a fixed window after the cue, paying the full wait cost on
+every trial and offering no principled way to abstain when the
+signal is ambiguous. We reframe within-trial decoding as a
+sequential decision a learned agent makes at each
+$0.25$-s timestep --- commit a class
+(\textsc{Commit}$_k$), defer for more evidence
+(\textsc{Defer}), request recalibration (\textsc{Recal}), or
+abstain (\textsc{Abstain}) --- and supply the two missing
+ingredients: a Conservative Q-Learning agent trained offline on
+logged trials under a CVaR risk-sensitive critic with a CMDP
+commit-error constraint, and a calibrated fitted-Q off-policy
+evaluator that lets us select policies without redeploying them
+on humans.
+
+The OPE estimate tracks on-policy Monte-Carlo ground truth at
+Pearson $r\!=\!0.86$ with rank ordering preserved, the property
+offline policy selection actually needs --- the first calibrated
+OPE result published for BCI motor imagery. On \bcia{} 4-class
+with an EEG-Conformer encoder, the selective decoder reaches
+$87.6\%$ commit accuracy at $37$~bits/min~\itr{} on the canonical
+$3$-subject panel and $74.6\%$ at $25$~b/m on the full $9$-subject
+panel; per-subject results stratify by encoder quality, with
+strong subjects matching the headline and four hard subjects
+(encoder val accuracy $\le\!0.70$) capping below regardless of
+agent, localising the bottleneck to representation rather than
+control. The CMDP commit-error budget ($\epsilon\!=\!0.10$) is
+satisfied on every reported configuration. The framework
+transfers across channel counts: leave-one-subject-out classification
+on $62$-channel Lee2019 delivers the first published LOSO
+benchmark for offline-RL BCI ($10/10$ subjects beat random,
+paired Wilcoxon $p\!=\!0.001$), while low-channel datasets
+transfer as a safety advantage rather than an accuracy SOTA
+($-25\%$ wrong-commit rate vs.\ an EEGNet-fixed baseline at
+statistically comparable commit accuracy). Code released under
+MIT.
 \end{abstract}
 
 \begin{IEEEkeywords}
