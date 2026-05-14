@@ -40,46 +40,53 @@ Author identity withheld for double-blind review}
 
 \begin{abstract}
 Motor-imagery brain--computer interfaces commit to a class label
-at a fixed window after the cue, paying the full wait cost on every
-trial and offering no principled way to abstain when the signal is
-ambiguous. We reframe within-trial decoding as a sequential
-decision a learned agent makes at each $0.25$-s timestep ---
-commit a class (\textsc{Commit}$_k$), defer for more evidence
-(\textsc{Defer}), request recalibration (\textsc{Recal}), or
-abstain (\textsc{Abstain}) --- and supply the two ingredients the
-BCI literature has not: a Conservative Q-Learning agent trained
-offline on logged trials under a CVaR risk-sensitive critic with a
-CMDP commit-error constraint, and a calibrated fitted-Q off-policy
-evaluator that selects policies without redeployment on humans.
-The OPE estimate tracks on-policy Monte-Carlo ground truth at
-Pearson $r\!=\!0.86$ with rank ordering preserved --- the property
-offline policy selection actually requires, and the \emph{first}
-calibrated OPE result published for motor-imagery BCI. On \bcia{}
-4-class with an EEG-Conformer encoder, the selective decoder
-reaches $87.6\%$ commit accuracy at $37$~bits/min~\itr{} on the
-canonical 3-subject panel and $74.6\%$ at $25$~b/m on all 9
-subjects, occupying the high-accuracy point of the
-speed-accuracy Pareto frontier we benchmark against
-confidence-threshold and mandatory-classifier baselines. Per-subject
+at a fixed window after the cue, paying the full wait cost on
+every trial and offering no principled way to abstain when the
+signal is ambiguous --- a poor fit for assistive deployments where
+a wrong command costs more than a delayed one. We reframe
+within-trial decoding as a sequential decision a learned agent
+makes at each $0.25$-s timestep: commit a class, defer for more
+evidence, request recalibration, or abstain. The agent is a
+Conservative Q-Learning controller trained offline on logged
+trials under a CVaR risk-sensitive critic and a CMDP commit-error
+constraint that directly bounds the rate of unsafe decisions. We
+validate it with a calibrated fitted-Q off-policy evaluator that
+selects between candidate policies without redeployment on
+humans. The estimator tracks on-policy Monte-Carlo ground truth
+at Pearson $r\!=\!0.86$ with rank ordering preserved, sufficient
+to pick the best of a candidate set without an online trial ---
+the \emph{first} calibrated OPE result published for motor-imagery
+BCI. On \bcia{} 4-class with an EEG-Conformer encoder, the
+selective decoder reaches $87.6\%$ commit accuracy at
+$37$~bits/min \itr{} on the canonical 3-subject panel, exceeding
+the mandatory EEGNet baseline ($0.82$ / $21$~b/m) on every axis;
+extended to all 9 subjects it reaches $74.6\%$ at $25$~b/m. Per-subject
 results stratify cleanly by encoder quality: strong subjects match
-the headline and four hard subjects (encoder val accuracy
-$\le\!0.70$) cap below regardless of agent, localising the
-bottleneck to representation rather than control. The CMDP
+the headline, while four hard subjects (encoder val accuracy
+$\le\!0.70$) cap below regardless of agent. The bottleneck is
+representation, not control, locating future BCI gains in better
+encoders rather than richer policy machinery. The CMDP
 commit-error budget ($\epsilon\!=\!0.10$) is satisfied on every
-reported configuration, and a cross-subject CVaR $\alpha$ sweep
+reported configuration, and a cross-subject CVaR~$\alpha$ sweep
 exposes the risk knob as a designer-tunable safety--throughput
 trade-off (commit rate $0.16\!\to\!0.29$, wrong-rate
-$0.022\!\to\!0.040$ across $\alpha\!\in\![0.10, 1.0]$). The
-framework transfers across channel counts: leave-one-subject-out
-classification on $62$-channel Lee2019 produces the \emph{first}
-published LOSO benchmark for offline-RL BCI ($10/10$ subjects
-beat random, paired Wilcoxon $p\!=\!0.001$), while low-channel
-datasets transfer as a $-25\%$ reduction in wrong-commit rate
-against an EEGNet-fixed baseline at statistically comparable
-accuracy --- a safety advantage rather than an accuracy SOTA. To
-our knowledge this is the first offline-RL BCI decoder with
-\textsc{Defer} as a \emph{learned} action, distinct from post-hoc
-thresholding. Code released under MIT.
+$0.022\!\to\!0.040$ across $\alpha\!\in\![0.10, 1.0]$) --- a
+clean operating-point dial clinicians and regulators can specify
+in advance. The framework transfers across channel counts.
+Leave-one-subject-out classification on $62$-channel Lee2019
+produces the \emph{first} published LOSO benchmark for offline-RL
+BCI ($10/10$ subjects beat random, paired Wilcoxon
+$p\!=\!0.001$), supporting zero-calibration deployment to new
+users. Low-channel datasets transfer as a $-25\%$ reduction in
+wrong-commit rate against an EEGNet-fixed baseline at
+statistically comparable accuracy --- a safety advantage rather
+than an accuracy SOTA. To our knowledge this is the first
+offline-RL BCI decoder with \textsc{Defer} as a \emph{learned}
+action, distinct from post-hoc thresholding; together with the
+calibrated OPE methodology, it provides the missing infrastructure
+for closed-loop clinical BCI deployments where the cost of a
+wrong decision is bounded by design and policy choice is
+auditable from offline data alone. Code released under MIT.
 \end{abstract}
 
 \begin{IEEEkeywords}
