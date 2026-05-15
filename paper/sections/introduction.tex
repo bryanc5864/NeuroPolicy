@@ -5,14 +5,14 @@ A motor-imagery (MI) brain--computer interface (BCI) must decide
 Standard pipelines (FBCSP+LDA, \eegnet{}, EEG-Conformer) decode at a
 fixed window---typically $0$--$4$~s post-cue---trading accuracy
 against information transfer rate (\itr{}), the throughput metric
-that matters for end-users. Dynamic-stopping classifiers
-\cite{Verschore2012,BianchiLiti2019P300} and SPRT
-variants~\cite{Liu2017MotorImageryBTSPRT} introduce evidence-based early
-termination, but these are hand-tuned thresholds on confidence
+that matters for end-users. SPRT-style dynamic stopping
+classifiers~\cite{Liu2017MotorImageryBTSPRT} introduce
+evidence-based early termination, but these are hand-tuned
+thresholds on confidence
 statistics, not learned policies.
 
 Recent
-work~\cite{Sunger2024MarkovType,Aung2024EEG_RL_Net,Fidencio2025ErrPRL}
+work~\cite{Aung2024EEG_RL_Net,Fidencio2025ErrPRL}
 frames BCI decoding as sequential decision-making, but none use
 offline reinforcement learning, none expose an explicit
 \textsc{Defer} action as part of the learned policy, none address
@@ -22,7 +22,7 @@ classifier under a fixed protocol, which is on-policy simulation in
 a deterministic environment, not OPE in any rigorous sense.
 Meanwhile, offline RL with calibrated OPE has matured in adjacent
 clinical domains (sepsis, ventilator weaning, anesthesia depth
-control)~\cite{Kumar2020CQL,Le2019BatchRL,TangWiens2021OPESelection,Voloshin2021OPEBench},
+control)~\cite{Kumar2020CQL,Le2019BatchRL},
 but this machinery has not been ported to BCI.
 
 This paper fills that methodological gap. We frame within-trial MI

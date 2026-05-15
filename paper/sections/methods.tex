@@ -48,29 +48,19 @@ pretrained for 20 epochs on training-subjects' window-label pairs with a
 trial-disjoint held-out validation split (10\%) for early stopping. The
 encoder is frozen for the agent.
 
-\textbf{LaBraM foundation-model integration.} We additionally integrate
-the pretrained \labram{}-base checkpoint~\cite{LaBraM2024} (5.8M
-parameters, pretrained on $\sim$2{,}500 hours of EEG) via braindecode
-0.9. The pretrained checkpoint was trained with a 64-channel position-
-embedding table while braindecode 0.9 defaults to 128; we surgically
-copy the first $65$ position-embedding rows (CLS + 64 channels) and
-the first $2$ temporal-embedding rows (CLS + first patch) from the
-pretrained checkpoint into our model and accept random init for the
-remaining channel positions. Input windows ($1$~s @ 250 Hz) are
-resampled on-the-fly to 200 Hz to match the patch-size of the
-pretrained model. We test \labram{} in three modes: (i) frozen body +
-linear head ($\textsc{LaBraM-frozen}$);
-(ii) end-to-end supervised fine-tune of the full $\sim 5.8$M-parameter
-model on training-trial windows for 15 epochs of AdamW at
-$\text{lr}=10^{-4}$ ($\textsc{LaBraM-finetuned}$); after which the
-encoder is frozen and used by the RL agent.
+\textbf{LaBraM integration.} We integrate the pretrained
+\labram{}-base checkpoint~\cite{LaBraM2024} (5.8M parameters,
+$\sim$2{,}500 h of EEG pretraining) via braindecode 0.9: copy the
+first $65$ position-embedding rows (CLS + 64 channels) and $2$
+temporal-embedding rows from the checkpoint, accept random init
+for the rest; resample $1$~s windows to 200~Hz. Three modes:
+frozen body + linear head; end-to-end fine-tune (15 epochs AdamW
+$\text{lr}\!=\!10^{-4}$); then frozen for the RL agent.
 
-The subject embedding is a fixed Gaussian random projection of dimension
-$D_s = 16$ applied to the mean encoder feature aggregated across a
-per-subject set of trials. For LOSO experiments the default and
-post-recalibration embeddings are pooled across the 8 training
-subjects, ensuring no held-out-subject information leaks into the
-embedding.
+The subject embedding $e_{\text{subj}}$ is a fixed Gaussian random
+projection ($D_s\!=\!16$) of the mean encoder feature; for LOSO
+the default and post-recalibration embeddings are pooled across
+the 8 training subjects to prevent held-out leakage.
 
 \subsection{Offline RL Training}\label{sec:methods:rl}
 
@@ -179,10 +169,8 @@ We compare against six baselines that share the
 $\{\textsc{Commit}_k, \textsc{Defer}\}$ action subspace (so all metrics
 --- return, accuracy, \itr{}, decision latency, wrong-commit rate ---
 are apples-to-apples through the same \texttt{BCIEnv}). Methods with
-incompatible action spaces (\textsc{MarkovType}'s RSVP P300 letter
-space~\cite{Sunger2024MarkovType},
-\textsc{EEG\_RL-Net}'s online Dueling DQN
-classification~\cite{Aung2024EEG_RL_Net}) are noted but not
+incompatible action spaces (\textsc{EEG\_RL-Net}'s online Dueling
+DQN classification~\cite{Aung2024EEG_RL_Net}) are noted but not
 benchmarked here, as direct comparison would require porting their
 paradigm-specific reward structures. For the \textsc{Defer}-capable
 class:
@@ -200,8 +188,8 @@ classifier; commits argmax as soon as $\max_k p(k|s_t) \ge \tau$,
 otherwise forces commit at $t = T - 1$. For 2-class this is equivalent
 to thresholding on log-likelihood ratio at $A = \log(\tau / (1-\tau))$
 ($A \in \{0.20, 0.62, 1.10\}$ respectively) --- i.e., a Wald-style
-SPRT~\cite{Liu2017MotorImageryBTSPRT} / classifier-confidence-threshold
-early-stopping rule~\cite{BianchiLiti2019P300,Verschore2012}. The
+SPRT-style early-stopping
+rule~\cite{Liu2017MotorImageryBTSPRT}. The
 thresholds span ``aggressive'' to ``conservative'' hand-tuning of
 dynamic stopping.
 \end{itemize}

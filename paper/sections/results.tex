@@ -369,59 +369,40 @@ EEGNet+threshold $\tau=0.90$                            & --- & $0.703 \!\pm\! 0
 \end{table*}
 
 \paragraph*{Empirical findings}
-On mandatory classification, cropped multi-window
-averaging~\cite{Schirrmeister2017DeepLearning} on EEG-Conformer
-gives $+7.8$pp over single-shot ($66.7\!\to\!74.5\%$ on 9
-subjects) and $+7.0$pp over EEGNet with the same recipe --- a
-reproducibility measurement, not a novel recipe. The 9-subject
-mean $74.5\%$ sits below published Conformer ($78.7\%$), CTNet
-($82.5\%$~\cite{Zhao2024CTNet}), and EEGEncoder
-($86.5\%$~\cite{Liao2025EEGEncoder}). To test whether the gap was
-purely a compute deficit, we re-ran the EEG-Conformer mandatory
-classifier at the full Song 2023 budget: $2000$ epochs with S\&R
-augmentation ($N_s\!=\!8$), 9 subjects $\times$ 3 seeds (per-subject
-in Appendix~\ref{app:conformer_2k}). The mean
-moves to $0.735\!\pm\!0.11$ --- statistically indistinguishable
-from the $80$-epoch number ($0.745$, paired-subject $\Delta$
-$\!=\!-0.011$) and still $\sim\!5$pp below published. The
-extended-budget result is non-uniform: subjects~$1, 3, 7, 8$
-improve ($+0.07$ on average) while subjects~$5, 6$ regress
-($-0.07$). Strong subjects benefit from longer pretraining; hard
-subjects overfit. The remaining gap to published Conformer is
-\emph{recipe} (batch construction, exact augmentation schedule,
-or initialisation) rather than compute, and we attribute the
-$\sim\!5$pp ceiling to it.
-We benchmark our selective decoder only against
-\emph{reproducible} open-source baselines (EEGNet, EEG-Conformer,
-CTNet --- all with public reference implementations). The higher
-published numbers from EEGEncoder~\cite{Liao2025EEGEncoder}
-($86.5\%$) and the two-stage Transformer
-of Chaudhary~et~al.~\cite{Chaudhary2024TwoStageMI} ($88.5\%$) are
-not directly comparable: neither paper releases code, EEGEncoder's
-TCN dilation pattern and transformer embedding dimension are
-undocumented, Chaudhary's training schedule and exact protocol
-are paywalled, and both architectures are hardcoded to full
-$4$-s trials (incompatible with our $1$-s growing-window selective
-pipeline without surgical changes). We therefore cite their
-mandatory-classifier numbers in Table~\ref{tab:sota} but do not
-attempt to reimplement them as selective-decoder baselines.
+Cropped multi-window averaging~\cite{Schirrmeister2017DeepLearning}
+on EEG-Conformer gives $+7.8$pp over single-shot
+($66.7\!\to\!74.5\%$ on 9 subjects) and $+7.0$pp over EEGNet on
+the same recipe. The 9-subject mean $74.5\%$ sits below published
+Conformer ($78.7\%$), CTNet ($82.5\%$~\cite{Zhao2024CTNet}), and
+EEGEncoder ($86.5\%$~\cite{Liao2025EEGEncoder}). To test whether
+the gap is compute, we re-ran EEG-Conformer at the full
+Song~2023 budget ($2000$ epochs + S\&R aug, 9 subj $\times$ 3
+seeds; Appendix~\ref{app:conformer_2k}): mean moves to
+$0.735\!\pm\!0.11$ --- statistically indistinguishable from the
+$80$-epoch number ($\Delta\!=\!-0.011$), still $\sim\!5$pp
+below published, with strong subjects improving and hard subjects
+regressing. The remaining gap is \emph{recipe}, not compute. We
+therefore benchmark our selective decoder against reproducible
+open-source baselines only (EEGNet, EEG-Conformer, CTNet); the
+higher published numbers from EEGEncoder
+($86.5\%$~\cite{Liao2025EEGEncoder}) and the two-stage Transformer
+($88.5\%$~\cite{Chaudhary2024TwoStageMI}) are closed-source and
+hardcoded to full $4$-s trials (incompatible with our $1$-s
+growing-window pipeline), so we cite their mandatory numbers but
+do not reimplement them as selective baselines.
 
-The selective-decoder block in Table~\ref{tab:sota} reports the
-accuracy--throughput Pareto frontier on the \emph{same} canonical
-3-subject panel: confidence-threshold dynamic stopping with low
-$\tau$ achieves extreme \itr{} ($\!>\!300$~b/m at $\tau\!=\!0.65$)
-but commits at near-chance accuracy ($\le 60\%$); raising $\tau$
-trades \itr{} for accuracy ($66.5$~b/m at $70\%$ acc with
-$\tau\!=\!0.9$). \nettype{} CVaR+CMDP sits on the high-accuracy
-end of this frontier: commit accuracy $86.2\!\pm\!5.8\%$,
-\itr{}~$34$~b/m, wrong-commit $\le 5\%$ under $\epsilon\!=\!0.10$
---- $\sim\!1.7\times$ the mandatory EEGNet-fixed \itr{}
-($20.7$~b/m) while substantially exceeding its accuracy
-($0.82 \to 0.86$). To our knowledge this is the first offline-RL
-BCI decoder with \textsc{Defer} as a \emph{learned} policy action,
-distinct from post-hoc
-thresholding~\cite{Ganeshkumar2017RejectMI}, evaluated at
-canonical-protocol conditions.
+The selective-decoder block of Table~\ref{tab:sota} reports the
+accuracy--throughput Pareto frontier on the canonical 3-subject
+panel: confidence-threshold dynamic stopping at low $\tau$
+achieves $\!>\!300$~b/m but at near-chance accuracy; raising
+$\tau$ trades \itr{} for accuracy ($66.5$~b/m at $70\%$ with
+$\tau\!=\!0.9$). \nettype{}~CVaR+CMDP sits on the high-accuracy
+end: $86.2\!\pm\!5.8\%$ commit accuracy, $34$~b/m, wrong-commit
+$\le 5\%$ under $\epsilon\!=\!0.10$ ($\sim\!1.7\times$ mandatory
+EEGNet's $20.7$~b/m while exceeding its $0.82$ accuracy). To our
+knowledge this is the first offline-RL BCI decoder with
+\textsc{Defer} as a \emph{learned} action, distinct from post-hoc
+thresholding~\cite{Ganeshkumar2017RejectMI}.
 
 \paragraph*{Encoder-agnostic test: Conformer and CTNet plug-ins}
 To probe whether commit accuracy is encoder-bottlenecked, we

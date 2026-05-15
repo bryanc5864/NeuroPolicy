@@ -3,140 +3,87 @@
 \subsection{What worked}\label{sec:disc:worked}
 
 \paragraph*{OPE calibration}
-The principal contribution: \fqe{} achieves Pearson $r=0.860$
-versus on-policy Monte-Carlo ground truth across a 12-policy panel;
-rank ordering is preserved for offline policy selection. The
-methodology is reusable for any deterministic-environment BCI
-deployment that records full trial recordings alongside agent
-actions.
+\fqe{} achieves Pearson $r=0.860$ vs.\ on-policy Monte-Carlo
+across a 12-policy panel; rank ordering is preserved for offline
+policy selection. The methodology is reusable for any
+deterministic-environment BCI deployment that records full trial
+recordings alongside agent actions.
 
 \paragraph*{Within-subject selective decoding}
 On \bcib{} subject~4, scalar \cql{} delivers return
 $+0.232\!\pm\!0.106$, commit accuracy $95.8\%$,
-$16.4$~bits/min~\itr{}, and $\Delta\bar G\!=\!+1.92$ episode-return
-over the random baseline. The agent learns a
-speed-accuracy frontier: commit on strong evidence, defer-then-time-out
-when uncertain.
+$16.4$~bits/min~\itr{}, and $\Delta\bar G\!=\!+1.92$ over
+random. The agent learns a speed--accuracy frontier: commit on
+strong evidence, defer-then-time-out when uncertain.
 
 \subsection{What did not work}\label{sec:disc:notworked}
 
 \paragraph*{Cross-subject encoder-agnostic plateau}
 \nettype{} significantly beats CSP+LDA fixed-window LOSO
 ($\Delta\!=\!+0.435$, $p\!=\!0.037$) but ties EEGNet-based
-baselines using the same encoder, and ties \labram{} when
-fine-tuned on pooled training trials (paired Wilcoxon
-$p\!=\!0.79$). The CVaR-\cql{} variant achieves $100\%$ accuracy
-within-subject on \bcib{} subject~4 but does not differentiate
-across $\alpha_{\cvar} \in \{0.10, 0.25, 0.50, 1.0\}$ on that
-subject (all $\alpha$ produce identical action sequences) --- the
-within-subject panel is too easy to expose risk sensitivity.
-On the cross-subject canonical \bcia{} panel, $\alpha$ does
-function as a meaningful knob (Fig.~\ref{fig:cvar_alpha}): commit
-rate $0.16\!\to\!0.29$ and wrong-commit rate $0.022\!\to\!0.040$
-as $\alpha$ rises from $0.10$ to $1.00$.
-Together: the offline-RL machinery is delivering near the ceiling
-of what either encoder can extract from $\sim\!6$k LOSO trials on
-the small-channel datasets.
+baselines using the same encoder, and ties \labram{} after pooled
+fine-tuning ($p\!=\!0.79$). CVaR-\cql{} is invariant to
+$\alpha_{\cvar}$ on \bcib{} sub~4 (problem too easy) but
+functions as a risk knob on the cross-subject panel
+(Fig.~\ref{fig:cvar_alpha}). The offline-RL machinery delivers
+near the encoder ceiling. Action-share across $N\!=\!88$ agents:
+\textsc{Defer} $92\%$, commit $6.3\%$, timeout-\textsc{Abstain}
+$1.7\%$; \textsc{Recal} and voluntary \textsc{Abstain} are latent
+and would live in closed-loop deployment with micro-calibration.
 
-\paragraph*{Action-space utilisation}
-Across $N\!=\!88$ trained agent$\times$split combinations, action
-shares are \textsc{Defer} $92.0\%$, commit $6.3\%$,
-abstain-by-timeout $1.7\%$; \emph{zero} agents ever use
-\textsc{Recal} or voluntary \textsc{Abstain}. The operational space
-is $\{\textsc{Commit}_k, \textsc{Defer}\}$ with timeout-\textsc{Abstain}
-as a sink. \textsc{Recal} is well-defined but presently latent --- it
-would become live in closed-loop deployment with mid-trial
-micro-calibration.
+\paragraph*{Task accuracy is not the right metric}
+Task accuracy on \bcia{} 4-class ($0.23$--$0.45$, Table~\ref{tab:sota})
+sits below mandatory baselines ($0.74$--$0.89$). This is by
+design: the selective decoder is allowed to refuse, counts only
+commits in its denominator, and routes refused trials to an
+explicit \textsc{Defer}/\textsc{Abstain} outcome a downstream
+system can handle. Compared at commit rate $1.00$ our agent
+reduces to mandatory EEGNet; the contribution is the operating
+points unlocked \emph{below} $1.00$, where commit accuracy reaches
+$0.876$ at $37$~b/m on the 3-subject panel
+($0.746$ at $24.9$~b/m on 9 subjects).
 
-\paragraph*{Naive cross-subject FQE deployment}
-On the original within-LOSO panel, naive \fqe{}-based policy
-selection underperforms a fixed default policy on
-$\Pr\!=\!0.69$ of bootstrap resamples. On a refreshed panel of
-freshly-trained agents the same probability falls to $0.38$ ---
-the harmful effect is fragile near the tie boundary. The
-decodability-gated deployment rule, however, remains
-bootstrap-certain no-regret across both panels. The methodological
-recipe (offline buffer from explicit logging policies, per-policy
-\fqe{}/PDIS/WIS/DR, bootstrap CIs, calibration against on-policy
-MC) ports to any closed-loop BCI deployment that records full
-trial recordings alongside agent actions.
+\paragraph*{LOSO significance depends on channel count}
+Cross-subject LOSO vs.\ random is significant only on 62-channel
+Lee2019 ($p\!=\!0.001$), not on 3-channel \bcib{} ($p\!=\!0.10$)
+or 22-channel \bcia{} ($p\!=\!0.15$). The monotone trend
+(Fig.~\ref{fig:channel_sig}) is the structural finding:
+cross-subject MI transfer benefits from richer scalp coverage
+rather than algorithmic refinement, consistent with prior
+sensor-array literature. The low-channel datasets are
+under-powered ($N\!=\!9$) for paired Wilcoxon at $p\!<\!0.05$ even
+when the mean shift is $+0.15$.
 
-\paragraph*{Task accuracy is not the right metric for a selective decoder}
-Reviewers comparing \nettype{} commit accuracy to standard
-mandatory-classifier leaderboards on \bcia{} 4-class will notice
-that our \emph{task accuracy} (correct $\div$ total trials) is
-considerably lower ($0.23$--$0.45$ in Table~\ref{tab:sota}) than
-mandatory baselines ($0.74$--$0.89$). This is by design and not a
-defect. The selective decoder is allowed to refuse a decision, and
-counts only commits in its accuracy denominator; the refused
-trials trigger an explicit \textsc{Defer} or \textsc{Abstain}
-outcome that a downstream system can handle (re-prompt, fall back
-to a default, request calibration). Compared at fixed commit rate
-$=\!1.00$ our agent reduces to the mandatory EEGNet baseline; the
-contribution is the operating points it unlocks \emph{below}
-$1.00$ commit rate, where commit accuracy rises to $0.876$ at
-$37$~b/m \itr{} with $<\!5\%$ wrong-commit rate on the 3-subject
-panel (and $0.746$ at $24.9$~b/m on the 9-subject panel; both in
-Table~\ref{tab:sota}, EEG-Conformer encoder). This is a
-different axis from leaderboard task accuracy, and we view the two
-as complementary rather than competitive.
-
-\paragraph*{LOSO-vs-random significance depends on channel count}
-Cross-subject LOSO commit accuracy is statistically significant
-against the random baseline only on the 62-channel Lee2019 dataset
-($p\!=\!0.001$), not on 3-channel \bcib{} ($p\!=\!0.10$) or
-22-channel \bcia{} ($p\!=\!0.15$). The monotone channel-count
-$\to$ significance trend
-(Fig.~\ref{fig:channel_sig}) is the structural finding: cross-subject
-motor-imagery transfer in offline RL benefits from richer scalp
-coverage rather than algorithmic refinement, consistent with prior
-sensor-array vs.\ source-localisation literature for motor
-imagery. The low-channel datasets are individually under-powered
-($N\!=\!9$) for a paired Wilcoxon to clear $p\!<\!0.05$ even when
-the per-subject mean shift is $+0.15$ on \bcia{}. The Lee2019
-result is not a generalisation claim across MI datasets but the
-strongest single demonstration that the framework transfers when
-the data support it.
-
-\paragraph*{OPE rank-preservation, not point accuracy, is what offline
-policy selection needs}
-Within-subject \fqe{} achieves Pearson $r\!=\!0.86$ vs.\ on-policy
-Monte-Carlo across 12 policies; cross-subject correlations are
-$r\!=\!+0.83$ (\bcib) and $r\!=\!+0.61$ (\bcia). The bci2a number
-is the weakest in the table, yet the deployment rule
+\paragraph*{OPE rank-preservation, not point accuracy}
+Within-subject \fqe{} attains $r\!=\!0.86$; cross-subject
+correlations are $r\!=\!+0.83$ (\bcib) and $r\!=\!+0.61$
+(\bcia). The bci2a value is weak point-wise but the
+decodability-gated deployment rule
 (\S\ref{sec:results:ope_loso}) is bootstrap-certain no-regret on
 $N\!=\!18$ deployments because policy selection requires
-\emph{rank} preservation, not point accuracy. A correlation of
-$+0.61$ still preserves the rank of the best policy in $9/9$
-\bcia{} held-out subjects, which is the operational property
-needed for offline selection. We would not advocate this OPE
-estimate for absolute deployment-risk quantification --- only for
-policy ranking.
+\emph{rank} preservation; $r\!=\!+0.61$ still preserves the best
+policy's rank on $9/9$ held-out subjects. We advocate this
+estimate only for policy ranking, not absolute risk
+quantification.
 
 \paragraph*{Choice of wrong-commit budget $\epsilon\!=\!0.10$}
-The CMDP commit-error constraint is set at $\epsilon\!=\!0.10$
-throughout. This is not arbitrary: published P300-speller systems
-operate at $5$--$15\%$ character-error rates with explicit
-error-correction interfaces~\cite{Townsend2010P300checkerboard,
+P300 spellers operate at $5$--$15\%$
+character-error~\cite{Townsend2010P300checkerboard,
 Sellers2006P300speller}, and motor-imagery BCI control of
-wheelchairs or virtual assistive devices typically requires
-false-positive rates below $\sim\!15\%$ to be considered safe for
-end-users with motor impairment~\cite{Tonin2022WheelchairBCI,
-Wolpaw2002ITR}. Selecting $\epsilon\!=\!0.10$ places \nettype{} at
-the more conservative end of this range while remaining slack
-enough that the policy retains a non-trivial commit rate
-($\sim\!27$--$53\%$ in our experiments) rather than degenerating to
-permanent abstention. Section~\ref{sec:results:sota} verifies the
-constraint is satisfied empirically across all reported seeds.
+assistive devices requires false-positive rates below $\sim\!15\%$
+for end-users with motor impairment~\cite{Tonin2022WheelchairBCI,
+Wolpaw2002ITR}. $\epsilon\!=\!0.10$ sits at the conservative end
+of this range while keeping commit rate at
+$\sim\!27$--$53\%$ rather than degenerating to permanent
+abstention; the constraint is satisfied across all reported seeds
+(\S\ref{sec:results:sota}).
 
 \subsection{Limitations and future work}\label{sec:disc:limitations}
 
-Lee2019 LOSO ran on a 10-subject subset; a full $N\!=\!54$ sweep
-would extend statistical power. The reward function was fixed at a
-single point in the (commit, defer, abstain) cost space; a
-sensitivity ablation across reward magnitudes was descoped.
-The \fqe{}-to-oracle gap of $\sim\!0.2$ in episode return
-awaits pessimistic or doubly-robust corrections. A closed-loop
-deployment with a real \textsc{Recal} action triggering
-micro-calibration and on-the-fly OPE scoring of the deployed
-policy is the natural next step.
+Lee2019 LOSO used a 10-subject subset; a full $N\!=\!54$ sweep
+would extend statistical power. The reward function was fixed; a
+sensitivity ablation across reward magnitudes was descoped. The
+\fqe{}-to-oracle gap of $\sim\!0.2$ awaits pessimistic or
+doubly-robust corrections. Closed-loop deployment with a live
+\textsc{Recal} action and on-the-fly OPE scoring is the natural
+next step.

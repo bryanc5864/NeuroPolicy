@@ -1,41 +1,32 @@
 % Section: Related Work
 
 \paragraph*{Dynamic stopping in BCI}
-Verschore et al.~\cite{Verschore2012} introduced classifier-confidence
-thresholds for early termination on a P300 speller; Bianchi et
-al.~\cite{BianchiLiti2019P300} proposed a refined early-stopping
-decision rule in the same paradigm. Liu et
-al.~\cite{Liu2017MotorImageryBTSPRT} adapted a sequential
-probability ratio test (BTSPRT) to motor-imagery BCI. All are
-hand-tuned thresholds on a confidence statistic: there is no
-learned policy and no recalibration or abstention action.
+Prior work uses hand-tuned thresholds on a confidence statistic,
+e.g.\ SPRT-style stopping for motor
+imagery~\cite{Liu2017MotorImageryBTSPRT}. None learn a policy or
+include a recalibration or abstention action.
 
 \paragraph*{Sequential decision frameworks for BCI}
-\textsc{MarkovType}~\cite{Sunger2024MarkovType} casts a P300 RSVP
-speller as a POMDP solved with on-policy REINFORCE.
-\textsc{EEG\_RL-Net}~\cite{Aung2024EEG_RL_Net} trains a Dueling DQN
-classification head on a GNN backbone, online and without a
-\textsc{Defer} action. ErrP-driven online
-RL~\cite{Fidencio2025ErrPRL} adapts a decoder during a
-paced game using error-related potentials as the reward signal. None
-of these are \emph{offline} RL; none use a \textsc{Defer},
-\textsc{Recal}, or \textsc{Abstain} action; none ship a calibrated
+\textsc{EEG\_RL-Net}~\cite{Aung2024EEG_RL_Net} trains a Dueling
+DQN classification head online; ErrP-driven online
+RL~\cite{Fidencio2025ErrPRL} adapts a decoder during a paced game.
+Neither is \emph{offline} RL, neither exposes \textsc{Defer},
+\textsc{Recal}, or \textsc{Abstain}, and neither ships a calibrated
 OPE estimator.
 
 \paragraph*{Offline RL and OPE methodology}
 Conservative Q-Learning~\cite{Kumar2020CQL} and risk-sensitive
 distributional variants~\cite{Dabney2018QR-DQN} are now standard;
-per-decision importance sampling~\cite{Precup2000PDIS},
-doubly-robust estimators~\cite{Jiang2016DR}, and fitted-Q
-evaluation~\cite{Le2019BatchRL} are the workhorse OPE estimators.
+PDIS~\cite{Precup2000PDIS}, doubly-robust
+estimators~\cite{Jiang2016DR}, and fitted-Q
+evaluation~\cite{Le2019BatchRL} are the workhorse OPE methods.
 Our contribution is porting this stack to BCI \emph{and} validating
 it against on-policy Monte-Carlo ground truth on a deterministic
 per-trial environment.
 
 \paragraph*{EEG foundation models}
-\labram{}~\cite{LaBraM2024} (ICLR'24 spotlight, $\sim$2{,}500 hours of
-EEG pretraining), CBraMod, and EEGPT release pretrained encoders;
-every published downstream usage attaches a supervised classification
-head. Our cross-subject experiments (\S\ref{sec:results:labram_loso})
-are the first end-to-end RL fine-tuning of an EEG foundation model
-in BCI.
+\labram{}~\cite{LaBraM2024}, CBraMod, and EEGPT release pretrained
+encoders; every published downstream usage attaches a supervised
+classification head. Our cross-subject experiments
+(\S\ref{sec:results:labram_loso}) are the first end-to-end RL
+fine-tuning of an EEG foundation model in BCI.
