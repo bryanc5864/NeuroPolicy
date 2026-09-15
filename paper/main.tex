@@ -1,4 +1,4 @@
-% Anonymous submission — author identification removed for blind review.
+% Camera-ready — ICIST 2026, Submission #27, Accept (Oral).
 \documentclass[conference]{IEEEtran}
 \IEEEoverridecommandlockouts
 
@@ -14,6 +14,8 @@
 \usepackage{cite}
 \usepackage{placeins}
 \usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,calc}
 \usepackage{etoolbox}
 \AtBeginEnvironment{thebibliography}{%
   \fontsize{6}{7}\selectfont%
@@ -39,62 +41,52 @@
 \title{Risk-Aware Offline Reinforcement Learning with Calibrated Off-Policy Evaluation\\for Motor-Imagery BCI Decoding}
 
 \author{
-\IEEEauthorblockN{Anonymous Submission}
-\IEEEauthorblockA{Paper~ID~\#\textit{XXX}\\
-Author identity withheld for double-blind review}
+\IEEEauthorblockN{Bryan Cheng}
+\IEEEauthorblockA{Independent Researcher\\
+bcbc7264@gmail.com}
 }
 
 \maketitle
 
 \begin{abstract}
-Motor-imagery brain--computer interfaces commit to a class label
-at a fixed window after the cue, paying the full wait cost on
-every trial and offering no principled way to abstain when the
-signal is ambiguous. We reframe within-trial decoding as a
-sequential decision a learned agent makes at each $0.25$-s
-timestep: commit a class, defer for more evidence, request
-recalibration, or abstain. The agent is a Conservative Q-Learning
-controller trained offline on logged trials under a CVaR
-risk-sensitive critic and a CMDP commit-error constraint that
-directly bounds the rate of unsafe decisions. We validate it with
-a calibrated fitted-Q off-policy evaluator that selects policies
-without redeployment on humans. On a 12-policy panel, the
-estimator tracks on-policy Monte-Carlo ground truth at Pearson
-$r\!=\!0.860$ with rank ordering preserved, sufficient to pick
-the best of a candidate set without an online trial --- the
-\emph{first} calibrated OPE result published for motor-imagery
-BCI. On \bcia{} 4-class with an EEG-Conformer encoder, the
-selective decoder reaches $87.6\!\pm\!2.9\%$ commit accuracy at
-$37.0$~bits/min~\itr{} on the canonical 3-subject panel,
-exceeding the mandatory EEGNet baseline ($0.815$ / $20.7$~b/m)
-on every axis; extended to all 9 subjects it reaches
-$74.6\!\pm\!11.9\%$ at $24.9$~b/m. Per-subject results cluster
-bimodally on commit accuracy: four strong subjects match the
-headline ($0.84$--$0.89$), four hard subjects cap at
-$0.60$--$0.69$ regardless of agent, and their lower encoder
-validation accuracy ($\le\!0.66$) tracks the floor --- locating
-future gains in encoder quality, not policy machinery.
-The CMDP commit-error budget ($\epsilon\!=\!0.10$) is satisfied
-on every reported configuration, and a cross-subject CVaR~$\alpha$
-sweep exposes the risk knob as a designer-tunable
-safety--throughput trade-off (commit rate $0.16\!\to\!0.29$,
-wrong-rate $0.022\!\to\!0.040$ across $\alpha\!\in\![0.10, 1.0]$)
---- a clean operating-point dial clinicians and regulators can
-specify in advance. The framework transfers across channel counts.
-Leave-one-subject-out classification on $62$-channel Lee2019
-delivers the \emph{first} published LOSO benchmark for offline-RL
-BCI ($10/10$ subjects beat random, paired Wilcoxon
-$p\!=\!0.001$). Against an EEGNet-fixed mandatory baseline on the
-same splits, commit accuracy is statistically comparable
-($0.696$ vs $0.716$, $p\!=\!0.43$) while wrong-commit rate
-trends $25\%$ lower ($0.214$ vs $0.284$, $p\!=\!0.07$, marginal)
---- a safety advantage rather than an accuracy SOTA. To our knowledge this is
-the first offline-RL BCI decoder with \textsc{Defer} as a
-\emph{learned} action; together with the calibrated OPE
-methodology, it provides the missing infrastructure for
-closed-loop clinical BCI deployments where wrong-decision cost is
-bounded by design and policy choice is auditable offline. Code
-released under MIT.
+Motor-imagery brain--computer interfaces (BCIs) commit to a class
+label at a fixed window after the cue: every trial pays the full
+wait cost, and there is no principled way to abstain when the
+signal is ambiguous. Our central contribution is to reframe
+within-trial decoding as a sequential decision problem: at each
+$0.25$-s step a learned agent commits to a class, defers for more
+evidence, requests recalibration, or abstains. The agent is
+trained fully offline from logged trials with Conservative
+Q-Learning, extended with a risk-sensitive critic (conditional
+value-at-risk, CVaR) and a constrained-MDP (CMDP) budget that
+bounds the wrong-commit rate by design; candidate policies are
+then selected \emph{without redeployment on humans} using a
+calibrated fitted-Q off-policy evaluator --- the first calibrated
+off-policy-evaluation (OPE) result for motor-imagery BCI (Pearson
+$r\!=\!0.860$ against on-policy ground truth on a 12-policy
+panel, rank ordering preserved). Because the agent is a
+\emph{selective} decoder, it answers only when the evidence
+warrants: on \bcia{} 4-class with an EEG-Conformer encoder it
+commits on $27\%$ of trials and achieves $87.6\!\pm\!2.9\%$
+accuracy on those commits at $37.0$~bits/min (canonical 3-subject
+panel; $74.6\!\pm\!11.9\%$ at a $29\%$ commit rate over all 9
+subjects), whereas a mandatory-commit EEGNet baseline answering
+every trial reaches $81.5\%$ at $20.7$~b/m. The CMDP budget
+($\epsilon\!=\!0.10$) is satisfied in every reported
+configuration, and sweeping the CVaR level
+$\alpha\!\in\![0.10,1.0]$ moves commit rate $0.16\!\to\!0.29$ and
+wrong-commit rate $0.022\!\to\!0.040$ --- a safety--throughput
+dial clinicians can specify in advance. On 62-channel Lee2019 we
+report the first leave-one-subject-out benchmark for offline-RL
+BCI ($10/10$ subjects beat random, $p\!=\!0.001$); against an
+EEGNet-fixed baseline, accuracy is comparable ($p\!=\!0.43$)
+while wrong-commit rate trends $25\%$ lower ($p\!=\!0.07$) --- a
+safety advantage rather than an accuracy record. To our knowledge
+this is the first offline-RL BCI decoder with \textsc{Defer} as a
+learned action; with calibrated OPE it supplies the missing
+infrastructure for clinical BCI deployments whose error cost is
+bounded by design and whose policy choice is auditable offline.
+Code is released under the MIT license.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -434,9 +426,9 @@ braindecode 0.9, d3rlpy, scikit-learn.
 (\texttt{BNCI2014\_004}), \bcia{} (\texttt{BNCI2014\_001}), Lee2019
 (\texttt{Lee2019\_MI}). All $\pm$ values are over 5 seeds; data
 preprocessing is deterministic.
-\textbf{Code} (anonymised, de-anonymised under MIT at
-camera-ready): pipeline + per-experiment summary JSONs at
-\url{https://anonymous.4open.science/r/NeuroPolicy-AFB8}; every
+\textbf{Code} (MIT license): full pipeline + per-experiment
+summary JSONs at
+\url{https://github.com/bryanc5864/NeuroPolicy}; every
 claim traces to a JSON in \texttt{experiments/}.
 
 \end{document}

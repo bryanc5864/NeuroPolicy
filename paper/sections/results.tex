@@ -109,7 +109,9 @@ for any OPE-bias correction to alter policy selection.
 
 \paragraph*{Multi-method OPE benchmark}
 The first $N\!=\!9$ LOSO multi-method OPE benchmark for BCI
-(full table: Appendix~\ref{app:multi_ope}). Mean
+(full table: Appendix~\ref{app:multi_ope}), adding weighted
+importance sampling (WIS) to the estimators of
+\S\ref{sec:methods:ope}. Mean
 per-method ($r$ / RMSE / bias):
 \fqe{} $0.16/1.47/{+}1.45$, PDIS $0.29/1.19/{+}1.14$,
 \textbf{WIS $\mathbf{0.27/0.82/{+}0.48}$},
@@ -376,7 +378,8 @@ the same recipe. The 9-subject mean $74.5\%$ sits below published
 Conformer ($78.7\%$), CTNet ($82.5\%$~\cite{Zhao2024CTNet}), and
 EEGEncoder ($86.5\%$~\cite{Liao2025EEGEncoder}). To test whether
 the gap is compute, we re-ran EEG-Conformer at the full
-Song~2023 budget ($2000$ epochs + S\&R aug, 9 subj $\times$ 3
+Song~2023 budget ($2000$ epochs + shift-and-rotate (S\&R)
+augmentation, 9 subj $\times$ 3
 seeds; Appendix~\ref{app:conformer_2k}): mean moves to
 $0.735\!\pm\!0.11$ --- statistically indistinguishable from the
 $80$-epoch number ($\Delta\!=\!-0.011$), still $\sim\!5$pp

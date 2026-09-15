@@ -10,8 +10,11 @@ problem with a learned action space
 constraint, and evaluated under a calibrated off-policy-evaluation (OPE)
 pipeline validated against on-policy Monte-Carlo ground truth.
 
-The codebase reproduces every figure and table in `paper/main.pdf`
-(IEEE conference format, 10 pages, anonymized for blind review).
+The codebase reproduces every figure and table in `paper/main.pdf`.
+
+**Accepted as an Oral presentation at IEEE ICIST 2026** (16th
+International Conference on Information Science and Technology,
+Coimbra, Portugal).
 
 ---
 
@@ -217,6 +220,22 @@ NeuroPolicy/
 - **LaBraM RL fine-tuning**: first offline-RL fine-tuning of an EEG foundation model in BCI; ties EEGNet on aggregate, with a subject-specific rescue effect (~+16pp)
 
 Every numerical claim traces to a specific `summary.json` in `experiments/`.
+
+---
+
+## Citation
+
+```bibtex
+@inproceedings{cheng2026neuropolicy,
+  title     = {Risk-Aware Offline Reinforcement Learning with Calibrated
+               Off-Policy Evaluation for Motor-Imagery {BCI} Decoding},
+  author    = {Cheng, Bryan},
+  booktitle = {2026 16th International Conference on Information Science
+               and Technology (ICIST)},
+  year      = {2026},
+  organization = {IEEE}
+}
+```
 
 ---
 

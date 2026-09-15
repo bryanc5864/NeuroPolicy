@@ -5,8 +5,9 @@ A motor-imagery (MI) brain--computer interface (BCI) must decide
 Standard pipelines (FBCSP+LDA, \eegnet{}, EEG-Conformer) decode at a
 fixed window---typically $0$--$4$~s post-cue---trading accuracy
 against information transfer rate (\itr{}), the throughput metric
-that matters for end-users. SPRT-style dynamic stopping
-classifiers~\cite{Liu2017MotorImageryBTSPRT} introduce
+that matters for end-users. Dynamic-stopping classifiers in the
+style of the sequential probability ratio test
+(SPRT)~\cite{Liu2017MotorImageryBTSPRT} introduce
 evidence-based early termination, but these are hand-tuned
 thresholds on confidence
 statistics, not learned policies.
@@ -14,38 +15,59 @@ statistics, not learned policies.
 Recent
 work~\cite{Aung2024EEG_RL_Net,Fidencio2025ErrPRL}
 frames BCI decoding as sequential decision-making, but none use
-offline reinforcement learning, none expose an explicit
-\textsc{Defer} action as part of the learned policy, none address
-motor imagery at scale, and---critically---none employ a calibrated
-off-policy evaluator. Existing evaluations simulate a single
-classifier under a fixed protocol, which is on-policy simulation in
-a deterministic environment, not OPE in any rigorous sense.
+offline reinforcement learning (RL) --- learning a policy purely
+from logged data, with no online interaction --- none expose an
+explicit \textsc{Defer} action as part of the learned policy, none
+address motor imagery at scale, and---critically---none employ a
+calibrated off-policy evaluator. Off-policy evaluation (OPE)
+estimates the value a candidate policy \emph{would} obtain if
+deployed, using only logged data; it is the tool that makes
+offline policy selection auditable. Existing BCI evaluations
+simulate a single classifier under a fixed protocol, which is
+on-policy simulation in a deterministic environment, not OPE in
+any rigorous sense.
 Meanwhile, offline RL with calibrated OPE has matured in adjacent
 clinical domains (sepsis, ventilator weaning, anesthesia depth
 control)~\cite{Kumar2020CQL,Le2019BatchRL},
 but this machinery has not been ported to BCI.
 
-This paper fills that methodological gap. We frame within-trial MI
-EEG decoding as an offline RL problem with a clinically meaningful
-action space $\{\textsc{Commit}_k, \textsc{Defer}, \textsc{Recal},
-\textsc{Abstain}\}$, train a Conservative Q-Learning (\cql{}) agent
-on logged trajectories from two behavior policies, and validate the
-resulting policies with a calibrated fitted-Q evaluator against
-on-policy Monte-Carlo ground truth.
+This paper fills that methodological gap. Our central
+contribution is a single reframing with two halves: (a)~we turn
+within-trial MI EEG decoding into an offline RL problem with a
+clinically meaningful action space $\{\textsc{Commit}_k,
+\textsc{Defer}, \textsc{Recal}, \textsc{Abstain}\}$, training a
+Conservative Q-Learning (\cql{})~\cite{Kumar2020CQL} agent on
+logged trajectories from two behavior policies; and (b)~we make
+the resulting policies \emph{selectable offline} by validating a
+fitted-Q evaluation (\fqe{}) estimator against on-policy
+Monte-Carlo ground truth. Fig.~\ref{fig:system_overview} gives a
+high-level view of the full system: the decision loop the agent
+runs within each trial (top) and the offline training-and-selection
+pipeline wrapped around it (bottom). Everything downstream ---
+risk-sensitive critics, safety constraints, encoder swaps,
+cross-subject benchmarks --- instantiates or stress-tests this
+one reframing.
 
 \paragraph*{Contributions}
 (i)~\textbf{Calibrated OPE for BCI:} per-target-policy \fqe{}
 attains Pearson $r\!=\!0.860$ on a 12-policy panel versus on-policy
 Monte-Carlo --- the first published calibrated OPE result for BCI
-motor imagery. (ii)~\textbf{Selective offline-RL decoder:} a CVaR
-critic combined with a CMDP commit-error constraint reaches commit
+motor imagery. (ii)~\textbf{Selective offline-RL decoder:} a
+conditional-value-at-risk (CVaR) critic combined with a
+constrained-MDP (CMDP) commit-error budget reaches commit
 accuracy $87.6\!\pm\!2.9\%$ at $37.0$~bits/min~\itr{} on the
 canonical 3-subject \bcia{} panel (EEG-Conformer encoder) and
 $74.6\!\pm\!11.9\%$ at $24.9$~b/m on the full 9-subject panel
-(Table~\ref{tab:sota}) --- the first offline-RL BCI decoder
-with \textsc{Defer} as a \emph{learned} action (distinct from
-post-hoc thresholding~\cite{Ganeshkumar2017RejectMI}).
-(iii)~\textbf{Cross-subject LOSO on three datasets:} 62-channel
+(Table~\ref{tab:sota}). These are \emph{selective} operating
+points --- the agent commits on only $27\%$/$29\%$ of trials,
+deferring or abstaining on the rest, so commit accuracy is not
+comparable to the task accuracy of a classifier forced to answer
+every trial (\S\ref{sec:results:sota} reports both) --- and this
+is the first offline-RL BCI decoder with \textsc{Defer} as a
+\emph{learned} action (distinct from post-hoc
+thresholding~\cite{Ganeshkumar2017RejectMI}).
+(iii)~\textbf{Cross-subject leave-one-subject-out (LOSO)
+benchmarks on three datasets:} 62-channel
 Lee2019 ($N\!=\!10$) yields commit accuracy
 $0.696\!\pm\!0.104$ vs random $0.481$, $10/10$ wins, paired
 Wilcoxon $p\!=\!0.001$ --- the first published Lee2019 LOSO

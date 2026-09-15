@@ -16,6 +16,37 @@ $16.4$~bits/min~\itr{}, and $\Delta\bar G\!=\!+1.92$ over
 random. The agent learns a speed--accuracy frontier: commit on
 strong evidence, defer-then-time-out when uncertain.
 
+\subsection{Attribution: what the RL agent adds beyond the
+encoder}\label{sec:disc:attribution}
+
+A fair question is whether the reported gains come from the RL
+machinery or simply from a stronger encoder. The experimental
+design separates the two. First, every same-encoder comparison
+isolates the policy: \nettype{} and the \eegnet{}-fixed and
+threshold baselines share the \emph{identical frozen encoder}
+(\S\ref{sec:methods:baselines}), so any difference between them
+is attributable to the decision policy alone. At matched encoder
+the agent does \emph{not} win on raw accuracy or return
+(\S\ref{sec:results:baselines}); what it adds are capabilities no
+mandatory or hand-thresholded classifier exposes --- a
+commit-error rate bounded by an explicit constraint (satisfied in
+every reported configuration), a $25\%$ lower wrong-commit rate
+at comparable accuracy on Lee2019 LOSO, a learned commit-time
+distribution with a monotone speed--accuracy profile
+(Fig.~\ref{fig:time_to_commit}), and \textsc{Defer}/\textsc{Abstain}
+semantics with a tunable risk knob (Fig.~\ref{fig:cvar_alpha}).
+Second, encoder swaps at fixed agent (Conformer, CTNet;
+\S\ref{sec:results:sota}) move the commit-accuracy ceiling while
+the agent recipe stays constant, and the 9-subject stratification
+shows encoder validation accuracy tracks the per-subject floor.
+The division of labour is therefore clean: \emph{the encoder sets
+the ceiling; the RL layer determines which operating points below
+that ceiling are reachable safely, and makes the choice among
+them auditable offline}. Headline commit-accuracy numbers exceed
+mandatory baselines partly \emph{because} the agent is selective
+(commit rate $0.27$--$0.29$, not $1.00$) --- that selectivity is
+the contribution, not a confound.
+
 \subsection{What did not work}\label{sec:disc:notworked}
 
 \paragraph*{Cross-subject encoder-agnostic plateau}
@@ -84,6 +115,20 @@ Lee2019 LOSO used a 10-subject subset; a full $N\!=\!54$ sweep
 would extend statistical power. The reward function was fixed; a
 sensitivity ablation across reward magnitudes was descoped. The
 \fqe{}-to-oracle gap of $\sim\!0.2$ awaits pessimistic or
-doubly-robust corrections. Closed-loop deployment with a live
-\textsc{Recal} action and on-the-fly OPE scoring is the natural
-next step.
+doubly-robust corrections.
+
+Two encoder-side directions follow directly from our ablations.
+The Song-recipe ablation (\S\ref{sec:results:sota}) showed that
+stronger \emph{supervised} encoder pretraining can hurt the
+downstream selective decoder --- the two stages impose competing
+inductive biases when trained separately. \emph{Joint end-to-end
+training of encoder and agent}, propagating the RL value gradient
+into the representation, is the principled resolution and the
+most promising route past the encoder ceiling identified in
+\S\ref{sec:results:sota}. Complementarily, as EEG foundation
+models mature beyond \labram{} (CBraMod, EEGPT, and successors),
+plugging a stronger pretrained backbone into the unchanged agent
+should lift the per-subject floor that currently caps the four
+hard \bcia{} subjects. Finally, closed-loop deployment with a
+live \textsc{Recal} action and on-the-fly OPE scoring is the
+natural next step for the framework as a whole.

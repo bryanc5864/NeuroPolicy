@@ -1,5 +1,71 @@
 % Section: Methods
 
+\begin{figure*}[!t]
+\centering
+\begin{tikzpicture}[
+  font=\scriptsize,
+  node distance=4mm and 5mm,
+  box/.style={draw, rounded corners=2pt, align=center, inner sep=3pt,
+              minimum height=10mm, fill=black!3},
+  act/.style={draw, align=left, inner sep=2.5pt, minimum height=5.5mm,
+              fill=white},
+  arr/.style={-{Stealth[length=2mm]}, semithick},
+  lbl/.style={font=\tiny\itshape, inner sep=1pt}
+]
+% ---------- top row: within-trial decision loop ----------
+\node[box] (eeg) {EEG trial $X$\\ $1.0$-s windows,\\ $0.25$-s stride};
+\node[box, right=of eeg] (enc) {frozen encoder $\phi$\\ (\eegnet{}\,/\,Conformer\,/\\ CTNet\,/\,\labram{})};
+\node[box, right=of enc] (state) {state $s_t$: $\phi(X_t)$,\\ running mean/var,\\ elapsed time, subj.~emb.};
+\node[box, right=of state] (agent) {offline-RL agent\\ \cql{} $+$ CVaR critic\\ $+$ CMDP budget $\epsilon$};
+\node[act, right=7mm of agent, yshift=10.5mm] (commit) {\textsc{Commit}$_k$ $\rightarrow$ output class $k$};
+\node[act, right=7mm of agent, yshift=3.5mm]  (defer)  {\textsc{Defer} $\rightarrow$ wait for evidence};
+\node[act, right=7mm of agent, yshift=-3.5mm] (recal)  {\textsc{Recal} $\rightarrow$ refit subj.~emb.};
+\node[act, right=7mm of agent, yshift=-10.5mm](abstain){\textsc{Abstain} $\rightarrow$ no decision};
+\draw[arr] (eeg) -- (enc);
+\draw[arr] (enc) -- (state);
+\draw[arr] (state) -- (agent);
+\draw[arr] (agent.east) -- (commit.west);
+\draw[arr] (agent.east) -- (defer.west);
+\draw[arr] (agent.east) -- (recal.west);
+\draw[arr] (agent.east) -- (abstain.west);
+\draw[arr, dashed] (defer.north) to[out=140,in=60, looseness=0.35]
+  node[lbl, above]{advance $t \mapsto t{+}1$} (eeg.north);
+\draw[arr, dashed] (recal.south) to[out=-100,in=-80, looseness=0.4]
+  node[lbl, below]{updated embedding} (state.south);
+% ---------- bottom row: offline training + policy selection ----------
+\node[box, below=16mm of eeg.south west, anchor=north west, xshift=0mm] (logs)
+  {logged trials from behavior\\ policies $\mu_1$ (fixed-window),\\ $\mu_2$ (SPRT-stochastic)};
+\node[box, right=of logs] (buffer) {offline buffer\\ $\mathcal{D}_\mu$};
+\node[box, right=of buffer] (train) {\cql{} training\\ (scalar\,/\,CVaR,\\ $\pm$\,CMDP)};
+\node[box, right=of train] (cand) {candidate policies\\ $\pi_1,\ldots,\pi_N$};
+\node[box, right=of cand] (fqe) {calibrated \fqe{} evaluator\\ ($r{=}0.86$ vs.\ on-policy\\ Monte-Carlo ground truth)};
+\draw[arr] (logs) -- (buffer);
+\draw[arr] (buffer) -- (train);
+\draw[arr] (train) -- (cand);
+\draw[arr] (cand) -- (fqe);
+\draw[arr] (fqe.north) -- ++(0,3mm) -|
+  node[lbl, pos=0.97, left, align=right]
+  {deploy selected\\ policy $\pi^{*}$}
+  (agent.south);
+\end{tikzpicture}
+\caption{System overview. \textbf{Top --- within-trial decision
+loop:} each $1$-s EEG window is embedded by a frozen encoder; the
+state (features, running statistics, elapsed time, subject
+embedding) feeds an offline-RL agent that either commits a class,
+defers to the next window, requests recalibration, or abstains.
+\textbf{Bottom --- offline training and policy selection:} the
+agent is trained with Conservative Q-Learning on trials logged by
+two behavior policies; candidate policies are ranked by a
+calibrated fitted-Q off-policy evaluator, so the deployed policy
+is chosen without any new human session.}
+\label{fig:system_overview}
+\end{figure*}
+
+Fig.~\ref{fig:system_overview} summarises the framework: an
+online decision loop (top) wrapped in an offline
+training-and-selection pipeline (bottom). This section defines
+each component in turn.
+
 \subsection{Problem Formulation}\label{sec:methods:problem}
 
 A motor-imagery (MI) trial is a multivariate EEG segment $X \in
@@ -177,7 +243,8 @@ class:
 \begin{itemize}
 \item \textbf{random}: uniform over \texttt{Discrete}($K + 3$).
 \item \textbf{CSP+LDA fixed}: Common Spatial Patterns~\cite{Ang2008FBCSP}
-(2 components, $\log$-variance features) + LDA, fitted on
+(2 components, $\log$-variance features) + linear discriminant
+analysis (LDA), fitted on
 training subjects' raw trials, predicting at trial level; emits
 \textsc{Defer} until $t = T - 1$ then commits the prediction.
 \item \textbf{\eegnet{} fixed}: the same supervised-pretrained \eegnet{}
